@@ -1,1 +1,2 @@
 - forbid to broadcast start/stop all if the only opened timers are stuck
+- privatiser les méthodes qui n'ont pas besoin d'être publiques

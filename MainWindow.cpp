@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include "AboutUi.hpp"
 #include "TimerUi.hpp"
+#include "TimerMax.hpp"
 #include "LicenseUi.hpp"
 #include "TimerComponent.hpp"
 
@@ -43,6 +44,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Default game speed : standard 1v1
     ui->comboSpeed->setCurrentIndex(GAME_SPEED_FASTER);
+
+    // Set max timer value
+    ui->hsliderPeriod->setMaximum(TIMER_MAX);
 
     // Create the timer components
     TimerComponent* CreepComponent = new TimerComponent(this, "Creep", "qrc:/Sounds/creep.mp3", CREEP_PERIOD, false);

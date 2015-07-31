@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>221</width>
-    <height>135</height>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,15 +52,15 @@
        <property name="text">
         <string>Timer period :</string>
        </property>
+       <property name="buddy">
+        <cstring>hsliderPeriod</cstring>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QSlider" name="hsliderPeriod">
        <property name="minimum">
         <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>60</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -83,6 +83,9 @@
        <property name="text">
         <string>Volume : </string>
        </property>
+       <property name="buddy">
+        <cstring>hsliderVolume</cstring>
+       </property>
       </widget>
      </item>
      <item>
@@ -100,6 +103,43 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hlayoutDelay">
+     <item>
+      <widget class="QLabel" name="labelDelay">
+       <property name="text">
+        <string>Start delay :</string>
+       </property>
+       <property name="buddy">
+        <cstring>spinDelay</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="spinDelay">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="suffix">
+        <string> seconds</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

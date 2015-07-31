@@ -38,12 +38,11 @@ class TimerUi : public QWidget
   public:
     TimerUi(QString fullfilename, int period, double multiplier);
     ~TimerUi();
-    void multiplierChanged(
-        double multiplier); // Slot triggered when the time rate changes
-    void playMedia();       // Slot triggered when the timer expires
-    void error(QMediaPlayer::Error); // Slot triggered if an error occurs
-    void start();                    // Start the timer
-    void stop();                     // Stop the timer
+    void multiplierChanged(double multiplier); // Slot triggered when the time rate changes
+    void playMedia();                          // Slot triggered when the timer expires
+    void error(QMediaPlayer::Error);           // Slot triggered if an error occurs
+    void start();                              // Start the timer
+    void stop();                               // Stop the timer
 
   private:
     Q_DISABLE_COPY(TimerUi)
@@ -54,11 +53,13 @@ class TimerUi : public QWidget
     QMediaContent m_media;      // Content the sound played
     QMediaPlayer* m_player;     // The player of the sound
     QMediaPlaylist* m_playlist; // The playlist allows to configure the player
-    bool m_broken; // True if the media can't be played, stucking the interface
+    bool m_broken;              // True if the media can't be played, stucking the interface
+    void startAfterDelay();
 
   private slots:
     void on_hsliderPeriod_valueChanged(int value);
     void on_hsliderVolume_valueChanged(int value);
+    void on_spinDelay_valueChanged(int delay);
 };
 
 #endif // TIMERUI_HPP

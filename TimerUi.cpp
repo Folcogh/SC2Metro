@@ -16,6 +16,7 @@
 
 #include "TimerUi.hpp"
 #include "ui_TimerUi.h"
+#include "TimerMax.hpp"
 
 TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     : ui(new Ui::TimerUi)
@@ -28,11 +29,13 @@ TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
 {
     // Setup the ui
     ui->setupUi(this);
+    ui->hsliderPeriod->setMaximum(TIMER_MAX);
     ui->hsliderPeriod->setValue(period);
     ui->hsliderVolume->setValue(INITIAL_VOLUME);
     ui->labelPercent->setText(QString("%1%").arg(INITIAL_VOLUME));
     ui->labelSound->setText(fullfilename);
     ui->labelBroken->setText(QString());
+    ui->spinDelay->setMaximum(TIMER_MAX);
 
     // Setup the timer
     m_timer->setInterval(period * 1000 / multiplier);
@@ -64,7 +67,12 @@ TimerUi::~TimerUi()
 void TimerUi::on_hsliderPeriod_valueChanged(int value)
 {
     m_timer->setInterval(value * 1000 / m_multiplier);
+
     ui->labelSeconds->setText(QString("%1 seconds").arg(value));
+    if (ui->spinDelay->value() > value)
+    {
+        ui->spinDelay->setValue(value);
+    }
 }
 
 void TimerUi::on_hsliderVolume_valueChanged(int value)
@@ -84,8 +92,8 @@ void TimerUi::start()
     // Check if the timer is alive. This is necessary if the main window broadcasts a "Start all" event
     if (!m_broken)
     {
-        m_timer->start();
-        m_player->play();
+        // Temporize the timer
+        QTimer::singleShot(ui->spinDelay->value() * 1000 / m_multiplier, this, startAfterDelay);
         ui->buttonStart->setDisabled(true);
         ui->buttonStop->setEnabled(true);
     }
@@ -96,6 +104,12 @@ void TimerUi::stop()
     m_timer->stop();
     ui->buttonStart->setEnabled(true);
     ui->buttonStop->setDisabled(true);
+}
+
+void TimerUi::startAfterDelay()
+{
+    m_timer->start();
+    playMedia();
 }
 
 void TimerUi::playMedia()
@@ -111,4 +125,13 @@ void TimerUi::error(QMediaPlayer::Error)
     ui->labelBroken->setText(QString("The media is broken : %1").arg(m_player->errorString()));
     m_timer->stop();
     m_broken = true;
+}
+
+void TimerUi::on_spinDelay_valueChanged(int delay)
+{
+    int max = ui->hsliderPeriod->value();
+    if (delay > max)
+    {
+        ui->spinDelay->setValue(max);
+    }
 }

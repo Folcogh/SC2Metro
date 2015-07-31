@@ -22,7 +22,8 @@ HEADERS  += MainWindow.hpp \
     TimerUi.hpp \
     TimerComponent.hpp \
     LicenseUi.hpp \
-    AboutUi.hpp
+    AboutUi.hpp \
+    TimerMax.hpp
 
 FORMS    += MainWindow.ui \
     TimerUi.ui \
