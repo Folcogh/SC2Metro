@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>309</width>
-    <height>298</height>
+    <width>284</width>
+    <height>268</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,16 +24,6 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="labelSound">
-        <property name="text">
-         <string>Sound</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="labelBroken">
         <property name="enabled">
          <bool>true</bool>
@@ -48,6 +38,16 @@
         </property>
         <property name="text">
          <string>error</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelSound">
+        <property name="text">
+         <string>Sound</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -125,9 +125,9 @@
       <item>
        <layout class="QHBoxLayout" name="hlayoutTerminate">
         <item>
-         <widget class="QCheckBox" name="checkTerminate">
+         <widget class="QLabel" name="labelTerminate">
           <property name="text">
-           <string>Terminate after ...</string>
+           <string>Terminate after :</string>
           </property>
          </widget>
         </item>
@@ -137,6 +137,9 @@
            <widget class="QRadioButton" name="radioTerminateSeconds">
             <property name="text">
              <string/>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">groupTerminate</string>
@@ -148,8 +151,8 @@
             <property name="suffix">
              <string> seconds</string>
             </property>
-            <property name="minimum">
-             <number>1</number>
+            <property name="maximum">
+             <number>900</number>
             </property>
            </widget>
           </item>
@@ -157,6 +160,9 @@
            <widget class="QRadioButton" name="radioTerminateTriggers">
             <property name="text">
              <string/>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
             <attribute name="buttonGroup">
              <string notr="true">groupTerminate</string>
@@ -168,11 +174,8 @@
             <property name="suffix">
              <string> triggers</string>
             </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
             <property name="maximum">
-             <number>900</number>
+             <number>1000</number>
             </property>
            </widget>
           </item>
@@ -250,7 +253,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>10</height>
          </size>
         </property>
        </spacer>

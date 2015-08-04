@@ -17,6 +17,7 @@
 #include "TimerUi.hpp"
 #include "ui_TimerUi.h"
 #include "TimerMax.hpp"
+#include <QButtonGroup>
 
 TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     : ui(new Ui::TimerUi)
@@ -26,7 +27,7 @@ TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     , m_player(new QMediaPlayer(this))
     , m_playlist(new QMediaPlaylist(this))
     , m_broken(false)
-    , m_enabled(true)
+    , m_triggers(-1)
 {
     // Setup the ui
     ui->setupUi(this);
@@ -37,6 +38,10 @@ TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     ui->labelSound->setText(fullfilename);
     ui->labelBroken->setText(QString());
     ui->spinDelay->setMaximum(TIMER_MAX);
+
+    // ID of the radio buttons
+    ui->groupTerminate->setId(ui->radioTerminateTriggers, TERMINATE_ON_TRIGGER_COUNT);
+    ui->groupTerminate->setId(ui->radioTerminateSeconds, TERMINATE_ON_TIME_ELAPSED);
 
     // Setup the timer
     m_timer->setInterval(period * 1000 / multiplier);
@@ -91,7 +96,7 @@ void TimerUi::multiplierChanged(double multiplier)
 void TimerUi::start()
 {
     // Check if the timer is alive. This is necessary if the main window broadcasts a "Start all" event
-    if (!m_broken && m_enabled)
+    if (!m_broken && ui->gboxTimer->isChecked())
     {
         // Temporize the timer
         QTimer::singleShot(ui->spinDelay->value() * 1000 / m_multiplier, this, &TimerUi::startAfterDelay);
@@ -110,14 +115,48 @@ void TimerUi::stop()
 
 void TimerUi::startAfterDelay()
 {
+    m_player->play();
     m_timer->start();
-    playMedia();
+
+    // Setup a termination if requested
+    if (ui->groupTerminate->checkedId() == TERMINATE_ON_TRIGGER_COUNT)
+    {
+        if (ui->spinTerminateTriggers->value() == 0)
+        {
+            m_triggers = -1;
+        }
+        else
+        {
+            m_triggers = ui->spinTerminateTriggers->value();
+        }
+    }
+    else // TERMINATE_ON_TIME_ELAPSED
+    {
+        if (ui->spinTerminateSeconds->value() == 0)
+        {
+            m_triggers = -1;
+        }
+        else
+        {
+            m_triggers = ui->spinTerminateSeconds->value() / ui->hsliderPeriod->value();
+        }
+    }
 }
 
 void TimerUi::playMedia()
 {
     m_player->stop();
     m_player->play();
+
+    if (m_triggers == -1)
+    {
+        return;
+    }
+    if (m_triggers == 0)
+    {
+        stop();
+    }
+    --m_triggers;
 }
 
 // Trigerred by the player in case of error
@@ -142,7 +181,7 @@ void TimerUi::on_gboxTimer_toggled(bool checked)
 {
     if (!checked)
     {
-        stop();
+        m_timer->stop();
+        m_player->stop();
     }
-    m_enabled = checked;
 }

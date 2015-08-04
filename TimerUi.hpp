@@ -23,7 +23,12 @@
 #include <QMediaContent>
 #include <QMediaPlaylist>
 
+// Playback default volume
 #define INITIAL_VOLUME 100
+
+// ID of the radio buttons setting the termination
+#define TERMINATE_ON_TRIGGER_COUNT 0
+#define TERMINATE_ON_TIME_ELAPSED 1
 
 namespace Ui
 {
@@ -53,7 +58,7 @@ class TimerUi : public QWidget
     QMediaPlayer* m_player;     // The player of the sound
     QMediaPlaylist* m_playlist; // The playlist allows to configure the player
     bool m_broken;              // True if the media can't be played, stucking the interface
-    bool m_enabled;             // True if the timer can be started/stoped
+    int m_triggers;             // -1 for unlimited timer, else the number of times the timer will be triggered
     void startAfterDelay();
 
   private slots:

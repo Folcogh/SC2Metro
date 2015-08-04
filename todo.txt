@@ -6,7 +6,5 @@
 - enregistrement des sons paramétrés -> sérialisation de la classe TimerUi
 - voir pour faire poper le menu de son custom sans avoir à modifier le choix de la liste
 - design sans tabs, avec une liste, et une interface "new timer" séparée ?
-- timers uniques
-- nombre de répétitions max
+- timers uniques (ajouter un check Play Initial Sound pour faire ça ?)
 - ajout d'autres sons prédéfinis: scout, check ressources, mules, chronoboost, supply
--
