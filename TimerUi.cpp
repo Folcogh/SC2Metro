@@ -26,6 +26,7 @@ TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     , m_player(new QMediaPlayer(this))
     , m_playlist(new QMediaPlaylist(this))
     , m_broken(false)
+    , m_enabled(true)
 {
     // Setup the ui
     ui->setupUi(this);
@@ -90,10 +91,10 @@ void TimerUi::multiplierChanged(double multiplier)
 void TimerUi::start()
 {
     // Check if the timer is alive. This is necessary if the main window broadcasts a "Start all" event
-    if (!m_broken)
+    if (!m_broken && m_enabled)
     {
         // Temporize the timer
-        QTimer::singleShot(ui->spinDelay->value() * 1000 / m_multiplier, this, startAfterDelay);
+        QTimer::singleShot(ui->spinDelay->value() * 1000 / m_multiplier, this, &TimerUi::startAfterDelay);
         ui->buttonStart->setDisabled(true);
         ui->buttonStop->setEnabled(true);
     }
@@ -102,6 +103,7 @@ void TimerUi::start()
 void TimerUi::stop()
 {
     m_timer->stop();
+    m_player->stop();
     ui->buttonStart->setEnabled(true);
     ui->buttonStop->setDisabled(true);
 }
@@ -134,4 +136,13 @@ void TimerUi::on_spinDelay_valueChanged(int delay)
     {
         ui->spinDelay->setValue(max);
     }
+}
+
+void TimerUi::on_gboxTimer_toggled(bool checked)
+{
+    if (!checked)
+    {
+        stop();
+    }
+    m_enabled = checked;
 }

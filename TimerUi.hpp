@@ -48,18 +48,19 @@ class TimerUi : public QWidget
     Q_DISABLE_COPY(TimerUi)
     Ui::TimerUi* ui;
     QTimer* m_timer;            // THE timer
-    double m_multiplier;        // Time rate. It's a copy of the one of the main
-                                // window, to have a faster access
+    double m_multiplier;        // Time rate. It's a copy of the one of the main window, to have a faster access
     QMediaContent m_media;      // Content the sound played
     QMediaPlayer* m_player;     // The player of the sound
     QMediaPlaylist* m_playlist; // The playlist allows to configure the player
     bool m_broken;              // True if the media can't be played, stucking the interface
+    bool m_enabled;             // True if the timer can be started/stoped
     void startAfterDelay();
 
   private slots:
     void on_hsliderPeriod_valueChanged(int value);
     void on_hsliderVolume_valueChanged(int value);
     void on_spinDelay_valueChanged(int delay);
+    void on_gboxTimer_toggled(bool checked);
 };
 
 #endif // TIMERUI_HPP

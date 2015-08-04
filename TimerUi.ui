@@ -6,164 +6,263 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>221</width>
-    <height>209</height>
+    <width>309</width>
+    <height>298</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QLabel" name="labelSound">
-     <property name="text">
-      <string>Sound</string>
+    <widget class="QGroupBox" name="gboxTimer">
+     <property name="title">
+      <string>Timer</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="labelBroken">
-     <property name="enabled">
+     <property name="checkable">
       <bool>true</bool>
      </property>
-     <property name="font">
-      <font>
-       <italic>true</italic>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 0, 0);</string>
-     </property>
-     <property name="text">
-      <string>error</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="labelSound">
+        <property name="text">
+         <string>Sound</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelBroken">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="font">
+         <font>
+          <italic>true</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>error</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hlayoutPeriod">
+        <item>
+         <widget class="QLabel" name="labelPeriod">
+          <property name="text">
+           <string>Timer period :</string>
+          </property>
+          <property name="buddy">
+           <cstring>hsliderPeriod</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="hsliderPeriod">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelSeconds">
+          <property name="text">
+           <string>seconds</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hlayoutDelay">
+        <item>
+         <widget class="QLabel" name="labelDelay">
+          <property name="text">
+           <string>Start delay :</string>
+          </property>
+          <property name="buddy">
+           <cstring>spinDelay</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinDelay">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="suffix">
+           <string> seconds</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="hspacerDelay">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hlayoutTerminate">
+        <item>
+         <widget class="QCheckBox" name="checkTerminate">
+          <property name="text">
+           <string>Terminate after ...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="glayoutTerminate">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="radioTerminateSeconds">
+            <property name="text">
+             <string/>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">groupTerminate</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinTerminateSeconds">
+            <property name="suffix">
+             <string> seconds</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="radioTerminateTriggers">
+            <property name="text">
+             <string/>
+            </property>
+            <attribute name="buttonGroup">
+             <string notr="true">groupTerminate</string>
+            </attribute>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="spinTerminateTriggers">
+            <property name="suffix">
+             <string> triggers</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>900</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="hspacerTerminate">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hlayoutVolume">
+        <item>
+         <widget class="QLabel" name="labelVolume">
+          <property name="text">
+           <string>Volume : </string>
+          </property>
+          <property name="buddy">
+           <cstring>hsliderVolume</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="hsliderVolume">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelPercent">
+          <property name="text">
+           <string>percent</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="hlayoutButtons">
+        <item>
+         <widget class="QPushButton" name="buttonStart">
+          <property name="text">
+           <string>Start</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonStop">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Stop</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="labelPeriod">
-       <property name="text">
-        <string>Timer period :</string>
-       </property>
-       <property name="buddy">
-        <cstring>hsliderPeriod</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSlider" name="hsliderPeriod">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelSeconds">
-       <property name="text">
-        <string>seconds</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="labelVolume">
-       <property name="text">
-        <string>Volume : </string>
-       </property>
-       <property name="buddy">
-        <cstring>hsliderVolume</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSlider" name="hsliderVolume">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelPercent">
-       <property name="text">
-        <string>percent</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="hlayoutDelay">
-     <item>
-      <widget class="QLabel" name="labelDelay">
-       <property name="text">
-        <string>Start delay :</string>
-       </property>
-       <property name="buddy">
-        <cstring>spinDelay</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spinDelay">
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="suffix">
-        <string> seconds</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="buttonStart">
-       <property name="text">
-        <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonStop">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Stop</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="groupTerminate"/>
+ </buttongroups>
 </ui>
