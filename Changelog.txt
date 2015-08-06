@@ -1,0 +1,25 @@
+05/08/2015
+- refactored the timer's UI
+- FIX: trigger the open dialog when selecting "Custom" in the combo box, even if the previous choice was already "Custom"
+- increased the timers max duration up to 15 minutes
+- transformed the timer enabling/disabling into a checkbox
+- allow to disable the sound play when a timer starts
+- removed the useless DLLs from the packaging. 20Mo -> 8Mo
+- renamed About to Readme
+- added ticks to the sliders
+- cleaned up some code
+- added files opening/saving
+
+04/08/2015
+- added termination on elapsed time/triggers
+
+04/08/2015
+- added a checkbox to enable/disable a timer without destroying it
+- added UI components to allow timer termination after x seconds/triggers
+
+31/07/2015
+- added a temporizer to start the timers
+- increased the maximum value of the timers
+
+30/07/2015
+- initial commit

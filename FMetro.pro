@@ -16,19 +16,19 @@ SOURCES += main.cpp\
     TimerUi.cpp \
     TimerComponent.cpp \
     LicenseUi.cpp \
-    AboutUi.cpp
+    ReadmeUi.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerUi.hpp \
     TimerComponent.hpp \
     LicenseUi.hpp \
-    AboutUi.hpp \
-    TimerMax.hpp
+    ReadmeUi.hpp \
+    Constants.hpp
 
 FORMS    += MainWindow.ui \
     TimerUi.ui \
     LicenseUi.ui \
-    AboutUi.ui
+    ReadmeUi.ui
 
 RESOURCES += \
     sounds.qrc \
@@ -36,4 +36,5 @@ RESOURCES += \
 
 DISTFILES += \
     todo.txt \
-    gpl.txt
+    gpl.txt \
+    Changelog.txt

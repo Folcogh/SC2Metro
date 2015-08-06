@@ -17,14 +17,18 @@
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 #include <QDir>
+#include <QList>
+#include <QFile>
 #include <QFileInfo>
 #include <QComboBox>
 #include <QTabWidget>
+#include <QDataStream>
 #include <QPushButton>
 #include <QFileDialog>
-#include "AboutUi.hpp"
+#include <QMessageBox>
 #include "TimerUi.hpp"
-#include "TimerMax.hpp"
+#include "ReadmeUi.hpp"
+#include "Constants.hpp"
 #include "LicenseUi.hpp"
 #include "TimerComponent.hpp"
 
@@ -50,12 +54,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Create the timer components
     TimerComponent* CreepComponent = new TimerComponent(this, "Creep", "qrc:/Sounds/creep.mp3", CREEP_PERIOD, false);
-    TimerComponent* InjectComponent =
-        new TimerComponent(this, "Inject", "qrc:/Sounds/inject.mp3", INJECT_PERIOD, false);
-    TimerComponent* MinimapComponent =
-        new TimerComponent(this, "Minimap", "qrc:/Sounds/minimap.mp3", MINIMAP_PERIOD, false);
-    TimerComponent* WorkerComponent =
-        new TimerComponent(this, "Worker", "qrc:/Sounds/worker.mp3", WORKER_PERIOD, false);
+    TimerComponent* InjectComponent = new TimerComponent(this, "Inject", "qrc:/Sounds/inject.mp3", INJECT_PERIOD, false);
+    TimerComponent* MinimapComponent = new TimerComponent(this, "Minimap", "qrc:/Sounds/minimap.mp3", MINIMAP_PERIOD, false);
+    TimerComponent* WorkerComponent = new TimerComponent(this, "Worker", "qrc:/Sounds/worker.mp3", WORKER_PERIOD, false);
     TimerComponent* CustomComponent = new TimerComponent(this, "<Custom...>", "", CUSTOM_PERIOD, true);
 
     // Add the name of the timer componennts to the sound list
@@ -70,6 +71,9 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->buttonAboutQt, &QPushButton::clicked, qApp, &QApplication::aboutQt);
     connect(ui->buttonLicense, &QPushButton::clicked, &LicenseUi::display);
     connect(ui->buttonAbout, &QPushButton::clicked, &AboutUi::display);
+
+    // Trigger the activation callback to update the data of the current sound
+    on_comboSound_activated(0);
 }
 
 MainWindow::~MainWindow()
@@ -118,11 +122,12 @@ void MainWindow::on_buttonCreate_clicked()
     // Enable Start all/Stop all buttons
     ui->buttonStartAllTimers->setEnabled(true);
     ui->buttonStopAllTimers->setEnabled(true);
+    ui->buttonSaveTimers->setEnabled(true);
 }
 
 // Used to set up the ui when the initial index is set on the ctor,
 // and to fallback to an existing one when a custom file selection is cancelled
-void MainWindow::on_comboSound_currentIndexChanged(int index)
+void MainWindow::on_comboSound_activated(int index)
 {
     TimerComponent* tc = ui->comboSound->itemData(index).value<TimerComponent*>();
     if (tc->custom())
@@ -155,11 +160,138 @@ void MainWindow::closeTab(int index)
         ui->tabs->removeTab(index);
         delete widget;
 
-        // Allow/forbid to broadcast the Start all/Stop all event
+        // Allow/forbid to broadcast the Start all/Stop all event and Save
         if (ui->tabs->count() == 1)
         {
             ui->buttonStartAllTimers->setDisabled(true);
             ui->buttonStopAllTimers->setDisabled(true);
+            ui->buttonSaveTimers->setDisabled(true);
         }
     }
+}
+
+void MainWindow::on_buttonSaveTimers_clicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Select the file where the timers will be saved", QDir::homePath(), QString("FMetro timers file (*.%1)").arg(TIMERS_FILE_EXTENSION));
+    if (filename.isNull())
+    {
+        return;
+    }
+
+    // Add the extension if necessary
+    if (QFileInfo(filename).suffix() != TIMERS_FILE_EXTENSION)
+    {
+        filename += TIMERS_FILE_EXTENSION;
+    }
+
+    // Open the file
+    QFile file(filename);
+    QDataStream stream(&file);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::critical(this, "Save error", QString("Failed to open the file %1").arg(filename));
+        return;
+    }
+
+    // Write signature and version
+    stream << QString(TIMERS_FILE_SIGNATURE) << int(TIMERS_FILE_VERSION);
+
+    // Write the number of timers
+    stream << ui->tabs->count() - 1;
+
+    // Writes the timers
+    for (int i = 1; i < ui->tabs->count(); i++)
+    {
+        stream << ui->tabs->tabText(i); // Write title
+        stream << static_cast<TimerUi*>(ui->tabs->widget(i)); // Write content
+    }
+
+    // Check success
+    if (stream.status() != QDataStream::Ok)
+    {
+        QMessageBox::critical(this, "Save error", QString("Failed to write to the file %1").arg(filename));
+    }
+}
+
+void MainWindow::on_buttonOpenTimers_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this, "Select the file to open", QDir::homePath(), QString("FMetro timers file (*.%1)").arg(TIMERS_FILE_EXTENSION));
+    if (filename.isNull())
+    {
+        return;
+    }
+
+    // Open the file
+    QFile file(filename);
+    QDataStream stream(&file);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        QMessageBox::critical(this, "Open error", QString("Failed to open the file %1").arg(filename));
+        return;
+    }
+
+    // Check signature
+    QString signature;
+    stream >> signature;
+    if (signature != QString(TIMERS_FILE_SIGNATURE))
+    {
+        QMessageBox::critical(this, "Open error", QString("File corrupted: %1").arg(filename));
+        return;
+    }
+
+    // Check version
+    int version;
+    stream >> version;
+    if (version > TIMERS_FILE_VERSION)
+    {
+        QMessageBox::critical(this, "Open error", QString("This version of FMetro is to old to open %1. Please update.").arg(filename));
+        return;
+    }
+
+    // Read the number of timers
+    int timercount;
+    stream >> timercount;
+
+    // Put all the timers in a list
+    QList <QString> titles;
+    QList <TimerUi*> timers;
+    for (int i = 0; i < timercount; i ++)
+    {
+        // Read title
+        QString title;
+        stream >> title;
+        titles.append(title);
+
+        // Read timer data
+        TimerUi* timerui;
+        stream >> timerui;
+        timers.append(timerui);
+    }
+
+    // Check if the stream is alive
+    if (stream.status() != QDataStream::Ok)
+    {
+        QMessageBox::critical(this, "Open error", QString("Error reading the file %1").arg(filename));
+        return;
+    }
+
+    // All is fine, remove the current timers and add the new ones
+    ui->tabs->setUpdatesEnabled(false);
+
+    for (int i = 1; i < ui->tabs->count(); i ++)
+    {
+        closeTab(i);
+    }
+
+    for (int i = 0; i < titles.count(); i ++)
+    {
+        ui->tabs->addTab(timers[i], titles[i]);
+        ui->buttonSaveTimers->setEnabled(true);
+    }
+
+    ui->tabs->setUpdatesEnabled(true);
+
+    // Emit the "Speed changed" event to update the timers
+    int index = ui->comboSpeed->currentIndex();
+    emit speedChanged(ui->comboSpeed->itemData(index).value<double>());
 }

@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>455</height>
+    <width>237</width>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Folco's Metronome for StarCraft II</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_7">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
@@ -27,7 +27,7 @@
        <attribute name="title">
         <string>Start</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QGroupBox" name="groupNewTimer">
           <property name="title">
@@ -45,7 +45,7 @@
              <item row="1" column="0">
               <widget class="QLabel" name="labelSound">
                <property name="text">
-                <string>Soun&amp;d :</string>
+                <string>Soun&amp;d:</string>
                </property>
                <property name="buddy">
                 <cstring>comboSound</cstring>
@@ -73,7 +73,7 @@
              <item row="3" column="0">
               <widget class="QLabel" name="labelPeriod">
                <property name="text">
-                <string>&amp;Period :</string>
+                <string>&amp;Period:</string>
                </property>
                <property name="buddy">
                 <cstring>hsliderPeriod</cstring>
@@ -93,6 +93,12 @@
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::TicksBelow</enum>
+               </property>
+               <property name="tickInterval">
+                <number>60</number>
                </property>
               </widget>
              </item>
@@ -114,7 +120,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="labelName">
                <property name="text">
-                <string>&amp;Name :</string>
+                <string>&amp;Name:</string>
                </property>
                <property name="buddy">
                 <cstring>editName</cstring>
@@ -147,7 +153,7 @@
              <item>
               <widget class="QLabel" name="labelSpeed">
                <property name="text">
-                <string>&amp;Game speed :</string>
+                <string>&amp;Game speed:</string>
                </property>
                <property name="buddy">
                 <cstring>comboSpeed</cstring>
@@ -183,6 +189,27 @@
              </item>
             </layout>
            </item>
+           <item>
+            <layout class="QHBoxLayout" name="hlayoutOpenSave">
+             <item>
+              <widget class="QPushButton" name="buttonOpenTimers">
+               <property name="text">
+                <string>Open timers</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="buttonSaveTimers">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Save timers</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
         </item>
@@ -199,7 +226,7 @@
                <item>
                 <widget class="QPushButton" name="buttonAbout">
                  <property name="text">
-                  <string>About</string>
+                  <string>Read me !</string>
                  </property>
                 </widget>
                </item>

@@ -54,10 +54,14 @@ class MainWindow : public QMainWindow
     void on_comboSpeed_currentIndexChanged(int index);
     void on_hsliderPeriod_valueChanged(int value);
     void on_buttonCreate_clicked();
-    void on_comboSound_currentIndexChanged(int index);
+    void on_comboSound_activated(int index);
     void closeTab(int index);
 
-signals:
+    void on_buttonSaveTimers_clicked();
+
+    void on_buttonOpenTimers_clicked();
+
+    signals:
     void speedChanged(double);
 };
 

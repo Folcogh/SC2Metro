@@ -6,260 +6,338 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>284</width>
-    <height>268</height>
+    <width>291</width>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="gboxTimer">
-     <property name="title">
-      <string>Timer</string>
-     </property>
-     <property name="checkable">
+    <widget class="QLabel" name="labelBroken">
+     <property name="enabled">
       <bool>true</bool>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLabel" name="labelBroken">
-        <property name="enabled">
+     <property name="font">
+      <font>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 0, 0);</string>
+     </property>
+     <property name="text">
+      <string>error</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="labelSound">
+     <property name="text">
+      <string>Sound</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="vspacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="boxStarting">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>Starting</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelDelay">
+        <property name="text">
+         <string>Delay:</string>
+        </property>
+        <property name="buddy">
+         <cstring>spinDelay</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinDelay">
+        <property name="suffix">
+         <string> seconds</string>
+        </property>
+        <property name="maximum">
+         <number>32767</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkStartTimer">
+        <property name="text">
+         <string>Start the timer when &quot;Start all timers&quot; is pressed</string>
+        </property>
+        <property name="checked">
          <bool>true</bool>
         </property>
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(255, 0, 0);</string>
-        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkPlayOnStart">
         <property name="text">
-         <string>error</string>
+         <string>Play the sound when the timer starts</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="labelSound">
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="checkSynchronize">
         <property name="text">
-         <string>Sound</string>
+         <string>Synchronize on hotkey</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlayoutPeriod">
-        <item>
-         <widget class="QLabel" name="labelPeriod">
-          <property name="text">
-           <string>Timer period :</string>
-          </property>
-          <property name="buddy">
-           <cstring>hsliderPeriod</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsliderPeriod">
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelSeconds">
-          <property name="text">
-           <string>seconds</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlayoutDelay">
-        <item>
-         <widget class="QLabel" name="labelDelay">
-          <property name="text">
-           <string>Start delay :</string>
-          </property>
-          <property name="buddy">
-           <cstring>spinDelay</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="spinDelay">
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="suffix">
-           <string> seconds</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="hspacerDelay">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlayoutTerminate">
-        <item>
-         <widget class="QLabel" name="labelTerminate">
-          <property name="text">
-           <string>Terminate after :</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="glayoutTerminate">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="radioTerminateSeconds">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">groupTerminate</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="spinTerminateSeconds">
-            <property name="suffix">
-             <string> seconds</string>
-            </property>
-            <property name="maximum">
-             <number>900</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioTerminateTriggers">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">groupTerminate</string>
-            </attribute>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="spinTerminateTriggers">
-            <property name="suffix">
-             <string> triggers</string>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="hspacerTerminate">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlayoutVolume">
-        <item>
-         <widget class="QLabel" name="labelVolume">
-          <property name="text">
-           <string>Volume : </string>
-          </property>
-          <property name="buddy">
-           <cstring>hsliderVolume</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="hsliderVolume">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelPercent">
-          <property name="text">
-           <string>percent</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="hlayoutButtons">
-        <item>
-         <widget class="QPushButton" name="buttonStart">
-          <property name="text">
-           <string>Start</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonStop">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string>Stop</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>10</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="vspacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="boxTriggering">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>Triggering</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelPeriod">
+        <property name="text">
+         <string>Period (900 seconds):</string>
+        </property>
+        <property name="buddy">
+         <cstring>hsliderPeriod</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSlider" name="hsliderPeriod">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>60</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelVolume">
+        <property name="text">
+         <string>Volume: </string>
+        </property>
+        <property name="buddy">
+         <cstring>hsliderVolume</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSlider" name="hsliderVolume">
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::NoTicks</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="vspacer_4">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="boxTermination">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>Termination</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_5">
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioTerminateSeconds">
+        <property name="text">
+         <string>after</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">groupTerminate</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="spinTerminateSeconds">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="suffix">
+         <string> seconds</string>
+        </property>
+        <property name="maximum">
+         <number>900</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="radioTerminateTriggers">
+        <property name="text">
+         <string>after</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">groupTerminate</string>
+        </attribute>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="spinTerminateTriggers">
+        <property name="suffix">
+         <string> triggers</string>
+        </property>
+        <property name="maximum">
+         <number>1000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="vspacer_5">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hlayoutButtons">
+     <item>
+      <widget class="QPushButton" name="buttonStart">
+       <property name="text">
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonStop">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Stop</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="vspacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>19</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

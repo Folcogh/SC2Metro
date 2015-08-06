@@ -41,31 +41,37 @@ class TimerUi : public QWidget
 {
     Q_OBJECT
   public:
+    TimerUi();
     TimerUi(QString fullfilename, int period, double multiplier);
     ~TimerUi();
     void multiplierChanged(double multiplier); // Slot triggered when the time rate changes
-    void playMedia();                          // Slot triggered when the timer expires
-    void error(QMediaPlayer::Error);           // Slot triggered if an error occurs
     void start();                              // Start the timer
     void stop();                               // Stop the timer
+    QDataStream& fromStream(QDataStream& stream);
+    QDataStream& toStream(QDataStream& stream) const;
 
   private:
     Q_DISABLE_COPY(TimerUi)
     Ui::TimerUi* ui;
-    QTimer* m_timer;            // THE timer
-    double m_multiplier;        // Time rate. It's a copy of the one of the main window, to have a faster access
-    QMediaContent m_media;      // Content the sound played
-    QMediaPlayer* m_player;     // The player of the sound
-    QMediaPlaylist* m_playlist; // The playlist allows to configure the player
-    bool m_broken;              // True if the media can't be played, stucking the interface
-    int m_triggers;             // -1 for unlimited timer, else the number of times the timer will be triggered
+    QTimer* m_timer;                 // THE timer
+    double m_multiplier;             // Time rate. It's a copy of the one of the main window, to have a faster access
+    QMediaContent* m_media;          // Content the sound played
+    QMediaPlayer* m_player;          // The player of the sound
+    QMediaPlaylist* m_playlist;      // The playlist allows to configure the player
+    bool m_broken;                   // True if the media can't be played, stucking the interface
+    int m_triggers;                  // -1 for unlimited timer, else the number of times the timer will be triggered
+    void playMedia();                // Slot triggered when the timer expires
+    void error(QMediaPlayer::Error); // Slot triggered if an error occurs
     void startAfterDelay();
+    void updateVolumeLabel();
+    void updatePeriodLabel();
 
   private slots:
     void on_hsliderPeriod_valueChanged(int value);
     void on_hsliderVolume_valueChanged(int value);
-    void on_spinDelay_valueChanged(int delay);
-    void on_gboxTimer_toggled(bool checked);
 };
+
+QDataStream& operator<<(QDataStream& stream, const TimerUi* timerui);
+QDataStream& operator>>(QDataStream& stream, TimerUi*& timerui);
 
 #endif // TIMERUI_HPP

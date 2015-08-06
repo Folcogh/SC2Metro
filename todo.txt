@@ -1,10 +1,3 @@
 - forbid to broadcast start/stop all if the only opened timers are stuck
-- privatiser les méthodes qui n'ont pas besoin d'être publiques
-- renommer About en Readme
-- ajouter un curseur sur les sliders (toutes les minutes ?)
-- tester dans une VM Win
-- enregistrement des sons paramétrés -> sérialisation de la classe TimerUi
-- voir pour faire poper le menu de son custom sans avoir à modifier le choix de la liste
-- design sans tabs, avec une liste, et une interface "new timer" séparée ?
-- timers uniques (ajouter un check Play Initial Sound pour faire ça ?)
-- ajout d'autres sons prédéfinis: scout, check ressources, mules, chronoboost, supply
+- tabless ui : a list for the timers, and a separated "New timer" interface ?
+- more predefined timers: scout, check ressources, mules, chronoboost, supply
