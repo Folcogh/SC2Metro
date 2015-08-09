@@ -1,3 +1,5 @@
-- forbid to broadcast start/stop all if the only opened timers are stuck
 - tabless ui : a list for the timers, and a separated "New timer" interface ?
-- more predefined timers: scout, check ressources, mules, chronoboost, supply
+- add a standard beep sound
+- change timer display format
+- create configuration to save preferred open/save folder
+- remove tab names request ?

@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "windows.h"
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
 #include <QDir>
@@ -57,6 +58,10 @@ MainWindow::MainWindow(QWidget* parent)
     TimerComponent* InjectComponent = new TimerComponent(this, "Inject", "qrc:/Sounds/inject.mp3", INJECT_PERIOD, false);
     TimerComponent* MinimapComponent = new TimerComponent(this, "Minimap", "qrc:/Sounds/minimap.mp3", MINIMAP_PERIOD, false);
     TimerComponent* WorkerComponent = new TimerComponent(this, "Worker", "qrc:/Sounds/worker.mp3", WORKER_PERIOD, false);
+    TimerComponent* MuleComponent = new TimerComponent(this, "Mule", "qrc:/Sounds/mule.mp3", MULE_PERIOD, false);
+    TimerComponent* ResourceComponent = new TimerComponent(this, "Resource", "qrc:/Sounds/resource.mp3", RESOURCE_PERIOD, false);
+    TimerComponent* ScoutComponent = new TimerComponent(this, "Scout", "qrc:/Sounds/scout.mp3", SCOUT_PERIOD, false);
+    TimerComponent* SupplyComponent = new TimerComponent(this, "Supply", "qrc:/Sounds/supply.mp3", SUPPLY_PERIOD, false);
     TimerComponent* CustomComponent = new TimerComponent(this, "<Custom...>", "", CUSTOM_PERIOD, true);
 
     // Add the name of the timer componennts to the sound list
@@ -64,6 +69,10 @@ MainWindow::MainWindow(QWidget* parent)
     ui->comboSound->addItem(InjectComponent->name(), QVariant::fromValue(InjectComponent));
     ui->comboSound->addItem(MinimapComponent->name(), QVariant::fromValue(MinimapComponent));
     ui->comboSound->addItem(WorkerComponent->name(), QVariant::fromValue(WorkerComponent));
+    ui->comboSound->addItem(MuleComponent->name(), QVariant::fromValue(MuleComponent));
+    ui->comboSound->addItem(ResourceComponent->name(), QVariant::fromValue(ResourceComponent));
+    ui->comboSound->addItem(ScoutComponent->name(), QVariant::fromValue(ScoutComponent));
+    ui->comboSound->addItem(SupplyComponent->name(), QVariant::fromValue(SupplyComponent));
     ui->comboSound->addItem(CustomComponent->name(), QVariant::fromValue(CustomComponent));
 
     // Establish the connections
@@ -74,6 +83,13 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Trigger the activation callback to update the data of the current sound
     on_comboSound_activated(0);
+
+    // Register an hotkey
+//    if (!RegisterHotKey(NULL, 1, MOD_ALT | 0x4000, 0x42))
+    if (!RegisterHotKey((HWND)winId(), 1, MOD_ALT | 0x4000, 0x42))
+    {
+        QMessageBox::critical(this, "Hotkey error", "Can't register hotkey, it won't work");
+    }
 }
 
 MainWindow::~MainWindow()
@@ -116,7 +132,7 @@ void MainWindow::on_buttonCreate_clicked()
 
     // Connect the timer to the main ui
     connect(this, &MainWindow::speedChanged, tu, &TimerUi::multiplierChanged);
-    connect(ui->buttonStartAllTimers, &QPushButton::clicked, tu, &TimerUi::start);
+    connect(ui->buttonStartAllTimers, &QPushButton::clicked, tu, &TimerUi::onStartAllEvent);
     connect(ui->buttonStopAllTimers, &QPushButton::clicked, tu, &TimerUi::stop);
 
     // Enable Start all/Stop all buttons
@@ -133,8 +149,7 @@ void MainWindow::on_comboSound_activated(int index)
     if (tc->custom())
     {
         // Custom timer -> query the sound file
-        QString filename =
-            QFileDialog::getOpenFileName(this, "Custom sound to play", QDir::homePath(), tr("Sounds (*.mp3 *.wav)"));
+        QString filename = QFileDialog::getOpenFileName(this, "Custom sound to play", QDir::homePath(), tr("Sounds (*.mp3 *.wav)"));
         if (filename.isEmpty())
         {
             ui->comboSound->setCurrentIndex(0);
@@ -202,7 +217,7 @@ void MainWindow::on_buttonSaveTimers_clicked()
     // Writes the timers
     for (int i = 1; i < ui->tabs->count(); i++)
     {
-        stream << ui->tabs->tabText(i); // Write title
+        stream << ui->tabs->tabText(i);                       // Write title
         stream << static_cast<TimerUi*>(ui->tabs->widget(i)); // Write content
     }
 
@@ -253,9 +268,9 @@ void MainWindow::on_buttonOpenTimers_clicked()
     stream >> timercount;
 
     // Put all the timers in a list
-    QList <QString> titles;
-    QList <TimerUi*> timers;
-    for (int i = 0; i < timercount; i ++)
+    QList<QString> titles;
+    QList<TimerUi*> timers;
+    for (int i = 0; i < timercount; i++)
     {
         // Read title
         QString title;
@@ -278,12 +293,12 @@ void MainWindow::on_buttonOpenTimers_clicked()
     // All is fine, remove the current timers and add the new ones
     ui->tabs->setUpdatesEnabled(false);
 
-    for (int i = 1; i < ui->tabs->count(); i ++)
+    for (int i = 1; i < ui->tabs->count(); i++)
     {
         closeTab(i);
     }
 
-    for (int i = 0; i < titles.count(); i ++)
+    for (int i = 0; i < titles.count(); i++)
     {
         ui->tabs->addTab(timers[i], titles[i]);
         ui->buttonSaveTimers->setEnabled(true);

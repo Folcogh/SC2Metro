@@ -10,4 +10,3 @@
 #define TIMERS_FILE_VERSION 1
 
 #endif // CONSTANTS_HPP
-

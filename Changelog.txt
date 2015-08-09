@@ -1,4 +1,12 @@
-05/08/2015
+07/08/2015
+- FIX: the timer starts even if "Start the timer when 'Start all timers' is pressed" is unchecked
+- FIX: don't cut the last sound played when the timer is limited
+- cleaned up the triggers'count code
+
+06/08/2015
+- added sounds: mule, resource, scout, supply
+
+06/08/2015
 - refactored the timer's UI
 - FIX: trigger the open dialog when selecting "Custom" in the combo box, even if the previous choice was already "Custom"
 - increased the timers max duration up to 15 minutes

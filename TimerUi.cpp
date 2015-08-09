@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "Global.hpp"
 #include "TimerUi.hpp"
 #include "ui_TimerUi.h"
 #include "Constants.hpp"
@@ -78,6 +79,7 @@ TimerUi::TimerUi(QString fullfilename, int period, double multiplier)
     connect(ui->radioTerminateTriggers, &QRadioButton::toggled, ui->spinTerminateTriggers, &QSpinBox::setEnabled);
     connect(ui->radioTerminateSeconds, &QRadioButton::toggled, ui->spinTerminateSeconds, &QSpinBox::setEnabled);
     connect(m_player, (void (QMediaPlayer::*)(QMediaPlayer::Error)) & QMediaPlayer::error, this, &TimerUi::error);
+    connect(native_event_filter, &NativeEventFilter::hotkeyPressed, this, &TimerUi::hotkeyTriggered);
 }
 
 TimerUi::~TimerUi()
@@ -117,10 +119,19 @@ void TimerUi::updatePeriodLabel()
     ui->labelPeriod->setText(QString("Period (%1 seconds):").arg(ui->hsliderPeriod->value()));
 }
 
+void TimerUi::hotkeyTriggered()
+{
+    if (ui->checkSynchronize->isChecked())
+    {
+        stop();
+        start();
+    }
+}
+
 void TimerUi::start()
 {
     // Check if the timer is alive. This is necessary if the main window broadcasts a "Start all" event
-    if (!m_broken && ui->checkStartTimer->isChecked())
+    if (!m_broken)
     {
         // Temporize the timer
         QTimer::singleShot(ui->spinDelay->value() * 1000 / m_multiplier, this, &TimerUi::startAfterDelay);
@@ -157,6 +168,14 @@ void TimerUi::stop()
     ui->buttonStop->setDisabled(true);
 }
 
+void TimerUi::onStartAllEvent()
+{
+    if (ui->checkStartTimer->isChecked())
+    {
+        start();
+    }
+}
+
 void TimerUi::playMedia()
 {
     m_player->stop();
@@ -166,11 +185,13 @@ void TimerUi::playMedia()
     {
         return;
     }
+    --m_triggers;
     if (m_triggers == 0)
     {
-        stop();
+        m_timer->stop();
+        ui->buttonStart->setEnabled(true);
+        ui->buttonStop->setDisabled(true);;
     }
-    --m_triggers;
 }
 
 // Trigerred by the player in case of error
@@ -188,16 +209,7 @@ QDataStream& TimerUi::fromStream(QDataStream& stream)
     QString sound;
     int delay, period, volume, checkedId, triggers, seconds;
     bool play, start, synchro;
-    stream >> sound
-            >> delay
-            >> play
-            >> start
-            >> synchro
-            >> period
-            >> volume
-            >> checkedId
-            >> triggers
-            >> seconds;
+    stream >> sound >> delay >> play >> start >> synchro >> period >> volume >> checkedId >> triggers >> seconds;
 
     // ID of the radio buttons
     ui->groupTerminate->setId(ui->radioTerminateTriggers, TERMINATE_ON_TRIGGER_COUNT);
@@ -248,17 +260,8 @@ QDataStream& TimerUi::fromStream(QDataStream& stream)
 
 QDataStream& TimerUi::toStream(QDataStream& stream) const
 {
-    return stream
-            << ui->labelSound->text()
-            << ui->spinDelay->value()
-            << ui->checkPlayOnStart->isChecked()
-            << ui->checkStartTimer->isChecked()
-            << ui->checkSynchronize->isChecked()
-            << ui->hsliderPeriod->value()
-            << ui->hsliderVolume->value()
-            << ui->groupTerminate->checkedId()
-            << ui->spinTerminateTriggers->value()
-            << ui->spinTerminateSeconds->value();
+    return stream << ui->labelSound->text() << ui->spinDelay->value() << ui->checkPlayOnStart->isChecked() << ui->checkStartTimer->isChecked() << ui->checkSynchronize->isChecked()
+                  << ui->hsliderPeriod->value() << ui->hsliderVolume->value() << ui->groupTerminate->checkedId() << ui->spinTerminateTriggers->value() << ui->spinTerminateSeconds->value();
 }
 
 QDataStream& operator<<(QDataStream& stream, const TimerUi* timerui)
@@ -271,4 +274,3 @@ QDataStream& operator>>(QDataStream& stream, TimerUi*& timerui)
     timerui = new TimerUi;
     return timerui->fromStream(stream);
 }
-

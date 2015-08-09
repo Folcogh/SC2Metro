@@ -14,13 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "Global.hpp"
 #include "MainWindow.hpp"
+#include <QAbstractEventDispatcher>
 #include <QApplication>
+#include <QMessageBox>
+
+NativeEventFilter* native_event_filter;
 
 int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+    native_event_filter = new NativeEventFilter;
+    QAbstractEventDispatcher::instance()->installNativeEventFilter(this);
+
+    QApplication app(argc, argv);
+
+    // Display and execute the app
+    MainWindow win;
+    win.show();
+    int ret = app.exec();
+
+    // Exit
+    delete native_event_filter;
+    return ret;
 }

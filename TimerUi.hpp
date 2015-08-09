@@ -44,9 +44,10 @@ class TimerUi : public QWidget
     TimerUi();
     TimerUi(QString fullfilename, int period, double multiplier);
     ~TimerUi();
-    void multiplierChanged(double multiplier); // Slot triggered when the time rate changes
-    void start();                              // Start the timer
+    void multiplierChanged(double multiplier); // Slot triggered when the time rate changes (TODO: add setMultiplier ?)
+    void start();                              // Start the timer (TODO ? private ??)
     void stop();                               // Stop the timer
+    void onStartAllEvent();
     QDataStream& fromStream(QDataStream& stream);
     QDataStream& toStream(QDataStream& stream) const;
 
@@ -65,6 +66,7 @@ class TimerUi : public QWidget
     void startAfterDelay();
     void updateVolumeLabel();
     void updatePeriodLabel();
+    void hotkeyTriggered();
 
   private slots:
     void on_hsliderPeriod_valueChanged(int value);

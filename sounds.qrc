@@ -4,5 +4,9 @@
         <file>Sounds/minimap.mp3</file>
         <file>Sounds/worker.mp3</file>
         <file>Sounds/inject.mp3</file>
+        <file>Sounds/mule.mp3</file>
+        <file>Sounds/resource.mp3</file>
+        <file>Sounds/scout.mp3</file>
+        <file>Sounds/supply.mp3</file>
     </qresource>
 </RCC>

@@ -24,6 +24,10 @@
 #define INJECT_PERIOD 44
 #define MINIMAP_PERIOD 10
 #define WORKER_PERIOD 17
+#define MULE_PERIOD 89
+#define RESOURCE_PERIOD 30
+#define SCOUT_PERIOD 180
+#define SUPPLY_PERIOD 30
 #define CUSTOM_PERIOD 30
 
 // This class provides default data for each predefined timer
@@ -32,8 +36,7 @@ class TimerComponent : public QObject
 {
     Q_OBJECT
   public:
-    TimerComponent(QObject* parent, QString name, QString fullfilename,
-                   int period, bool custom);
+    TimerComponent(QObject* parent, QString name, QString fullfilename, int period, bool custom);
     QString name() const;
     QString fullfilename() const;
     int period() const;

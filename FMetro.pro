@@ -16,14 +16,17 @@ SOURCES += main.cpp\
     TimerUi.cpp \
     TimerComponent.cpp \
     LicenseUi.cpp \
-    ReadmeUi.cpp
+    ReadmeUi.cpp \
+    NativeEventFilter.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerUi.hpp \
     TimerComponent.hpp \
     LicenseUi.hpp \
     ReadmeUi.hpp \
-    Constants.hpp
+    Constants.hpp \
+    NativeEventFilter.hpp \
+    Global.hpp
 
 FORMS    += MainWindow.ui \
     TimerUi.ui \
@@ -37,4 +40,5 @@ RESOURCES += \
 DISTFILES += \
     todo.txt \
     gpl.txt \
-    Changelog.txt
+    Changelog.txt \
+    .clang-format

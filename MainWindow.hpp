@@ -56,12 +56,10 @@ class MainWindow : public QMainWindow
     void on_buttonCreate_clicked();
     void on_comboSound_activated(int index);
     void closeTab(int index);
-
     void on_buttonSaveTimers_clicked();
-
     void on_buttonOpenTimers_clicked();
 
-    signals:
+  signals:
     void speedChanged(double);
 };
 
