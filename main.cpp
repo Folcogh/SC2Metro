@@ -16,7 +16,6 @@
 
 #include "Global.hpp"
 #include "MainWindow.hpp"
-#include <QAbstractEventDispatcher>
 #include <QApplication>
 #include <QMessageBox>
 
@@ -24,10 +23,8 @@ NativeEventFilter* native_event_filter;
 
 int main(int argc, char* argv[])
 {
-    native_event_filter = new NativeEventFilter;
-    QAbstractEventDispatcher::instance()->installNativeEventFilter(this);
-
     QApplication app(argc, argv);
+    native_event_filter = new NativeEventFilter;
 
     // Display and execute the app
     MainWindow win;

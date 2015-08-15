@@ -116,7 +116,7 @@ void TimerUi::updateVolumeLabel()
 
 void TimerUi::updatePeriodLabel()
 {
-    ui->labelPeriod->setText(QString("Period (%1 seconds):").arg(ui->hsliderPeriod->value()));
+    ui->labelPeriod->setText(QString("Period (%1:%2):").arg(ui->hsliderPeriod->value() / 60, 2, 10, QChar('0')).arg(ui->hsliderPeriod->value() % 60, 2, 10, QChar('0')));
 }
 
 void TimerUi::hotkeyTriggered()

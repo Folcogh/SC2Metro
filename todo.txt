@@ -1,5 +1,4 @@
 - tabless ui : a list for the timers, and a separated "New timer" interface ?
 - add a standard beep sound
-- change timer display format
 - create configuration to save preferred open/save folder
 - remove tab names request ?

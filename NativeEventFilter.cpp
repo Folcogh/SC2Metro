@@ -1,27 +1,28 @@
 #include "NativeEventFilter.hpp"
 #include "windows.h"
-#include <QApplication>
 #include <QDebug>
 #include <QString>
+#include <QMessageBox>
+#include <QAbstractEventDispatcher>
 
 NativeEventFilter::NativeEventFilter()
 {
-    count = 0;
+    if (!RegisterHotKey((HWND)0, 1, MOD_ALT | MOD_SHIFT, 0x53))
+    {
+        QMessageBox::critical(NULL, "Hotkey error", "Can't register hotkey, it won't work");
+    }
+    QAbstractEventDispatcher::instance()->installNativeEventFilter(this);
 }
 
-bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType, void* message, long*)
+bool NativeEventFilter::nativeEventFilter(const QByteArray&, void* message, long*)
 {
-    if (eventType == "windows_dispatcher_MSG")
+//    if (eventType == "windows_dispatcher_MSG")
     {
         MSG* msg = static_cast<MSG*>(message);
-
-        count++;
-        qDebug() << QString("Event count: %1. Message: %2").arg(count).arg(msg->message);
-
         if (msg->message == WM_HOTKEY)
         {
             emit hotkeyPressed();
-            return true;
+//            return true;
         }
     }
     return false;

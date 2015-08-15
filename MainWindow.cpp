@@ -83,13 +83,6 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Trigger the activation callback to update the data of the current sound
     on_comboSound_activated(0);
-
-    // Register an hotkey
-//    if (!RegisterHotKey(NULL, 1, MOD_ALT | 0x4000, 0x42))
-    if (!RegisterHotKey((HWND)winId(), 1, MOD_ALT | 0x4000, 0x42))
-    {
-        QMessageBox::critical(this, "Hotkey error", "Can't register hotkey, it won't work");
-    }
 }
 
 MainWindow::~MainWindow()
@@ -112,7 +105,7 @@ void MainWindow::on_comboSpeed_currentIndexChanged(int index)
 // Modify the period
 void MainWindow::on_hsliderPeriod_valueChanged(int value)
 {
-    ui->labelSeconds->setText(QString("%1 seconds").arg(value));
+    ui->labelSeconds->setText(QString("%1:%2").arg(value / 60, 2, 10, QChar('0')).arg(value % 60, 2, 10, QChar('0')));
 }
 
 // Create a new timer
@@ -160,7 +153,7 @@ void MainWindow::on_comboSound_activated(int index)
     ui->hsliderPeriod->setValue(tc->period());
 
     // Update the ui
-    ui->labelSeconds->setText(QString("%1 seconds").arg(tc->period()));
+    ui->labelSeconds->setText(QString("%1:%2").arg(tc->period() / 60, 2, 10, QChar('0')).arg(tc->period() % 60, 2, 10, QChar('0')));
     ui->labelSoundname->setText(QFileInfo(tc->fullfilename()).fileName());
 }
 

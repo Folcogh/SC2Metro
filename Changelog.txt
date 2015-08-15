@@ -1,3 +1,7 @@
+15/08/2015
+- changed the timer display format (x seconds -> mm:ss)
+- added hotkey support
+
 07/08/2015
 - FIX: the timer starts even if "Start the timer when 'Start all timers' is pressed" is unchecked
 - FIX: don't cut the last sound played when the timer is limited
