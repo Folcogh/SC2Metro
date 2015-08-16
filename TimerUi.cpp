@@ -259,6 +259,7 @@ QDataStream& TimerUi::fromStream(QDataStream& stream)
     connect(ui->buttonStart, &QPushButton::clicked, this, &TimerUi::start);
     connect(ui->buttonStop, &QPushButton::clicked, this, &TimerUi::stop);
     connect(m_player, (void (QMediaPlayer::*)(QMediaPlayer::Error)) & QMediaPlayer::error, this, &TimerUi::error);
+    connect(native_event_filter, &NativeEventFilter::hotkeyPressed, this, &TimerUi::hotkeyTriggered);
 
     return stream;
 }

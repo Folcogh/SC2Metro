@@ -1,3 +1,6 @@
+17/08/15
+- FIX: enable the hotkey on file opening
+
 16/08/2015
 - FIX: enable the Start All button if there is a timer available on file opening
 - FIX: establish the Start all -> start connection on file opening
