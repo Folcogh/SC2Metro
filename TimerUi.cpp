@@ -168,6 +168,11 @@ void TimerUi::stop()
     ui->buttonStop->setDisabled(true);
 }
 
+bool TimerUi::broken()
+{
+    return m_broken;
+}
+
 void TimerUi::onStartAllEvent()
 {
     if (ui->checkStartTimer->isChecked())
@@ -207,7 +212,7 @@ void TimerUi::error(QMediaPlayer::Error)
 QDataStream& TimerUi::fromStream(QDataStream& stream)
 {
     QString sound;
-    int delay, period, volume, checkedId, triggers, seconds;
+    unsigned int delay, period, volume, checkedId, triggers, seconds;
     bool play, start, synchro;
     stream >> sound >> delay >> play >> start >> synchro >> period >> volume >> checkedId >> triggers >> seconds;
 

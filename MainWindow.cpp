@@ -90,6 +90,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::updateStartButton()
+{
+    TimerUi* tu;
+    ui->buttonStartAllTimers->setUpdatesEnabled(false);
+    ui->buttonStartAllTimers->setDisabled(true);
+
+    for (int i = 1; i < ui->tabs->count(); i++)
+    {
+        tu = static_cast<TimerUi*>(ui->tabs->widget(i));
+        if (!tu->broken())
+        {
+            ui->buttonStartAllTimers->setEnabled(true);
+            break;
+        }
+    }
+    ui->buttonStartAllTimers->setUpdatesEnabled(true);
+}
+
 // Enable the create button if the name is not null
 void MainWindow::on_editName_textChanged(const QString& text)
 {
@@ -128,9 +146,8 @@ void MainWindow::on_buttonCreate_clicked()
     connect(ui->buttonStartAllTimers, &QPushButton::clicked, tu, &TimerUi::onStartAllEvent);
     connect(ui->buttonStopAllTimers, &QPushButton::clicked, tu, &TimerUi::stop);
 
-    // Enable Start all/Stop all buttons
-    ui->buttonStartAllTimers->setEnabled(true);
-    ui->buttonStopAllTimers->setEnabled(true);
+    // Enable Start all buttons
+    updateStartButton();
     ui->buttonSaveTimers->setEnabled(true);
 }
 
@@ -167,14 +184,7 @@ void MainWindow::closeTab(int index)
         QWidget* widget = ui->tabs->widget(index);
         ui->tabs->removeTab(index);
         delete widget;
-
-        // Allow/forbid to broadcast the Start all/Stop all event and Save
-        if (ui->tabs->count() == 1)
-        {
-            ui->buttonStartAllTimers->setDisabled(true);
-            ui->buttonStopAllTimers->setDisabled(true);
-            ui->buttonSaveTimers->setDisabled(true);
-        }
+        updateStartButton();
     }
 }
 
@@ -270,10 +280,13 @@ void MainWindow::on_buttonOpenTimers_clicked()
         stream >> title;
         titles.append(title);
 
-        // Read timer data
+        // Read timer data, create the timer and establish the connections
         TimerUi* timerui;
         stream >> timerui;
         timers.append(timerui);
+        connect(ui->buttonStartAllTimers, &QPushButton::clicked, timerui, &TimerUi::onStartAllEvent);
+        connect(ui->buttonStopAllTimers, &QPushButton::clicked, timerui, &TimerUi::stop);
+        connect(this, &MainWindow::speedChanged, timerui, &TimerUi::multiplierChanged);
     }
 
     // Check if the stream is alive
@@ -286,9 +299,9 @@ void MainWindow::on_buttonOpenTimers_clicked()
     // All is fine, remove the current timers and add the new ones
     ui->tabs->setUpdatesEnabled(false);
 
-    for (int i = 1; i < ui->tabs->count(); i++)
+    while (ui->tabs->count() != 1)
     {
-        closeTab(i);
+        closeTab(1);
     }
 
     for (int i = 0; i < titles.count(); i++)
@@ -297,6 +310,7 @@ void MainWindow::on_buttonOpenTimers_clicked()
         ui->buttonSaveTimers->setEnabled(true);
     }
 
+    updateStartButton();
     ui->tabs->setUpdatesEnabled(true);
 
     // Emit the "Speed changed" event to update the timers

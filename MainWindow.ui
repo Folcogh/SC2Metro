@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>237</width>
-    <height>491</height>
+    <width>270</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -179,9 +179,6 @@
              </item>
              <item>
               <widget class="QPushButton" name="buttonStopAllTimers">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
                <property name="text">
                 <string>S&amp;top all timers</string>
                </property>

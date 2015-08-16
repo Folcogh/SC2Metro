@@ -47,6 +47,7 @@ class TimerUi : public QWidget
     void multiplierChanged(double multiplier); // Slot triggered when the time rate changes (TODO: add setMultiplier ?)
     void start();                              // Start the timer (TODO ? private ??)
     void stop();                               // Stop the timer
+    bool broken();
     void onStartAllEvent();
     QDataStream& fromStream(QDataStream& stream);
     QDataStream& toStream(QDataStream& stream) const;

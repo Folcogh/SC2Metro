@@ -48,6 +48,7 @@ class MainWindow : public QMainWindow
   private:
     Q_DISABLE_COPY(MainWindow)
     Ui::MainWindow* ui;
+    void updateStartButton();
 
   private slots:
     void on_editName_textChanged(const QString& text);

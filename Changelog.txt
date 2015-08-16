@@ -1,3 +1,10 @@
+16/08/2015
+- FIX: enable the Start All button if there is a timer available on file opening
+- FIX: establish the Start all -> start connection on file opening
+- FIX: establish the Stop all -> stop connection on file opening
+- FIX: establish the multiplierChanged connection on file opening
+- FIX: close all timers on file opening
+
 15/08/2015
 - changed the timer display format (x seconds -> mm:ss)
 - added hotkey support
