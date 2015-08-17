@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Images/folco.png</file>
-        <file>Images/gplv3.png</file>
-    </qresource>
-</RCC>

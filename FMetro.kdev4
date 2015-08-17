@@ -1,0 +1,4 @@
+[Project]
+Name=FMetro
+Manager=KDevCMakeManager
+VersionControl=kdevgit
