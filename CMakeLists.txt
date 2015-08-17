@@ -4,7 +4,7 @@ find_package(Qt4 REQUIRED)
 
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 
-set(FMetro_SRCS FMetro.cpp main.cpp)
+set(FMetro_SRCS main.cpp)
 
 qt4_automoc(${FMetro_SRCS})
 add_executable(fmetro ${FMetro_SRCS})
