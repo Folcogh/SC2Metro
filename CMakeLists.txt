@@ -1,13 +1,39 @@
-cmake_minimum_required(VERSION 2.6)
-project(fmetro)
-find_package(Qt4 REQUIRED)
+cmake_minimum_required(VERSION 2.8.11)
+project(FMetro)
 
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+# Find the QtWidgets library
+find_package(Qt5 REQUIRED Widgets)
 
-set(FMetro_SRCS main.cpp)
+# Include that globally, so KDevelop can find the headers
+include_directories(FMetro PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Qt5Widgets_INCLUDE_DIRS}
+    )
 
-qt4_automoc(${FMetro_SRCS})
-add_executable(fmetro ${FMetro_SRCS})
-target_link_libraries(fmetro ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+# Create target
+add_executable(FMetro
+    BOTimer.cpp
+    Controller.cpp
+    CyclicTimer.cpp
+    Game.cpp
+    GameUi.cpp
+    main.cpp
+    MainWindow.cpp
+    )
 
-install(TARGETS fmetro RUNTIME DESTINATION bin)
+target_compile_options(FMetro PUBLIC
+    -std=c++11
+    -Wall
+    -Wextra
+    )
+
+target_link_libraries(FMetro
+    ${Qt5Widgets_LIBRARIES}
+    )
+
+set_target_properties(FMetro PROPERTIES
+    AUTOMOC ON
+    )
+
+# Installation
+install(TARGETS FMetro RUNTIME DESTINATION bin)

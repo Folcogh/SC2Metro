@@ -1,1 +1,2 @@
- 
+- customize QCoreApplication instance
+- customize QMainWindow
