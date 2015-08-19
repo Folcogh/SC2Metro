@@ -1,4 +1,6 @@
 2015-08-19
+
+2015-08-19
 - add UiEditGameName class
 - comment sources (doxygen)
 - MainWindow is now a singleton
