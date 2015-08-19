@@ -5,14 +5,22 @@
 #include <QAction>
 #include <QMainWindow>
 
+/**
+ * @brief The main window class
+ *
+ * This class is a singleton. All dialogs needs to access a pointer to the
+ *instance in order to be centered
+ */
 class MainWindow : public QMainWindow
 {
   public:
-    MainWindow();
     ~MainWindow();
+    static MainWindow* get();
+    static MainWindow* realInstance();
 
   private:
-    Q_DISABLE_COPY(MainWindow);
+    Q_DISABLE_COPY(MainWindow)
+    MainWindow();
     void translate();
 
     // Application-wide actions
@@ -26,7 +34,6 @@ class MainWindow : public QMainWindow
 
     // Game menu
     QMenu* MenuGame;
-
 };
 
 #endif // MAIN_WINDOW_HPP

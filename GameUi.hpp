@@ -10,7 +10,7 @@ class GameUi : public QWidget
     ~GameUi();
 
   private:
-    Q_DISABLE_COPY(GameUi);
+    Q_DISABLE_COPY(GameUi)
 };
 
 #endif // GAME_UI_HPP

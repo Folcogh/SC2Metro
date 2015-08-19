@@ -13,11 +13,14 @@ class Game : public QObject
   public:
     Game();
     ~Game();
+    void UiReady();
+    void setName(QString name);
 
   private:
-    Q_DISABLE_COPY(Game);
+    Q_DISABLE_COPY(Game)
     QList<BOTimer*> BOTimerList;
     QList<CyclicTimer*> CyclicTimerList;
+    QString Name;
 };
 
 #endif // GAME_HPP

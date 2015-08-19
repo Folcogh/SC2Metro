@@ -19,6 +19,7 @@ add_executable(FMetro
     GameUi.cpp
     main.cpp
     MainWindow.cpp
+    UiEditGameName.cpp
     )
 
 target_compile_options(FMetro PUBLIC

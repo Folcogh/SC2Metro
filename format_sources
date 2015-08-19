@@ -1,0 +1,1 @@
+*.cpp *.hpp : clang-format-3.5 -i $TMPFILE

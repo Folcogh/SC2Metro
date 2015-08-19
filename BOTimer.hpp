@@ -12,7 +12,7 @@ class BOTimer : public QObject
     ~BOTimer();
 
   private:
-    Q_DISABLE_COPY(BOTimer);
+    Q_DISABLE_COPY(BOTimer)
 };
 
 #endif // BO_TIMER_HPP

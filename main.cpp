@@ -5,13 +5,12 @@
 int main(int argc, char** argv)
 {
     int retval;
-    QApplication app(argc, argv);
-    MainWindow window;
-    new Controller; // Singleton
+    QApplication* app = new QApplication(argc, argv);
+    MainWindow::get()->show();
 
-    // Show and execute the program
-    window.show();
-    retval = app.exec();
-    delete Controller::get();
+    retval = app->exec();
+
+    delete Controller::realInstance();
+    delete MainWindow::realInstance();
     return retval;
 }

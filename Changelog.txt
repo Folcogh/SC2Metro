@@ -1,3 +1,8 @@
 2015-08-19
-- created first actions
-- created the controller
+- add UiEditGameName class
+- comment sources (doxygen)
+- MainWindow is now a singleton
+
+2015-08-19
+- create first actions
+- create the controller

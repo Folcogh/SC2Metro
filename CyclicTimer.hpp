@@ -12,7 +12,7 @@ class CyclicTimer : public QObject
     ~CyclicTimer();
 
   private:
-    Q_DISABLE_COPY(CyclicTimer);
+    Q_DISABLE_COPY(CyclicTimer)
 };
 
 #endif // CYCLIC_TIMER_HPP
