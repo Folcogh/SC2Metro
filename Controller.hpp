@@ -10,8 +10,7 @@
 /**
  * @brief Controller of the MVC pattern
  *
- * This class os a singleton, and dispatch the messages between the games and
- *the interfaces.
+ * This class os a singleton, and dispatch the messages between the games and the interfaces.
  * It maintain a pairs list to allow them to communicate
  */
 class Controller : public QObject
@@ -46,3 +45,4 @@ class Controller : public QObject
 };
 
 #endif // CONTROLLER_HPP
+

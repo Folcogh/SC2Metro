@@ -1,1 +1,1 @@
-*.cpp *.hpp : clang-format-3.5 -i $TMPFILE
+*.cpp *.hpp : /usr/bin/clang-format-3.5 -i $TMPFILE

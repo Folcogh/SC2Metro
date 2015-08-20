@@ -7,7 +7,6 @@
  */
 static Controller* controller = nullptr;
 
-// Private constructor, this is a singleton
 /**
  * @brief Private constructor of the singleton
  */
@@ -20,8 +19,7 @@ Controller::Controller()
 /**
  * @brief Destructor of the singleton. Reset the static pointer
  *
- * The opened games should have been already closed because the QCloseEvent is
- *catched,
+ * The opened games should have been already closed because the QCloseEvent is catched,
  * so the GameList should be already empty, but...
  */
 Controller::~Controller()
@@ -51,8 +49,7 @@ Controller* Controller::get()
  * @brief Return the instance of the singleton
  *
  * This method returns a pointer which can be used by delete.
- * It won't create an instance if the singleton doesn't exist, but delete
- *supports nullptr
+ * It won't create an instance if the singleton doesn't exist, but delete supports nullptr
  *
  * @return Controller* Pointer to the singleton if it exists, else nullptr
  */
@@ -70,8 +67,7 @@ Controller* Controller::realInstance()
 /**
  * @brief Create a new game
  *
- * A game needs a name. To avoid a useless creation/destruction if the name
- *input is cancelled,
+ * A game needs a name. To avoid a useless creation/destruction if the name input is cancelled,
  * this method prompts for a name, then send it to the game when created
  *
  * @return void
@@ -108,3 +104,5 @@ void Controller::saveAllGames()
 void Controller::closeCurrentGame()
 {
 }
+
+

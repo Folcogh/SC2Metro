@@ -8,8 +8,7 @@
 /**
  * @brief The main window class
  *
- * This class is a singleton. All dialogs needs to access a pointer to the
- *instance in order to be centered
+ * This class is a singleton. All dialogs needs to access a pointer to the instance in order to be centered
  */
 class MainWindow : public QMainWindow
 {
@@ -31,9 +30,12 @@ class MainWindow : public QMainWindow
     QAction* ActionSaveAllGames;
     QAction* ActionCloseCurrentGame;
     QAction* ActionQuitApplication;
+    QAction* ActionAboutQt;
 
     // Game menu
     QMenu* MenuGame;
+    QMenu* MenuHelp;
 };
 
 #endif // MAIN_WINDOW_HPP
+

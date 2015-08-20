@@ -1,6 +1,7 @@
 #include "MainWindow.hpp"
 #include "Controller.hpp"
 #include <QMenuBar>
+#include <QApplication>
 
 static MainWindow* mainwindow;
 
@@ -51,6 +52,10 @@ MainWindow::MainWindow()
     ActionQuitApplication->setIcon(QIcon::fromTheme("application-exit"));
     ActionQuitApplication->setShortcut(QKeySequence::Quit);
     connect(ActionQuitApplication, &QAction::triggered, this, &MainWindow::close);
+    
+    // About Qt
+    ActionAboutQt = new QAction(this);
+    connect(ActionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
 
     /***********************************************************
      *
@@ -70,8 +75,13 @@ MainWindow::MainWindow()
     MenuGame->addSeparator();
     MenuGame->addAction(ActionQuitApplication);
 
-    // Populate menu
+    // Help
+    MenuHelp = new QMenu(this);
+    MenuHelp->addAction(ActionAboutQt);
+    
+    // Populate the menu bar
     menuBar()->addMenu(MenuGame);
+    menuBar()->addMenu(MenuHelp);
 
     /***********************************************************
      *
@@ -104,8 +114,7 @@ MainWindow* MainWindow::get()
  * @brief Return the instance of the singleton
  *
  * This method returns a pointer which can be used by delete.
- * It won't create an instance if the singleton doesn't exist, but delete
- *supports nullptr
+ * It won't create an instance if the singleton doesn't exist, but delete supports nullptr
  *
  * @return MainWindow* Pointer to the singleton if it exists, else nullptr
  */
@@ -123,6 +132,7 @@ void MainWindow::translate()
 {
     // Menus
     MenuGame->setTitle(tr("Game"));
+    MenuHelp->setTitle(tr("Help"));
 
     // Actions
     ActionNewGame->setText(tr("New"));
@@ -132,4 +142,5 @@ void MainWindow::translate()
     ActionSaveAllGames->setText(tr("Save all"));
     ActionCloseCurrentGame->setText(tr("Close current"));
     ActionQuitApplication->setText(tr("Quit"));
+    ActionAboutQt->setText(tr("About Qt"));
 }
