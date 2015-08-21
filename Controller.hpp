@@ -27,10 +27,13 @@ class Controller : public QObject
     void saveGameAs();
     void saveAllGames();
     void closeCurrentGame();
+    void newCurrentUi(QWidget* ui);
+    void gameCloseRequested(QWidget* ui);
 
   private:
     Q_DISABLE_COPY(Controller)
     Controller();
+    Game* gameOf(GameUi* ui);
 
     /**
      * @brief This list keeps the association between a game and its interface
@@ -45,4 +48,3 @@ class Controller : public QObject
 };
 
 #endif // CONTROLLER_HPP
-

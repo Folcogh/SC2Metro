@@ -11,16 +11,17 @@ class Game : public QObject
     Q_OBJECT
 
   public:
-    Game();
+    Game(QString name);
     ~Game();
-    void UiReady();
-    void setName(QString name);
+    void populateUi();
+    bool modified();
 
   private:
     Q_DISABLE_COPY(Game)
     QList<BOTimer*> BOTimerList;
     QList<CyclicTimer*> CyclicTimerList;
     QString Name;
+    bool Modified;
 };
 
 #endif // GAME_HPP

@@ -1,7 +1,9 @@
 #include "Game.hpp"
 
-Game::Game()
+Game::Game(QString name)
     : QObject(nullptr)
+    , Name(name)
+    , Modified(false)
 {
 }
 
@@ -15,24 +17,11 @@ Game::~Game()
     }
 }
 
-/**
- * @brief First method to call when a game and its ui are built
- *
- * This method allows the game to populate its interface
- *
- * @return void
- */
-void Game::UiReady()
+void Game::populateUi()
 {
 }
 
-/**
- * @brief Set or change the name of a game
- *
- * @param name Game name
- * @return void
- */
-void Game::setName(QString name)
+bool Game::modified()
 {
-    Name = name;
+    return Modified;
 }

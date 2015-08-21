@@ -3,7 +3,9 @@
 
 #include <QMenu>
 #include <QAction>
+#include <QTabWidget>
 #include <QMainWindow>
+#include "GameUi.hpp"
 
 /**
  * @brief The main window class
@@ -16,6 +18,9 @@ class MainWindow : public QMainWindow
     ~MainWindow();
     static MainWindow* get();
     static MainWindow* realInstance();
+    void addGameUi(QWidget* ui, QString name);
+    void currentGameChanged(int);
+    void gameCloseRequested(int index);
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -35,7 +40,9 @@ class MainWindow : public QMainWindow
     // Game menu
     QMenu* MenuGame;
     QMenu* MenuHelp;
+
+    // Central widget
+    QTabWidget* tabs;
 };
 
 #endif // MAIN_WINDOW_HPP
-

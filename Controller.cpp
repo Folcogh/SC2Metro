@@ -1,4 +1,5 @@
 #include "Controller.hpp"
+#include "MainWindow.hpp"
 #include "UiEditGameName.hpp"
 #include <QDebug>
 
@@ -68,21 +69,21 @@ Controller* Controller::realInstance()
  * @brief Create a new game
  *
  * A game needs a name. To avoid a useless creation/destruction if the name input is cancelled,
- * this method prompts for a name, then send it to the game when created
+ * this method prompts for a name, then sends it to the game when created
  *
  * @return void
  */
 void Controller::newGame()
 {
     QString name = UiEditGameName::newGameName();
-    if (name.isEmpty()) {
-        return;
+    if (!name.isEmpty()) {
+        Game* game = new Game(name);                      // Create the game
+        GameUi* ui = new GameUi;                          // Create the ui
+        MainWindow::get()->addGameUi(ui, name);           // Add it to the main window
+        GameList.append(QPair<Game*, GameUi*>(game, ui)); // Push the game/ui pair
+        CurrentGame = &GameList.last();                   // Update CurrentGame
+        game->populateUi();                               // Now the game can fill the ui
     }
-
-    GameList.append(QPair<Game*, GameUi*>(new Game, new GameUi));
-    CurrentGame = &GameList.last();
-    CurrentGame->first->UiReady();
-    CurrentGame->first->setName(name);
 }
 
 void Controller::openGame()
@@ -103,6 +104,36 @@ void Controller::saveAllGames()
 
 void Controller::closeCurrentGame()
 {
+    if (CurrentGame->first->modified()) {
+        // ask if save
+    }
 }
 
+void Controller::newCurrentUi(QWidget* ui)
+{
+    GameUi* gameui = static_cast<GameUi*>(ui);
+    for (int i = 0; i < GameList.size(); i ++) {
+        if (GameList.at(i).second == gameui) {
+            CurrentGame = &GameList[i];
+            break;
+        }
+    }
+}
 
+void Controller::gameCloseRequested(QWidget* ui)
+{
+    GameUi* gameui = static_cast<GameUi*>(ui);
+    if (gameOf(gameui)->modified()) {
+        // ask if save
+    }
+}
+
+Game* Controller::gameOf(GameUi* ui)
+{
+    for (int i = 0; i < GameList.size(); i ++) {
+        if (GameList.at(i).second == ui) {
+            return GameList.at(i).first;
+        }
+    }
+    return nullptr;
+}

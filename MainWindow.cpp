@@ -52,7 +52,7 @@ MainWindow::MainWindow()
     ActionQuitApplication->setIcon(QIcon::fromTheme("application-exit"));
     ActionQuitApplication->setShortcut(QKeySequence::Quit);
     connect(ActionQuitApplication, &QAction::triggered, this, &MainWindow::close);
-    
+
     // About Qt
     ActionAboutQt = new QAction(this);
     connect(ActionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
@@ -78,7 +78,7 @@ MainWindow::MainWindow()
     // Help
     MenuHelp = new QMenu(this);
     MenuHelp->addAction(ActionAboutQt);
-    
+
     // Populate the menu bar
     menuBar()->addMenu(MenuGame);
     menuBar()->addMenu(MenuHelp);
@@ -89,8 +89,25 @@ MainWindow::MainWindow()
      *
      ***********************************************************/
 
+    // Setup the central widget
+    tabs = new QTabWidget;
+    tabs->setTabsClosable(true);
+    setCentralWidget(tabs);
+
     // Translate interface
     translate();
+
+    // Set a default size
+    setMinimumSize(800, 600);
+
+    /***********************************************************
+     *
+     *          Connctions
+     *
+     ***********************************************************/
+    connect(tabs, &QTabWidget::currentChanged, this, &MainWindow::currentGameChanged);
+    connect(tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::gameCloseRequested);
+
 }
 
 MainWindow::~MainWindow()
@@ -143,4 +160,27 @@ void MainWindow::translate()
     ActionCloseCurrentGame->setText(tr("Close current"));
     ActionQuitApplication->setText(tr("Quit"));
     ActionAboutQt->setText(tr("About Qt"));
+}
+
+/**
+ * @brief Add the widget of a game in the central tabbed widget
+ *
+ * @param ui Widget
+ * @param name Name of the game
+ * @return void
+ */
+void MainWindow::addGameUi( QWidget* ui, QString name )
+{
+    tabs->addTab(ui, name);
+    tabs->setCurrentWidget(ui);
+}
+
+void MainWindow::currentGameChanged(int)
+{
+    Controller::get()->newCurrentUi(tabs->currentWidget());
+}
+
+void MainWindow::gameCloseRequested(int index)
+{
+    Controller::get()->gameCloseRequested(tabs->widget(index));
 }
