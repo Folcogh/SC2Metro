@@ -1,4 +1,9 @@
-2015-08-19
+2015-08-22
+- add open/save/save as/save all/close/closeall/quit mechanisms
+
+2015-08-21
+- add some connections
+- add ui creation and insertion in the main window
 
 2015-08-19
 - add UiEditGameName class

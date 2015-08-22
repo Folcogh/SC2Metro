@@ -5,7 +5,7 @@
 #include <QAction>
 #include <QTabWidget>
 #include <QMainWindow>
-#include "GameUi.hpp"
+#include <QCloseEvent>
 
 /**
  * @brief The main window class
@@ -18,14 +18,19 @@ class MainWindow : public QMainWindow
     ~MainWindow();
     static MainWindow* get();
     static MainWindow* realInstance();
+    void closeEvent(QCloseEvent* event);
     void addGameUi(QWidget* ui, QString name);
     void currentGameChanged(int);
     void gameCloseRequested(int index);
+    void RemoveGameUi(QWidget* ui);
 
   private:
     Q_DISABLE_COPY(MainWindow)
     MainWindow();
     void translate();
+    void saveGame();
+    void saveGameAs();
+    void closeCurrentGame();
 
     // Application-wide actions
     QAction* ActionNewGame;

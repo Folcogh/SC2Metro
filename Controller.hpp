@@ -23,28 +23,22 @@ class Controller : public QObject
     static Controller* realInstance();
     void newGame();
     void openGame();
-    void saveGame();
-    void saveGameAs();
+    void saveGame(QWidget* ui);
+    void saveGame(Game* game);
+    void saveGameAs(QWidget* ui);
     void saveAllGames();
-    void closeCurrentGame();
     void newCurrentUi(QWidget* ui);
     void gameCloseRequested(QWidget* ui);
+    bool appCloseRequested();
 
   private:
     Q_DISABLE_COPY(Controller)
     Controller();
     Game* gameOf(GameUi* ui);
-
-    /**
-     * @brief This list keeps the association between a game and its interface
-     *
-     */
+    GameUi* uiOf(Game* game);
+    bool saveGameAs(Game* game);
+    bool closeGame(Game* game);
     QList<QPair<Game*, GameUi*>> GameList;
-    /**
-     * @brief Point to the active pair in the main window
-     *
-     */
-    QPair<Game*, GameUi*>* CurrentGame;
 };
 
 #endif // CONTROLLER_HPP

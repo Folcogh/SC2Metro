@@ -11,16 +11,22 @@ class Game : public QObject
     Q_OBJECT
 
   public:
-    Game(QString name);
+    explicit Game(QString name);
     ~Game();
     void populateUi();
     bool modified();
+    QString name();
+    QString fullfilename();
+    void save();
+    void setFilename(QString filename);
+    static Game* open(QString filename);
 
   private:
     Q_DISABLE_COPY(Game)
     QList<BOTimer*> BOTimerList;
     QList<CyclicTimer*> CyclicTimerList;
     QString Name;
+    QString FullFilename;
     bool Modified;
 };
 

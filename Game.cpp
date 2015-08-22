@@ -25,3 +25,26 @@ bool Game::modified()
 {
     return Modified;
 }
+
+QString Game::name()
+{
+    return Name;
+}
+
+QString Game::fullfilename()
+{
+    return FullFilename;
+}
+
+void Game::save()
+{
+}
+
+void Game::setFilename(QString filename)
+{
+    FullFilename = filename;
+}
+
+Game* Game::open(QString filename)
+{
+}

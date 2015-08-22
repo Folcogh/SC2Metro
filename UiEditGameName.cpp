@@ -36,7 +36,6 @@ UiEditGameName::UiEditGameName()
 
 /**
  * @brief Construct a dialog to edit an existing name
- *
  * @param name Existing name
  */
 UiEditGameName::UiEditGameName(QString name)
@@ -54,7 +53,6 @@ UiEditGameName::~UiEditGameName()
 
 /**
  * @brief Prompt for a new game name
- *
  * @return QString A string containing the name. The string is empty if the dialog was cancelled
  */
 QString UiEditGameName::newGameName()
@@ -67,7 +65,6 @@ QString UiEditGameName::newGameName()
 
 /**
  * @brief Edit the current game name
- *
  * @param name Current name
  * @return QString A string containing the new name. The string is empty if the dialog was cancelled
  */
@@ -81,7 +78,6 @@ QString UiEditGameName::editGameName(QString name)
 
 /**
  * @brief Common part of the static methods
- *
  * @return QString A string containing the typed name. The string is empty if the dialog was cancelled
  */
 QString UiEditGameName::commonEdit()
@@ -96,7 +92,6 @@ QString UiEditGameName::commonEdit()
 
 /**
  * @brief Disable the button OK if the input field is empty, else enable it
- *
  * @param text content of the input field
  * @return void
  */

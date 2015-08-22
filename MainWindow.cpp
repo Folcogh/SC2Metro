@@ -29,13 +29,13 @@ MainWindow::MainWindow()
     ActionSaveGame = new QAction(this);
     ActionSaveGame->setIcon(QIcon::fromTheme("document-save"));
     ActionSaveGame->setShortcut(QKeySequence::Save);
-    connect(ActionSaveGame, &QAction::triggered, Controller::get(), &Controller::saveGame);
+    connect(ActionSaveGame, &QAction::triggered, this, &MainWindow::saveGame);
 
     // Save game as
     ActionSaveAsGame = new QAction(this);
     ActionSaveAsGame->setIcon(QIcon::fromTheme("document-save-as"));
     ActionSaveAsGame->setShortcut(QKeySequence::SaveAs);
-    connect(ActionSaveAsGame, &QAction::triggered, Controller::get(), &Controller::saveGameAs);
+    connect(ActionSaveAsGame, &QAction::triggered, this, &MainWindow::saveGameAs);
 
     // Save all games
     ActionSaveAllGames = new QAction(this);
@@ -45,7 +45,7 @@ MainWindow::MainWindow()
     // Close current game
     ActionCloseCurrentGame = new QAction(this);
     ActionCloseCurrentGame->setShortcut(QKeySequence::Close);
-    connect(ActionCloseCurrentGame, &QAction::triggered, Controller::get(), &Controller::closeCurrentGame);
+    connect(ActionCloseCurrentGame, &QAction::triggered, this, &MainWindow::closeCurrentGame);
 
     // Quit
     ActionQuitApplication = new QAction(this);
@@ -102,12 +102,11 @@ MainWindow::MainWindow()
 
     /***********************************************************
      *
-     *          Connctions
+     *          Connections
      *
      ***********************************************************/
     connect(tabs, &QTabWidget::currentChanged, this, &MainWindow::currentGameChanged);
     connect(tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::gameCloseRequested);
-
 }
 
 MainWindow::~MainWindow()
@@ -116,7 +115,6 @@ MainWindow::~MainWindow()
 
 /**
  * @brief Singleton getter
- *
  * @return A pointer to the singleton
  */
 MainWindow* MainWindow::get()
@@ -142,7 +140,6 @@ MainWindow* MainWindow::realInstance()
 
 /**
  * @brief Set all the strings of the main window
- *
  * @return void
  */
 void MainWindow::translate()
@@ -162,6 +159,13 @@ void MainWindow::translate()
     ActionAboutQt->setText(tr("About Qt"));
 }
 
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if (!Controller::get()->appCloseRequested()) {
+        event->ignore();
+    }
+}
+
 /**
  * @brief Add the widget of a game in the central tabbed widget
  *
@@ -169,10 +173,15 @@ void MainWindow::translate()
  * @param name Name of the game
  * @return void
  */
-void MainWindow::addGameUi( QWidget* ui, QString name )
+void MainWindow::addGameUi(QWidget* ui, QString name)
 {
     tabs->addTab(ui, name);
     tabs->setCurrentWidget(ui);
+}
+
+void MainWindow::RemoveGameUi(QWidget* ui)
+{
+    tabs->removeTab(tabs->indexOf(ui));
 }
 
 void MainWindow::currentGameChanged(int)
@@ -183,4 +192,19 @@ void MainWindow::currentGameChanged(int)
 void MainWindow::gameCloseRequested(int index)
 {
     Controller::get()->gameCloseRequested(tabs->widget(index));
+}
+
+void MainWindow::saveGame()
+{
+    Controller::get()->saveGame(tabs->currentWidget());
+}
+
+void MainWindow::saveGameAs()
+{
+    Controller::get()->saveGameAs(tabs->currentWidget());
+}
+
+void MainWindow::closeCurrentGame()
+{
+    gameCloseRequested(tabs->currentIndex());
 }
