@@ -1,3 +1,10 @@
+2015-08-23
+- add some checks on game creation/opening/saving
+- add assertions
+- add const to some methods
+- add documentations
+- add open/save in Game.cpp
+
 2015-08-22
 - add open/save/save as/save all/close/closeall/quit mechanisms
 

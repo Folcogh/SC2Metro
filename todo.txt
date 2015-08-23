@@ -1,2 +1,6 @@
 - customize QCoreApplication instance
 - customize QMainWindow
+- message on new/open/populateUi errors
+- implement changeCurrentUi in Controller
+- Q_ASSERT -> QT_NO_DEBUG
+- QStyle::StandardPixmap

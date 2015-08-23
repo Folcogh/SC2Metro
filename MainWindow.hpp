@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
     ~MainWindow();
     static MainWindow* get();
     static MainWindow* realInstance();
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
     void addGameUi(QWidget* ui, QString name);
     void currentGameChanged(int);
     void gameCloseRequested(int index);

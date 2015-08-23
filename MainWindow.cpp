@@ -98,7 +98,7 @@ MainWindow::MainWindow()
     translate();
 
     // Set a default size
-    setMinimumSize(800, 600);
+    setMinimumSize(1000, 800);
 
     /***********************************************************
      *
@@ -111,6 +111,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    mainwindow = nullptr; // Should be useless
 }
 
 /**
@@ -179,32 +180,58 @@ void MainWindow::addGameUi(QWidget* ui, QString name)
     tabs->setCurrentWidget(ui);
 }
 
+/**
+ * @brief Remove the widget of a game from the tab widdget
+ * @param ui Ui of the game
+ */
 void MainWindow::RemoveGameUi(QWidget* ui)
 {
+    Q_ASSERT(tabs->indexOf(ui) != -1);
     tabs->removeTab(tabs->indexOf(ui));
 }
 
+/**
+ * @brief Say to the Controller that the current game has changed
+ * @param int Unused
+ */
 void MainWindow::currentGameChanged(int)
 {
+    Q_ASSERT(tabs->currentIndex() != -1);
     Controller::get()->newCurrentUi(tabs->currentWidget());
 }
 
+/**
+ * @brief Slot called the tabs when the user wants to close one
+ * @param index Index of the tab
+ */
 void MainWindow::gameCloseRequested(int index)
 {
     Controller::get()->gameCloseRequested(tabs->widget(index));
 }
 
+/**
+ * @brief Slot called when the user wants to save the current game
+ */
 void MainWindow::saveGame()
 {
+    Q_ASSERT(tabs->currentIndex() != -1);
     Controller::get()->saveGame(tabs->currentWidget());
 }
 
+/**
+ * @brief Slot called when the user wants to save a game with a specific filename
+ */
 void MainWindow::saveGameAs()
 {
+    Q_ASSERT(tabs->currentIndex() != -1);
     Controller::get()->saveGameAs(tabs->currentWidget());
 }
 
+/**
+ * @brief Called when the user wants to close the current game
+ */
 void MainWindow::closeCurrentGame()
 {
+    Q_ASSERT(tabs->currentIndex() != -1);
     gameCloseRequested(tabs->currentIndex());
 }

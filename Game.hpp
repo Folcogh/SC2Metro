@@ -14,9 +14,9 @@ class Game : public QObject
     explicit Game(QString name);
     ~Game();
     void populateUi();
-    bool modified();
-    QString name();
-    QString fullfilename();
+    bool modified() const;
+    QString name() const;
+    QString fullfilename() const;
     void save();
     void setFilename(QString filename);
     static Game* open(QString filename);

@@ -95,21 +95,29 @@ void Controller::newGame()
     if (!name.isEmpty()) {
         Game* game = new Game(name);                      // Create the game
         GameUi* ui = new GameUi;                          // Create the ui
-        MainWindow::get()->addGameUi(ui, name);           // Add it to the main window
         GameList.append(QPair<Game*, GameUi*>(game, ui)); // Push the game/ui pair
         game->populateUi();                               // Now the game can fill the ui
+        MainWindow::get()->addGameUi(ui, name);           // Add it to the main window
     }
 }
 
+/**
+ * @brief ...
+ *
+ * @return void
+ */
 void Controller::openGame()
 {
-    QString filename = QFileDialog::getOpenFileName(MainWindow::get(), tr("Open a game"), QDir::homePath(), FMETRO_GAME_FILE_FILTER);
+    QString filename = QFileDialog::getOpenFileName(MainWindow::get(), tr("Open a game"), QDir::homePath(), GAME_FILE_FILTER);
     if (!filename.isEmpty()) {
         Game* game = Game::open(filename);
+        if (game == nullptr) {
+            return;
+        }
         GameUi* ui = new GameUi;
-        MainWindow::get()->addGameUi(ui, game->name());
         GameList.append(QPair<Game*, GameUi*>(game, ui));
         game->populateUi();
+        MainWindow::get()->addGameUi(ui, game->name());
     }
 }
 
@@ -120,7 +128,7 @@ void Controller::openGame()
  *
  * @param ui Ui of the game to save
  */
-void Controller::saveGame(QWidget* ui)
+void Controller::saveGame(QWidget* ui) const
 {
     saveGame(gameOf(static_cast<GameUi*>(ui)));
 }
@@ -130,9 +138,11 @@ void Controller::saveGame(QWidget* ui)
  *
  * @param game Game to save
  */
-void Controller::saveGame(Game* game)
+void Controller::saveGame(Game* game) const
 {
-    game->save();
+    if (game->modified()) {
+        game->save();
+    }
 }
 
 /**
@@ -142,7 +152,7 @@ void Controller::saveGame(Game* game)
  *
  * @param ui Ui of the game to save
  */
-void Controller::saveGameAs(QWidget* ui)
+void Controller::saveGameAs(QWidget* ui) const
 {
     saveGameAs(gameOf(static_cast<GameUi*>(ui)));
 }
@@ -155,14 +165,14 @@ void Controller::saveGameAs(QWidget* ui)
  * @param game The game to save
  * @return bool True if a filename was choosen, else false
  */
-bool Controller::saveGameAs(Game* game)
+bool Controller::saveGameAs(Game* game) const
 {
-    QString filename = QFileDialog::getSaveFileName(MainWindow::get(), QString(tr("Save game %1")).arg(game->name()), QDir::homePath(), FMETRO_GAME_FILE_FILTER);
+    QString filename = QFileDialog::getSaveFileName(MainWindow::get(), QString(tr("Save game %1")).arg(game->name()), QDir::homePath(), GAME_FILE_FILTER);
     if (filename.isEmpty()) {
         return false;
     }
-    if (QFileInfo(filename).suffix() != QString(FMETRO_GAME_FILE_EXTENSION)) {
-        filename.append(QString(".%1").arg(FMETRO_GAME_FILE_EXTENSION));
+    if (QFileInfo(filename).suffix() != QString(GAME_FILE_EXTENSION)) {
+        filename.append(QString(".%1").arg(GAME_FILE_EXTENSION));
     }
     game->setFilename(filename);
     saveGame(game);
@@ -173,14 +183,16 @@ bool Controller::saveGameAs(Game* game)
  * @brief Browse all the games, save the ones which have a file, and prompt for the ones which have been newly created
  * @return void
  */
-void Controller::saveAllGames()
+void Controller::saveAllGames() const
 {
     for (int i = 0; i < GameList.size(); i++) {
         Game* game = GameList[i].first;
-        if (game->fullfilename().size() == 0) {
-            saveGameAs(game);
-        } else {
-            saveGame(game);
+        if (game->modified()) {
+            if (game->fullfilename().size() == 0) {
+                saveGameAs(game);
+            } else {
+                saveGame(game);
+            }
         }
     }
 }
@@ -190,16 +202,18 @@ void Controller::saveAllGames()
  *
  * @param ui Ui of the new current game
  */
-void Controller::newCurrentUi(QWidget* ui)
+void Controller::newCurrentUi(QWidget* ui) const
 {
     GameUi* gameui = static_cast<GameUi*>(ui);
-    for (int i = 0; i < GameList.size(); i++) {
+    int i;
+    for (i = 0; i < GameList.size(); i++) {
         if (GameList.at(i).second == gameui) {
             // Change mainwindow title
             // Adjust actions
             break;
         }
     }
+    Q_ASSERT(GameList.at(i).second == gameui);
 }
 
 /**
@@ -253,7 +267,7 @@ bool Controller::closeGame(Game* game)
     }
 
     // Ok, modifications saved or discarded, destroy the game and its ui
-    GameUi* ui = uiOf(game);
+    GameUi* ui = gameUiOf(game);
     MainWindow::get()->RemoveGameUi(ui);
     delete ui;
     delete game;
@@ -266,13 +280,16 @@ bool Controller::closeGame(Game* game)
  * @param ui Ui of the game
  * @return Game* Game associated with the Ui
  */
-Game* Controller::gameOf(GameUi* ui)
+Game* Controller::gameOf(GameUi* ui) const
 {
-    int i = 0;
-    while (GameList.at(i).second != ui) {
-        ++i;
+    int i;
+    for (i = 0; i < GameList.size(); i++) {
+        if (GameList.at(i).second == ui) {
+            break;
+        }
     }
-    return GameList[i].first;
+    Q_ASSERT(GameList.at(i).second == ui);
+    return GameList.at(i).first;
 }
 
 /**
@@ -280,11 +297,14 @@ Game* Controller::gameOf(GameUi* ui)
  * @param game Game of the Ui
  * @return GameUi* Ui associated with the game
  */
-GameUi* Controller::uiOf(Game* game)
+GameUi* Controller::gameUiOf(Game* game) const
 {
     int i = 0;
-    while (GameList.at(i).first != game) {
-        ++i;
+    for (i = 0; i < GameList.size(); i++) {
+        if (GameList.at(i).first == game) {
+            break;
+        }
     }
-    return GameList[i].second;
+    Q_ASSERT(GameList.at(i).first == game);
+    return GameList.at(i).second;
 }
