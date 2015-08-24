@@ -123,7 +123,7 @@ void Controller::adjustActions(Game* game) const
 {
     quint32 ActionsEnabled = 0;
     if (game != nullptr) {
-        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED| CLOSE_CURRENT_GAME_ENABLED;
+        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED| CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME;
         if ((game->fullfilename().size() != 0) && (game->modified())) {
             ActionsEnabled |= SAVE_GAME_ENABLED;
         }
@@ -137,7 +137,7 @@ void Controller::adjustActions(Game* game) const
  */
 void Controller::adjustTitleBar(Game* game) const
 {
-    QString title(APPLICATION_NAME_STR);
+    QString title(APPLICATION_NAME);
     if (game != nullptr) {
         if (!game->fullfilename().isEmpty()) {
             title.append(" - [ ").append(game->fullfilename()).append(" ]");
@@ -205,12 +205,15 @@ void Controller::saveGame(QWidget* ui) const
  * @brief Save a game
  * @param game Game
  */
-void Controller::saveGame ( Game* game ) const
+bool Controller::saveGame ( Game* game ) const
 {
     Q_ASSERT(game != nullptr);
-    game->save();
-    adjustActions(game);
-    adjustTitleBar(game);
+    if (game->save()) {
+        adjustActions(game);
+        adjustTitleBar(game);
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -243,8 +246,7 @@ bool Controller::saveGameAs(Game* game) const
         filename.append(QString(".%1").arg(GAME_FILE_EXTENSION));
     }
     game->setFilename(filename);
-    saveGame(game);
-    return true;
+    return saveGame(game);
 }
 
 /**
@@ -310,7 +312,9 @@ bool Controller::closeGame(Game* game)
                 return false;
             }
             if (answer == QMessageBox::StandardButton::Save) {
-                game->save();
+                if (!game->save()) {
+                    return false; // Something failed
+                }
             }
         }
     }
@@ -334,7 +338,7 @@ bool Controller::appCloseRequested()
 {
     while (GameList.size() != 0) {
         if (!closeGame(GameList.last().first)) {
-            return false; // Game closing aborted by the user
+            return false; // Game closing aborted by the user or failed
         }
     }
     return true; // All games closed succesfully

@@ -36,7 +36,7 @@ class Controller : public QObject
     Controller();
     Game* gameOf(GameUi* ui) const;
     GameUi* gameUiOf(Game* game) const;
-    void saveGame(Game* game) const;
+    bool saveGame(Game* game) const;
     bool saveGameAs(Game* game) const;
     bool closeGame(Game* game);
     void adjustActions(Game* game) const;

@@ -1,7 +1,8 @@
 #ifndef GLOBAL_HPP
 #define GLOBAL_HPP
 
-#define APPLICATION_NAME_STR "FMetro"
+#define APPLICATION_NAME "FMetro"
+#define APPLICATION_VERSION "2.0.0"
 
 #define GAME_FILE_EXTENSION "fmg"
 #define GAME_FILE_FILTER QString(tr("FMetro game (*.%1)")).arg(GAME_FILE_EXTENSION)

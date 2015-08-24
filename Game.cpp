@@ -79,7 +79,7 @@ void Game::setFilename(QString filename)
 /**
  * @brief Save a game to its file
  */
-void Game::save()
+bool Game::save()
 {
     // Don't assert(Modified), because this method must be callable by a saveAs procedure
     Q_ASSERT(!FullFilename.isEmpty());
@@ -88,7 +88,7 @@ void Game::save()
     QFile file(FullFilename);
     if (!file.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't save to the file %1").arg(FullFilename));
-        return;
+        return false;
     }
     QDataStream stream(&file);
 
@@ -96,9 +96,10 @@ void Game::save()
     stream << QString(GAME_FILE_SIGNATURE) << GAME_FILE_VERSION << Name;
     if (stream.status() != QDataStream::Ok) {
         QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't save to the file %1").arg(FullFilename));
-        return;
+        return false;
     }
     Modified = false;
+    return true;
 }
 
 /**

@@ -57,7 +57,13 @@ MainWindow::MainWindow()
     ActionAboutQt = new QAction(this);
     connect(ActionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
 
-    adjustActions(0); // Default:
+    // Edit game name
+    ActionEditGameName = new QAction(this);
+    connect(ActionEditGameName, &QAction::triggered, this, &MainWindow::editCurrentGameName);
+
+
+    // Set default actions available
+    adjustActions(0);
 
     /***********************************************************
      *
@@ -77,12 +83,17 @@ MainWindow::MainWindow()
     MenuGame->addSeparator();
     MenuGame->addAction(ActionQuitApplication);
 
+    // Edit
+    MenuEdit = new QMenu(this);
+    MenuEdit->addAction(ActionEditGameName);
+
     // Help
     MenuHelp = new QMenu(this);
     MenuHelp->addAction(ActionAboutQt);
 
     // Populate the menu bar
     menuBar()->addMenu(MenuGame);
+    menuBar()->addMenu(MenuEdit);
     menuBar()->addMenu(MenuHelp);
 
     /***********************************************************
@@ -150,6 +161,7 @@ void MainWindow::translate()
 {
     // Menus
     MenuGame->setTitle(tr("Game"));
+    MenuEdit->setTitle(tr("Edit"));
     MenuHelp->setTitle(tr("Help"));
 
     // Actions
@@ -161,6 +173,7 @@ void MainWindow::translate()
     ActionCloseCurrentGame->setText(tr("Close current"));
     ActionQuitApplication->setText(tr("Quit"));
     ActionAboutQt->setText(tr("About Qt"));
+    ActionEditGameName->setText(tr("Edit game name"));
 }
 
 /**
@@ -218,10 +231,26 @@ void MainWindow::gameCloseRequested(int index)
     Controller::get()->gameCloseRequested(tabs->widget(index));
 }
 
+/**
+ * @brief ...
+ *
+ * @param index ...
+ * @return void
+ */
 void MainWindow::gameNameEditRequested ( int index )
 {
     QString text = Controller::get()->gameNameEditRequested(tabs->widget(index));
     tabs->setTabText(index, text);
+}
+
+/**
+ * @brief
+ *
+ * @return void
+ */
+void MainWindow::editCurrentGameName()
+{
+    gameNameEditRequested(tabs->currentIndex());
 }
 
 /**
@@ -257,4 +286,5 @@ void MainWindow::adjustActions( quint32 ActionsEnabled )
     ActionSaveAsGame->setEnabled(ActionsEnabled & SAVE_GAME_AS_ENABLED);
     ActionSaveAllGames->setEnabled(ActionsEnabled & SAVE_ALL_GAMES_ENABLED);
     ActionCloseCurrentGame->setEnabled(ActionsEnabled & CLOSE_CURRENT_GAME_ENABLED);
+    ActionEditGameName->setEnabled(ActionsEnabled & EDIT_CURRENT_GAME_NAME);
 }

@@ -33,8 +33,9 @@ class MainWindow : public QMainWindow
     void currentGameChanged(int);
     void gameCloseRequested(int index);
     void gameNameEditRequested(int index);
+    void editCurrentGameName();
 
-    // Application-wide actions
+    // Actions
     QAction* ActionNewGame;
     QAction* ActionOpenGame;
     QAction* ActionSaveGame;
@@ -43,9 +44,11 @@ class MainWindow : public QMainWindow
     QAction* ActionCloseCurrentGame;
     QAction* ActionQuitApplication;
     QAction* ActionAboutQt;
+    QAction* ActionEditGameName;
 
-    // Game menu
+    // Game menus
     QMenu* MenuGame;
+    QMenu* MenuEdit;
     QMenu* MenuHelp;
 
     // Central widget
@@ -61,5 +64,6 @@ class MainWindow : public QMainWindow
 #define SAVE_GAME_AS_ENABLED 2
 #define SAVE_ALL_GAMES_ENABLED 4
 #define CLOSE_CURRENT_GAME_ENABLED 8
+#define EDIT_CURRENT_GAME_NAME 16
 
 #endif // MAIN_WINDOW_HPP

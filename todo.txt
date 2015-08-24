@@ -1,8 +1,8 @@
-- customize QCoreApplication instance
-- customize QMainWindow
-- message on new/open/populateUi errors
-- implement changeCurrentUi in Controller
-- Q_ASSERT -> QT_NO_DEBUG
-- QStyle::StandardPixmap
-- a tab is closed before asking to be saved ? is it losed anyway ?
-- tabs name not updated when editing name
+TODO
+
+- application icon
+
+
+HINTS
+
+- QStyle::StandardPixmap for icons
