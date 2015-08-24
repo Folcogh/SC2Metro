@@ -1,3 +1,8 @@
+2015-08-24
+- add title bar of the main window, depending on the current opened file
+- add adjustement of the actions of the main window, depending on the current opened file
+- make the game name editable by double-clicking the tab bar
+
 2015-08-23
 - add some checks on game creation/opening/saving
 - add assertions

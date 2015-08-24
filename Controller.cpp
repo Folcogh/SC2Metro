@@ -7,6 +7,12 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+/***********************************************************
+ *
+ *          Singleton stuff
+ *
+ ***********************************************************/
+
 /**
  * @brief Pointer of the singleton
  */
@@ -63,31 +69,95 @@ Controller* Controller::realInstance()
 
 /***********************************************************
  *
- *          Slots connected from the main window
+ *          Internal methods
  *
  ***********************************************************/
 
 /**
- * @brief This method is called by the main window when the application wants to terminate
- * @return bool True if all the game were closed (the application may exit), else false (can't exit)
+ * @brief Find the game associated with the provided Ui
+ *
+ * Due to MainWindow throwing newCurrentUi(index), with index == -1, this method supports ui == nullptr
+ * In this case, it returns Game* == nullptr
+ *
+ * @param ui Ui of the game
+ * @return Game* Game associated with the Ui
  */
-bool Controller::appCloseRequested()
+Game* Controller::gameOf(GameUi* ui) const
 {
-    while (GameList.size() != 0) {
-        if (!closeGame(GameList.last().first)) {
-            return false; // Game closing aborted by the user
+    Game* game = nullptr;
+    for (int i = 0; i < GameList.size(); i++) {
+        if (GameList.at(i).second == ui) {
+            game = GameList.at(i).first;
+            break;
         }
     }
-    return true; // All games closed succesfully
+    return game;
 }
+
+/**
+ * @brief Find the ui associated with the provided Game
+ *
+ * Due to MainWindow throwing newCurrentUi(index), with index == -1, this method supports game == nullptr
+ * In this case, it returns GameUi* == nullptr
+ *
+ * @param game Game of the Ui (mays be nullptr)
+ * @return GameUi* Ui associated with the game, or nullptr
+ */
+GameUi* Controller::gameUiOf(Game* game) const
+{
+    GameUi* ui = nullptr;
+    for (int i = 0; i < GameList.size(); i++) {
+        if (GameList.at(i).first == game) {
+            ui = GameList.at(i).second;
+            break;
+        }
+    }
+    return ui;
+}
+
+/**
+ * @brief Adjust the actions available in the main window
+ * @param game Current game. May be nullptr
+ */
+void Controller::adjustActions(Game* game) const
+{
+    quint32 ActionsEnabled = 0;
+    if (game != nullptr) {
+        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED| CLOSE_CURRENT_GAME_ENABLED;
+        if ((game->fullfilename().size() != 0) && (game->modified())) {
+            ActionsEnabled |= SAVE_GAME_ENABLED;
+        }
+    }
+    MainWindow::get()->adjustActions(ActionsEnabled);
+}
+
+/**
+ * @brief Set the title bar of the main window according to the current opened file
+ * @param game Current game. May be nullptr if there is no current game
+ */
+void Controller::adjustTitleBar(Game* game) const
+{
+    QString title(APPLICATION_NAME_STR);
+    if (game != nullptr) {
+        if (!game->fullfilename().isEmpty()) {
+            title.append(" - [ ").append(game->fullfilename()).append(" ]");
+        }
+        title.append(" - ").append(game->name());
+    }
+    MainWindow::get()->setWindowTitle(title);
+}
+
+/***********************************************************
+ *
+ *          New / Open / Save / Save as / Save all / Close / Close all mechanism
+ *
+ ***********************************************************/
 
 /**
  * @brief Create a new game
  *
  * A game needs a name. To avoid a useless creation/destruction if the name input is cancelled,
  * this method prompts for a name, then sends it to the game when created
- *
- * @return void
  */
 void Controller::newGame()
 {
@@ -102,9 +172,7 @@ void Controller::newGame()
 }
 
 /**
- * @brief ...
- *
- * @return void
+ * @brief Open a game from a file
  */
 void Controller::openGame()
 {
@@ -134,15 +202,15 @@ void Controller::saveGame(QWidget* ui) const
 }
 
 /**
- * @brief Save a game which has already a filename
- *
- * @param game Game to save
+ * @brief Save a game
+ * @param game Game
  */
-void Controller::saveGame(Game* game) const
+void Controller::saveGame ( Game* game ) const
 {
-    if (game->modified()) {
-        game->save();
-    }
+    Q_ASSERT(game != nullptr);
+    game->save();
+    adjustActions(game);
+    adjustTitleBar(game);
 }
 
 /**
@@ -198,25 +266,6 @@ void Controller::saveAllGames() const
 }
 
 /**
- * @brief Message thrown by the main window to say that the current displayed game is changing
- *
- * @param ui Ui of the new current game
- */
-void Controller::newCurrentUi(QWidget* ui) const
-{
-    GameUi* gameui = static_cast<GameUi*>(ui);
-    int i;
-    for (i = 0; i < GameList.size(); i++) {
-        if (GameList.at(i).second == gameui) {
-            // Change mainwindow title
-            // Adjust actions
-            break;
-        }
-    }
-    Q_ASSERT(GameList.at(i).second == gameui);
-}
-
-/**
  * @brief Message thrown by the main window to say that a game needs to be closed
  *
  * @param ui Ui of the game
@@ -261,7 +310,7 @@ bool Controller::closeGame(Game* game)
                 return false;
             }
             if (answer == QMessageBox::StandardButton::Save) {
-                saveGame(game);
+                game->save();
             }
         }
     }
@@ -275,36 +324,45 @@ bool Controller::closeGame(Game* game)
     return true;
 }
 
-/**
- * @brief Find the game associated with the provided Ui
- * @param ui Ui of the game
- * @return Game* Game associated with the Ui
- */
-Game* Controller::gameOf(GameUi* ui) const
+/***********************************************************
+ *
+ *          Slots called by the main window, and which address the whole application
+ *
+ ***********************************************************/
+
+bool Controller::appCloseRequested()
 {
-    int i;
-    for (i = 0; i < GameList.size(); i++) {
-        if (GameList.at(i).second == ui) {
-            break;
+    while (GameList.size() != 0) {
+        if (!closeGame(GameList.last().first)) {
+            return false; // Game closing aborted by the user
         }
     }
-    Q_ASSERT(GameList.at(i).second == ui);
-    return GameList.at(i).first;
+    return true; // All games closed succesfully
 }
 
 /**
- * @brief Find the ui associated with the provided Game
- * @param game Game of the Ui
- * @return GameUi* Ui associated with the game
+ * @brief Message thrown by the main window to say that the current displayed game is changing
+ *
+ * @param ui Ui of the new current game
  */
-GameUi* Controller::gameUiOf(Game* game) const
+void Controller::newCurrentUi(QWidget* ui) const
 {
-    int i = 0;
-    for (i = 0; i < GameList.size(); i++) {
-        if (GameList.at(i).first == game) {
-            break;
+    GameUi* gameui = static_cast<GameUi*>(ui);
+    Game* game = gameOf(gameui);
+    adjustTitleBar(game);
+    adjustActions(game);
+}
+
+QString Controller::gameNameEditRequested ( QWidget* ui)
+{
+    Game* game = gameOf(static_cast<GameUi*>(ui));
+    if (game != nullptr) {
+        QString newname = UiEditGameName::editGameName(game->name());
+        if (newname.size() != 0) {
+            game->setName(newname);
+            adjustActions(game);
+            adjustTitleBar(game);
         }
     }
-    Q_ASSERT(GameList.at(i).first == game);
-    return GameList.at(i).second;
+    return game->name();
 }

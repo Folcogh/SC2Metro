@@ -24,20 +24,23 @@ class Controller : public QObject
     void newGame();
     void openGame();
     void saveGame(QWidget* ui) const;
-    void saveGame(Game* game) const;
     void saveGameAs(QWidget* ui) const;
     void saveAllGames() const;
     void newCurrentUi(QWidget* ui) const;
     void gameCloseRequested(QWidget* ui);
     bool appCloseRequested();
+    QString gameNameEditRequested ( QWidget* ui );
 
   private:
     Q_DISABLE_COPY(Controller)
     Controller();
     Game* gameOf(GameUi* ui) const;
     GameUi* gameUiOf(Game* game) const;
+    void saveGame(Game* game) const;
     bool saveGameAs(Game* game) const;
     bool closeGame(Game* game);
+    void adjustActions(Game* game) const;
+    void adjustTitleBar(Game* game) const;
     QList<QPair<Game*, GameUi*>> GameList;
 };
 

@@ -20,9 +20,8 @@ class MainWindow : public QMainWindow
     static MainWindow* realInstance();
     void closeEvent(QCloseEvent* event) override;
     void addGameUi(QWidget* ui, QString name);
-    void currentGameChanged(int);
-    void gameCloseRequested(int index);
     void RemoveGameUi(QWidget* ui);
+    void adjustActions(quint32 ActionsEnabled);
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -31,6 +30,9 @@ class MainWindow : public QMainWindow
     void saveGame();
     void saveGameAs();
     void closeCurrentGame();
+    void currentGameChanged(int);
+    void gameCloseRequested(int index);
+    void gameNameEditRequested(int index);
 
     // Application-wide actions
     QAction* ActionNewGame;
@@ -49,5 +51,15 @@ class MainWindow : public QMainWindow
     // Central widget
     QTabWidget* tabs;
 };
+
+/**
+ * @brief Actions status
+ *
+ * Allow the Controller to enable/disable actions, according to the current game status
+ */
+#define SAVE_GAME_ENABLED 1
+#define SAVE_GAME_AS_ENABLED 2
+#define SAVE_ALL_GAMES_ENABLED 4
+#define CLOSE_CURRENT_GAME_ENABLED 8
 
 #endif // MAIN_WINDOW_HPP

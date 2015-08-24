@@ -20,6 +20,7 @@ class Game : public QObject
     void save();
     void setFilename(QString filename);
     static Game* open(QString filename);
+    void setName (QString name );
 
   private:
     Q_DISABLE_COPY(Game)

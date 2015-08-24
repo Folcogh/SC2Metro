@@ -57,6 +57,8 @@ MainWindow::MainWindow()
     ActionAboutQt = new QAction(this);
     connect(ActionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
 
+    adjustActions(0); // Default:
+
     /***********************************************************
      *
      *          MENUS
@@ -107,6 +109,7 @@ MainWindow::MainWindow()
      ***********************************************************/
     connect(tabs, &QTabWidget::currentChanged, this, &MainWindow::currentGameChanged);
     connect(tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::gameCloseRequested);
+    connect(tabs, &QTabWidget::tabBarDoubleClicked, this, &MainWindow::gameNameEditRequested);
 }
 
 MainWindow::~MainWindow()
@@ -160,6 +163,13 @@ void MainWindow::translate()
     ActionAboutQt->setText(tr("About Qt"));
 }
 
+/**
+ * @brief Called by the event loop when the close() event is triggered
+ *
+ * Allow to accept or ignore the application close event, depending on the opened games status
+ *
+ * @param event Close event
+ */
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (!Controller::get()->appCloseRequested()) {
@@ -196,7 +206,6 @@ void MainWindow::RemoveGameUi(QWidget* ui)
  */
 void MainWindow::currentGameChanged(int)
 {
-    Q_ASSERT(tabs->currentIndex() != -1);
     Controller::get()->newCurrentUi(tabs->currentWidget());
 }
 
@@ -207,6 +216,12 @@ void MainWindow::currentGameChanged(int)
 void MainWindow::gameCloseRequested(int index)
 {
     Controller::get()->gameCloseRequested(tabs->widget(index));
+}
+
+void MainWindow::gameNameEditRequested ( int index )
+{
+    QString text = Controller::get()->gameNameEditRequested(tabs->widget(index));
+    tabs->setTabText(index, text);
 }
 
 /**
@@ -234,4 +249,12 @@ void MainWindow::closeCurrentGame()
 {
     Q_ASSERT(tabs->currentIndex() != -1);
     gameCloseRequested(tabs->currentIndex());
+}
+
+void MainWindow::adjustActions( quint32 ActionsEnabled )
+{
+    ActionSaveGame->setEnabled(ActionsEnabled & SAVE_GAME_ENABLED);
+    ActionSaveAsGame->setEnabled(ActionsEnabled & SAVE_GAME_AS_ENABLED);
+    ActionSaveAllGames->setEnabled(ActionsEnabled & SAVE_ALL_GAMES_ENABLED);
+    ActionCloseCurrentGame->setEnabled(ActionsEnabled & CLOSE_CURRENT_GAME_ENABLED);
 }
