@@ -146,3 +146,12 @@ Game* Game::open(QString filename)
     }
     return game;
 }
+
+// Cyclic timers
+
+bool Game::newCyclicTimer ( CYCLIC_TIMER_VIEW_DATA* data )
+{
+    (void) data;
+    return true;
+}
+

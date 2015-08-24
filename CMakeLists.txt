@@ -3,11 +3,13 @@ project(FMetro)
 
 # Find the QtWidgets library
 find_package(Qt5 REQUIRED Widgets)
+find_package(Qt5 REQUIRED Gui)
 
 # Include that globally, so KDevelop can find the headers
 include_directories(FMetro PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt5Gui_INCLUDE_DIRS}
     )
 
 # Create target
@@ -30,6 +32,7 @@ target_compile_options(FMetro PUBLIC
 
 target_link_libraries(FMetro
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
     )
 
 set_target_properties(FMetro PROPERTIES

@@ -5,6 +5,7 @@
 #include <QObject>
 #include "BOTimer.hpp"
 #include "CyclicTimer.hpp"
+#include "CyclicTimerViewData.hpp"
 
 class Game : public QObject
 {
@@ -21,6 +22,7 @@ class Game : public QObject
     void setFilename(QString filename);
     static Game* open(QString filename);
     void setName (QString name );
+    bool newCyclicTimer(CYCLIC_TIMER_VIEW_DATA* data);
 
   private:
     Q_DISABLE_COPY(Game)

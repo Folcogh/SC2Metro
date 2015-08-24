@@ -6,6 +6,7 @@
 #include <QObject>
 #include "Game.hpp"
 #include "GameUi.hpp"
+#include "CyclicTimerViewData.hpp"
 
 /**
  * @brief Controller of the MVC pattern
@@ -30,6 +31,7 @@ class Controller : public QObject
     void gameCloseRequested(QWidget* ui);
     bool appCloseRequested();
     QString gameNameEditRequested ( QWidget* ui );
+    bool newCyclicTimer ( GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data );
 
   private:
     Q_DISABLE_COPY(Controller)

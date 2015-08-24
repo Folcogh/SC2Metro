@@ -1,4 +1,11 @@
 2015-08-24
+- begin cyclic timer interface
+
+2015-08-24
+- add EditCurrentGameName action
+- better handling of save/save as/close, with more return values from Game class
+
+2015-08-24
 - add title bar of the main window, depending on the current opened file
 - add adjustement of the actions of the main window, depending on the current opened file
 - make the game name editable by double-clicking the tab bar

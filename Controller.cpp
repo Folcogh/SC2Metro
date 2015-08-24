@@ -2,6 +2,7 @@
 #include "Controller.hpp"
 #include "MainWindow.hpp"
 #include "UiEditGameName.hpp"
+#include "CyclicTimerViewData.hpp"
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -300,7 +301,7 @@ bool Controller::closeGame(Game* game)
             }
             if (answer == QMessageBox::StandardButton::Save) {
                 if (!saveGameAs(game)) {
-                    return false; // Cancel
+                    return false; // Cancel or something failed
                 }
             }
         } else {
@@ -369,4 +370,15 @@ QString Controller::gameNameEditRequested ( QWidget* ui)
         }
     }
     return game->name();
+}
+
+/***********************************************************
+ *
+ *          Slots called by the game ui
+ *
+ ***********************************************************/
+
+bool Controller::newCyclicTimer ( GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data )
+{
+    return gameOf(ui)->newCyclicTimer(data);
 }

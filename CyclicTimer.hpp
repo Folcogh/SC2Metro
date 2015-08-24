@@ -3,6 +3,10 @@
 
 #include <QObject>
 
+typedef struct {
+
+} CYCLIC_TIMER_DATA;
+
 class CyclicTimer : public QObject
 {
     Q_OBJECT

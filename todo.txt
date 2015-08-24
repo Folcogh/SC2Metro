@@ -1,6 +1,7 @@
 TODO
 
 - application icon
+- edit cyclic timer per item ??
 
 
 HINTS

@@ -2,6 +2,8 @@
 #define GAME_UI_HPP
 
 #include <QWidget>
+#include <QPushButton>
+#include <QTableWidget>
 
 class GameUi : public QWidget
 {
@@ -11,6 +13,12 @@ class GameUi : public QWidget
 
   private:
     Q_DISABLE_COPY(GameUi)
+    void newCyclicTimer();
+
+    QTableWidget* CyclicTable;
+    QPushButton* ButtonAddCyclic; // Useless ?
+    QPushButton* ButtonEditCyclic;
+    QPushButton* ButtonRemoveCyclic;
 };
 
 #endif // GAME_UI_HPP
