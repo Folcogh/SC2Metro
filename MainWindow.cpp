@@ -237,7 +237,7 @@ void MainWindow::gameCloseRequested(int index)
  * @param index ...
  * @return void
  */
-void MainWindow::gameNameEditRequested ( int index )
+void MainWindow::gameNameEditRequested(int index)
 {
     QString text = Controller::get()->gameNameEditRequested(tabs->widget(index));
     tabs->setTabText(index, text);
@@ -280,7 +280,7 @@ void MainWindow::closeCurrentGame()
     gameCloseRequested(tabs->currentIndex());
 }
 
-void MainWindow::adjustActions( quint32 ActionsEnabled )
+void MainWindow::adjustActions(quint32 ActionsEnabled)
 {
     ActionSaveGame->setEnabled(ActionsEnabled & SAVE_GAME_ENABLED);
     ActionSaveAsGame->setEnabled(ActionsEnabled & SAVE_GAME_AS_ENABLED);

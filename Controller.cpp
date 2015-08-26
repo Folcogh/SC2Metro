@@ -124,7 +124,7 @@ void Controller::adjustActions(Game* game) const
 {
     quint32 ActionsEnabled = 0;
     if (game != nullptr) {
-        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED| CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME;
+        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED | CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME;
         if ((game->fullfilename().size() != 0) && (game->modified())) {
             ActionsEnabled |= SAVE_GAME_ENABLED;
         }
@@ -206,7 +206,7 @@ void Controller::saveGame(QWidget* ui) const
  * @brief Save a game
  * @param game Game
  */
-bool Controller::saveGame ( Game* game ) const
+bool Controller::saveGame(Game* game) const
 {
     Q_ASSERT(game != nullptr);
     if (game->save()) {
@@ -358,7 +358,7 @@ void Controller::newCurrentUi(QWidget* ui) const
     adjustActions(game);
 }
 
-QString Controller::gameNameEditRequested ( QWidget* ui)
+QString Controller::gameNameEditRequested(QWidget* ui)
 {
     Game* game = gameOf(static_cast<GameUi*>(ui));
     if (game != nullptr) {
@@ -378,7 +378,7 @@ QString Controller::gameNameEditRequested ( QWidget* ui)
  *
  ***********************************************************/
 
-bool Controller::newCyclicTimer ( GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data )
+bool Controller::newCyclicTimer(GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data)
 {
     return gameOf(ui)->newCyclicTimer(data);
 }

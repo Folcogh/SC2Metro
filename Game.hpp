@@ -21,7 +21,7 @@ class Game : public QObject
     bool save();
     void setFilename(QString filename);
     static Game* open(QString filename);
-    void setName (QString name );
+    void setName(QString name);
     bool newCyclicTimer(CYCLIC_TIMER_VIEW_DATA* data);
 
   private:

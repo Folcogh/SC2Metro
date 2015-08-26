@@ -3,7 +3,8 @@
 
 #include <QObject>
 
-typedef struct {
+typedef struct
+{
 
 } CYCLIC_TIMER_DATA;
 

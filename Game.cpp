@@ -52,7 +52,7 @@ QString Game::name() const
     return Name;
 }
 
-void Game::setName (QString name)
+void Game::setName(QString name)
 {
     Name = name;
     Modified = true;
@@ -81,7 +81,6 @@ void Game::setFilename(QString filename)
  */
 bool Game::save()
 {
-    // Don't assert(Modified), because this method must be callable by a saveAs procedure
     Q_ASSERT(!FullFilename.isEmpty());
 
     // Create and open the file
@@ -149,9 +148,8 @@ Game* Game::open(QString filename)
 
 // Cyclic timers
 
-bool Game::newCyclicTimer ( CYCLIC_TIMER_VIEW_DATA* data )
+bool Game::newCyclicTimer(CYCLIC_TIMER_VIEW_DATA* data)
 {
-    (void) data;
+    (void)data;
     return true;
 }
-

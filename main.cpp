@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     app.setApplicationName(APPLICATION_NAME);
     app.setApplicationDisplayName(APPLICATION_NAME);
     app.setApplicationVersion(APPLICATION_VERSION);
-    //app.setWindowIcon();
+    // app.setWindowIcon();
 
     MainWindow::get()->show();
     retval = app.exec();

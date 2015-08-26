@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QAbstractItemView>
+#include <QTableView>
 
 GameUi::GameUi()
     : QWidget(nullptr)
@@ -26,8 +28,8 @@ GameUi::GameUi()
     CyclicButtonsLayout->addWidget(ButtonRemoveCyclic);
 
     // Main layout
-    QVBoxLayout* CyclicLayout = new QVBoxLayout;
     CyclicTable = new QTableWidget(0, 7);
+    QVBoxLayout* CyclicLayout = new QVBoxLayout;
     CyclicLayout->addWidget(CyclicTable);
     CyclicLayout->addLayout(CyclicButtonsLayout);
 
@@ -41,15 +43,15 @@ GameUi::GameUi()
     CyclicTable->setHorizontalHeaderLabels(headerLabels);
     CyclicTable->verticalHeader()->setVisible(false);
     CyclicTable->horizontalHeader()->setStretchLastSection(true);
+    CyclicTable->setSortingEnabled(true);
+    CyclicTable->setShowGrid(false);
     CyclicTable->setAlternatingRowColors(true);
     CyclicTable->setSelectionMode(QAbstractItemView::SingleSelection);
     CyclicTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     CyclicTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     CyclicTable->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     CyclicTable->setDragEnabled(false);
-    CyclicTable->setSortingEnabled(true);
     CyclicTable->setTabKeyNavigation(false);
-    CyclicTable->setShowGrid(false);
 
     // Buttons configuration
     ButtonEditCyclic->setEnabled(false);
@@ -83,4 +85,13 @@ void GameUi::newCyclicTimer()
         delete data;
         return;
     }
+    CyclicTable->blockSignals(true);
+    CyclicTable->setUpdatesEnabled(false);
+    CyclicTable->setSortingEnabled(false);
+
+    // Add new item
+
+    CyclicTable->setSortingEnabled(true);
+    CyclicTable->setUpdatesEnabled(true);
+    CyclicTable->blockSignals(false);
 }
