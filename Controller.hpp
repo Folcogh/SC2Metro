@@ -6,7 +6,7 @@
 #include <QObject>
 #include "Game.hpp"
 #include "GameUi.hpp"
-#include "CyclicTimerViewData.hpp"
+#include "CyclicTimerData.hpp"
 
 /**
  * @brief Controller of the MVC pattern

@@ -2,7 +2,7 @@
 #include "Controller.hpp"
 #include "MainWindow.hpp"
 #include "UiEditGameName.hpp"
-#include "CyclicTimerViewData.hpp"
+#include "CyclicTimerData.hpp"
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -134,6 +134,12 @@ void Controller::adjustActions(Game* game) const
 
 /**
  * @brief Set the title bar of the main window according to the current opened file
+ *
+ * The title looks like :
+ * - <application name> if no game is opened
+ * - <application name> - <game name> if the current game is a new one
+ * - <application name> - [ <full filename> ] - <game name> if the  current game comes from a file
+ *
  * @param game Current game. May be nullptr if there is no current game
  */
 void Controller::adjustTitleBar(Game* game) const
@@ -179,8 +185,13 @@ void Controller::openGame()
 {
     QString filename = QFileDialog::getOpenFileName(MainWindow::get(), tr("Open a game"), QDir::homePath(), GAME_FILE_FILTER);
     if (!filename.isEmpty()) {
-        Game* game = Game::open(filename);
-        if (game == nullptr) {
+        Game* game = new Game;
+        try {
+            game->open(filename);
+        }
+        catch (const FException & exception) {
+            QMessageBox::critical(MainWindow::get(), tr("Error"), exception.message());
+            delete game;
             return;
         }
         GameUi* ui = new GameUi;
@@ -209,12 +220,17 @@ void Controller::saveGame(QWidget* ui) const
 bool Controller::saveGame(Game* game) const
 {
     Q_ASSERT(game != nullptr);
-    if (game->save()) {
+    try {
+        game->save();
         adjustActions(game);
         adjustTitleBar(game);
         return true;
     }
-    return false;
+    catch (const FException & exception)
+    {
+        QMessageBox::critical(MainWindow::get(), tr("Error"), exception.message());
+        return false;
+    }
 }
 
 /**
@@ -313,7 +329,7 @@ bool Controller::closeGame(Game* game)
                 return false;
             }
             if (answer == QMessageBox::StandardButton::Save) {
-                if (!game->save()) {
+                if (!saveGame(game)) {
                     return false; // Something failed
                 }
             }
@@ -335,6 +351,10 @@ bool Controller::closeGame(Game* game)
  *
  ***********************************************************/
 
+/**
+ * @brief Called when the main window receives a QCloseEvent
+ * @return bool
+ */
 bool Controller::appCloseRequested()
 {
     while (GameList.size() != 0) {
@@ -347,7 +367,6 @@ bool Controller::appCloseRequested()
 
 /**
  * @brief Message thrown by the main window to say that the current displayed game is changing
- *
  * @param ui Ui of the new current game
  */
 void Controller::newCurrentUi(QWidget* ui) const
@@ -358,6 +377,12 @@ void Controller::newCurrentUi(QWidget* ui) const
     adjustActions(game);
 }
 
+/**
+ * @brief ...
+ *
+ * @param ui ...
+ * @return QString
+ */
 QString Controller::gameNameEditRequested(QWidget* ui)
 {
     Game* game = gameOf(static_cast<GameUi*>(ui));
@@ -378,7 +403,15 @@ QString Controller::gameNameEditRequested(QWidget* ui)
  *
  ***********************************************************/
 
+/**
+ * @brief ...
+ * @param ui ...
+ * @param data ...
+ * @return bool
+ */
 bool Controller::newCyclicTimer(GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data)
 {
-    return gameOf(ui)->newCyclicTimer(data);
+//    return gameOf(ui)->newCyclicTimer(data);
+    Q_UNUSED(ui);
+    Q_UNUSED(data);
 }

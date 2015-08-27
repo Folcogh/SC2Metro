@@ -25,7 +25,7 @@ UiEditGameName::UiEditGameName()
 
     // Dialog config
     adjustSize();
-    setWindowTitle("New game");
+    setWindowTitle(tr("New game"));
     buttons->button(QDialogButtonBox::Ok)->setDisabled(true);
 
     // Connexions
@@ -41,10 +41,10 @@ UiEditGameName::UiEditGameName()
 UiEditGameName::UiEditGameName(QString name)
     : UiEditGameName()
 {
-    mainLayout->insertWidget(0, new QLabel(QObject::tr("Current name: %1").arg(name)));
+    mainLayout->insertWidget(0, new QLabel(tr("Current name: %1").arg(name)));
     nameEdit->setText(name);
     adjustSize();
-    setWindowTitle("Edit game name");
+    setWindowTitle(tr("Edit game name"));
 }
 
 UiEditGameName::~UiEditGameName()

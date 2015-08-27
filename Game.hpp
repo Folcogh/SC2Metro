@@ -2,27 +2,30 @@
 #define GAME_HPP
 
 #include <QList>
+#include <QString>
 #include <QObject>
 #include "BOTimer.hpp"
+#include "FException.hpp"
 #include "CyclicTimer.hpp"
-#include "CyclicTimerViewData.hpp"
+#include "CyclicTimerData.hpp"
 
 class Game : public QObject
 {
     Q_OBJECT
 
   public:
+    Game();
     explicit Game(QString name);
     ~Game();
     void populateUi();
     bool modified() const;
     QString name() const;
-    QString fullfilename() const;
-    bool save();
-    void setFilename(QString filename);
-    static Game* open(QString filename);
     void setName(QString name);
-    bool newCyclicTimer(CYCLIC_TIMER_VIEW_DATA* data);
+    QString fullfilename() const;
+    void open(QString filename) throw(const FException &);
+    void save() throw(const FException &);
+    void setFilename(QString filename);
+    void newCyclicTimer(CYCLIC_TIMER_DATA* data) throw(const FException &);
 
   private:
     Q_DISABLE_COPY(Game)

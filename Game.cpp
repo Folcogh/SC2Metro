@@ -5,14 +5,18 @@
 #include <QFile>
 #include <QtGlobal>
 #include <QDataStream>
-#include <QMessageBox>
 #include <QFileDialog>
 
-Game::Game(QString name)
+Game::Game()
     : QObject(nullptr)
-    , Name(name)
     , Modified(false)
 {
+}
+
+Game::Game(QString name)
+    : Game()
+{
+    Name = name;
 }
 
 Game::~Game()
@@ -79,26 +83,23 @@ void Game::setFilename(QString filename)
 /**
  * @brief Save a game to its file
  */
-bool Game::save()
+void Game::save() throw(const FException &)
 {
     Q_ASSERT(!FullFilename.isEmpty());
 
     // Create and open the file
     QFile file(FullFilename);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't save to the file %1").arg(FullFilename));
-        return false;
+        throw new FException(tr("Error while saving the file %1").arg(FullFilename));
     }
     QDataStream stream(&file);
 
     // Save the file
     stream << QString(GAME_FILE_SIGNATURE) << GAME_FILE_VERSION << Name;
     if (stream.status() != QDataStream::Ok) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't save to the file %1").arg(FullFilename));
-        return false;
+        throw new FException(tr("Error while saving the file %1").arg(FullFilename));
     }
     Modified = false;
-    return true;
 }
 
 /**
@@ -107,12 +108,11 @@ bool Game::save()
  * @param filename File name of the game
  * @return Game* The game created
  */
-Game* Game::open(QString filename)
+void Game::open(QString filename) throw(const FException &)
 {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't open the file %1").arg(filename));
-        return nullptr;
+        throw new FException(tr("Error while opening the file %1").arg(filename));
     }
     QDataStream stream(&file);
 
@@ -124,32 +124,24 @@ Game* Game::open(QString filename)
     stream >> version;
 
     if (signature != GAME_FILE_SIGNATURE) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("This is not a FMetro file").arg(filename));
-        return nullptr;
+        throw new FException(tr("Error while opening the file %1: this is not a " APPLICATION_NAME " file").arg(filename));
     }
     if (version < GAME_FILE_VERSION) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Your version of FMetro is too old, please upgrade").arg(filename));
-        return nullptr;
+        throw new FException(tr("Error while opening the file %1: your version of " APPLICATION_NAME " is too old, please upgrade").arg(filename));
     }
 
-    // Create game and fill it
-    QString name;
-    stream >> name;
-    Game* game = new Game(name);
-    game->setFilename(filename);
+    // Fill the game data
+    stream >> Name;
 
+    // Check the final status of the stream
     if (stream.status() != QDataStream::Ok) {
-        QMessageBox::critical(MainWindow::get(), tr("Error"), tr("Couldn't read that file").arg(filename));
-        delete game;
-        return nullptr;
+        throw new FException(tr("Error while opening the file %1").arg(filename));
     }
-    return game;
 }
 
 // Cyclic timers
 
-bool Game::newCyclicTimer(CYCLIC_TIMER_VIEW_DATA* data)
+void Game::newCyclicTimer(CYCLIC_TIMER_DATA* data) throw(const FException &)
 {
     (void)data;
-    return true;
 }

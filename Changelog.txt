@@ -1,3 +1,9 @@
+2015-08-27
+- add FException class
+- remove ui from the Game class, use exceptions caught by Controller
+- make Game::open(QString filename) a non-static method
+- begin cyclic timer creation
+
 2015-08-24
 - begin cyclic timer interface
 

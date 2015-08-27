@@ -1,13 +1,13 @@
 #include "GameUi.hpp"
 #include "Controller.hpp"
-#include "CyclicTimerViewData.hpp"
+#include "CyclicTimerData.hpp"
 #include <QGroupBox>
+#include <QTableView>
 #include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QAbstractItemView>
-#include <QTableView>
 
 GameUi::GameUi()
     : QWidget(nullptr)

@@ -17,10 +17,12 @@ add_executable(FMetro
     BOTimer.cpp
     Controller.cpp
     CyclicTimer.cpp
+    FException.cpp
     Game.cpp
     GameUi.cpp
     main.cpp
     MainWindow.cpp
+    UiEditCyclicTimer.cpp
     UiEditGameName.cpp
     )
 
