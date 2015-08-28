@@ -1,3 +1,8 @@
+2015-08-28
+- terminate cyclic timer edition ui
+- add the cyclic timer creation protocol
+- add classes CyclicTimerData and CyclicTimerSpec
+
 2015-08-27
 - add FException class
 - remove ui from the Game class, use exceptions caught by Controller

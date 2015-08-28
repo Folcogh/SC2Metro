@@ -31,7 +31,7 @@ class Controller : public QObject
     void gameCloseRequested(QWidget* ui);
     bool appCloseRequested();
     QString gameNameEditRequested(QWidget* ui);
-    bool newCyclicTimer(GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data);
+    CyclicTimerData* newCyclicTimer(GameUi* ui);
 
   private:
     Q_DISABLE_COPY(Controller)

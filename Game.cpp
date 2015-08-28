@@ -140,8 +140,12 @@ void Game::open(QString filename) throw(const FException &)
 }
 
 // Cyclic timers
-
-void Game::newCyclicTimer(CYCLIC_TIMER_DATA* data) throw(const FException &)
+CyclicTimerSpec* Game::cyclicTimerSpec()
 {
-    (void)data;
+    return new CyclicTimerSpec; // No modification to do
+}
+
+void Game::addCyclicTimer(CyclicTimerData* data)
+{
+    CyclicTimerList.append(new CyclicTimer(data));
 }

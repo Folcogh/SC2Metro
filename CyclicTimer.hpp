@@ -1,23 +1,22 @@
 #ifndef CYCLIC_TIMER_HPP
 #define CYCLIC_TIMER_HPP
 
-#include <QObject>
+#include "CyclicTimerData.hpp"
 
-typedef struct
+class CyclicTimer
 {
-
-} CYCLIC_TIMER_DATA;
-
-class CyclicTimer : public QObject
-{
-    Q_OBJECT
-
   public:
-    explicit CyclicTimer(QObject* parent = nullptr);
+    explicit CyclicTimer(CyclicTimerData* data);
     ~CyclicTimer();
 
   private:
-    Q_DISABLE_COPY(CyclicTimer)
+    Q_DISABLE_COPY(CyclicTimer);
+    int Period;
+    int Start;
+    int Terminate;
+    int Volume;
+    QString Sound;
+    QKeySequence Hotkey;
 };
 
 #endif // CYCLIC_TIMER_HPP

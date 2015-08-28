@@ -7,6 +7,7 @@
 #include "BOTimer.hpp"
 #include "FException.hpp"
 #include "CyclicTimer.hpp"
+#include "CyclicTimerSpec.hpp"
 #include "CyclicTimerData.hpp"
 
 class Game : public QObject
@@ -25,7 +26,9 @@ class Game : public QObject
     void open(QString filename) throw(const FException &);
     void save() throw(const FException &);
     void setFilename(QString filename);
-    void newCyclicTimer(CYCLIC_TIMER_DATA* data) throw(const FException &);
+
+    CyclicTimerSpec* cyclicTimerSpec();
+    void addCyclicTimer(CyclicTimerData* data);
 
   private:
     Q_DISABLE_COPY(Game)

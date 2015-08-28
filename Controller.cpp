@@ -2,7 +2,8 @@
 #include "Controller.hpp"
 #include "MainWindow.hpp"
 #include "UiEditGameName.hpp"
-#include "CyclicTimerData.hpp"
+#include "CyclicTimerSpec.hpp"
+#include "UiEditCyclicTimer.hpp"
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -409,9 +410,14 @@ QString Controller::gameNameEditRequested(QWidget* ui)
  * @param data ...
  * @return bool
  */
-bool Controller::newCyclicTimer(GameUi* ui, CYCLIC_TIMER_VIEW_DATA* data)
+CyclicTimerData* Controller::newCyclicTimer(GameUi* ui)
 {
-//    return gameOf(ui)->newCyclicTimer(data);
-    Q_UNUSED(ui);
-    Q_UNUSED(data);
+    Game* game = gameOf(ui);
+    CyclicTimerSpec* spec = game->cyclicTimerSpec();
+    CyclicTimerData* data = UiEditCyclicTimer::newCyclicTimer(spec);
+    if (data != nullptr) {
+        game->addCyclicTimer(data);
+    }
+    delete spec;
+    return data;
 }

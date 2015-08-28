@@ -1,8 +1,13 @@
 #include "CyclicTimer.hpp"
 
-CyclicTimer::CyclicTimer(QObject* parent)
-    : QObject(parent)
+CyclicTimer::CyclicTimer(CyclicTimerData* data)
 {
+    Period = data->period();
+    Start = data->start();
+    Terminate = data->terminate();
+    Volume = data->volume();
+    Sound = data->sound();
+    Hotkey = data->hotkey();
 }
 
 CyclicTimer::~CyclicTimer()

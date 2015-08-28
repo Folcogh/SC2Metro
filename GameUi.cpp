@@ -80,10 +80,9 @@ GameUi::~GameUi()
  */
 void GameUi::newCyclicTimer()
 {
-    CYCLIC_TIMER_VIEW_DATA* data = new CYCLIC_TIMER_VIEW_DATA;
-    if (!Controller::get()->newCyclicTimer(this, data)) {
-        delete data;
-        return;
+    CyclicTimerData* data = Controller::get()->newCyclicTimer(this);
+    if (data == nullptr) {
+        return; // Fail or canceled by the user
     }
     CyclicTable->blockSignals(true);
     CyclicTable->setUpdatesEnabled(false);
