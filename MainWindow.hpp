@@ -22,6 +22,8 @@ class MainWindow : public QMainWindow
     void addGameUi(QWidget* ui, QString name);
     void RemoveGameUi(QWidget* ui);
     void adjustActions(quint32 ActionsEnabled);
+    void newCyclicTimer();
+    QAction* actionNewCyclicTimer();
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -45,10 +47,12 @@ class MainWindow : public QMainWindow
     QAction* ActionQuitApplication;
     QAction* ActionAboutQt;
     QAction* ActionEditGameName;
+    QAction* ActionNewCyclicTimer;
 
     // Game menus
     QMenu* MenuGame;
     QMenu* MenuEdit;
+    QMenu* MenuCyclicTimers;
     QMenu* MenuHelp;
 
     // Central widget
@@ -60,10 +64,11 @@ class MainWindow : public QMainWindow
  *
  * Allow the Controller to enable/disable actions, according to the current game status
  */
-#define SAVE_GAME_ENABLED 1
-#define SAVE_GAME_AS_ENABLED 2
-#define SAVE_ALL_GAMES_ENABLED 4
-#define CLOSE_CURRENT_GAME_ENABLED 8
-#define EDIT_CURRENT_GAME_NAME 16
+#define SAVE_GAME_ENABLED 1 << 0
+#define SAVE_GAME_AS_ENABLED 1 << 1
+#define SAVE_ALL_GAMES_ENABLED 1 << 2
+#define CLOSE_CURRENT_GAME_ENABLED 1 << 3
+#define EDIT_CURRENT_GAME_NAME 1 << 4
+#define NEW_CYCLIC_TIMER 1 << 5
 
 #endif // MAIN_WINDOW_HPP

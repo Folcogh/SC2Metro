@@ -1,29 +1,33 @@
 #ifndef CYCLIC_TIMER_SPEC_HPP
 #define CYCLIC_TIMER_SPEC_HPP
 
+#include <QtGlobal>
+
 class CyclicTimerSpec
 {
   public:
-    int periodMin() const { return PeriodMin; }
-    int periodMax() const { return PeriodMax; }
-    int defaultPeriod() const { return DefaultPeriod; }
-    int periodStep() const { return PeriodStep; }
-    int periodPageStep() const { return PeriodPageStep; }
+    CyclicTimerSpec();
+    int periodMin() const;
+    int periodMax() const;
+    int defaultPeriod() const;
+    int periodStep() const;
+    int periodPageStep() const;
 
-    int boundMin() const { return BoundMin; }
-    int boundMax() const { return BoundMax; }
-    int defaultStart() const { return DefaultStart; }
-    int defaultTerminate() const { return DefaultTerminate; }
-    int boundStep() const { return BoundStep; }
-    int boundPageStep() const { return BoundPageStep; }
+    int boundMin() const;
+    int boundMax() const;
+    int defaultStart() const;
+    int defaultTerminate() const;
+    int boundStep() const;
+    int boundPageStep() const;
 
-    int volumeMin() const { return VolumeMin; }
-    int volumeMax() const { return VolumeMax; }
-    int defaultVolume() const { return DefaultVolume; }
-    int volumeStep() const { return VolumeStep; }
-    int volumePageStep() const { return VolumePageStep; }
+    int volumeMin() const;
+    int volumeMax() const;
+    int defaultVolume() const;
+    int volumeStep() const;
+    int volumePageStep() const;
 
-   private:
+  private:
+    Q_DISABLE_COPY(CyclicTimerSpec)
     int PeriodMin = 5;
     int PeriodMax = 60 * 15;
     int DefaultPeriod = 30;

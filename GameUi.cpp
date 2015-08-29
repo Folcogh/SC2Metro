@@ -1,6 +1,8 @@
 #include "GameUi.hpp"
 #include "Controller.hpp"
+#include "MainWindow.hpp"
 #include "CyclicTimerData.hpp"
+#include "ActionPushButton.hpp"
 #include <QGroupBox>
 #include <QTableView>
 #include <QBoxLayout>
@@ -19,7 +21,7 @@ GameUi::GameUi()
      ***********************************************************/
 
     // Buttons
-    ButtonAddCyclic = new QPushButton(tr("Add a new timer"));
+    ButtonAddCyclic = new ActionPushButton(MainWindow::get()->actionNewCyclicTimer());
     ButtonEditCyclic = new QPushButton(tr("Edit this timer"));
     ButtonRemoveCyclic = new QPushButton(tr("Remove this timer"));
     QHBoxLayout* CyclicButtonsLayout = new QHBoxLayout;
@@ -57,9 +59,6 @@ GameUi::GameUi()
     ButtonEditCyclic->setEnabled(false);
     ButtonRemoveCyclic->setEnabled(false);
 
-    // Connections
-    connect(ButtonAddCyclic, &QPushButton::clicked, this, &GameUi::newCyclicTimer);
-
     /***********************************************************
      *
      *          Game ui
@@ -78,12 +77,8 @@ GameUi::~GameUi()
  * @brief Add a cyclic timer in the list
  * @return void
  */
-void GameUi::newCyclicTimer()
+void GameUi::newCyclicTimer(CyclicTimerData* data)
 {
-    CyclicTimerData* data = Controller::get()->newCyclicTimer(this);
-    if (data == nullptr) {
-        return; // Fail or canceled by the user
-    }
     CyclicTable->blockSignals(true);
     CyclicTable->setUpdatesEnabled(false);
     CyclicTable->setSortingEnabled(false);

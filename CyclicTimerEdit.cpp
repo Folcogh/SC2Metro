@@ -1,4 +1,4 @@
-#include "UiEditCyclicTimer.hpp"
+#include "CyclicTimerEdit.hpp"
 #include "MainWindow.hpp"
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -6,7 +6,7 @@
 #include <QBoxLayout>
 #include <QChar>
 
-UiEditCyclicTimer::UiEditCyclicTimer(CyclicTimerSpec* spec)
+CyclicTimerEdit::CyclicTimerEdit(CyclicTimerSpec* spec)
     :QDialog(MainWindow::get())
     , Collapsed(false)
 {
@@ -102,14 +102,14 @@ UiEditCyclicTimer::UiEditCyclicTimer(CyclicTimerSpec* spec)
 
     connect(ButtonOk, &QPushButton::clicked, this, &QDialog::accept);
     connect(ButtonCancel, &QPushButton::clicked, this, &QDialog::reject);
-    connect(ButtonMore, &QPushButton::clicked, this, &UiEditCyclicTimer::buttonMoreClicked);
+    connect(ButtonMore, &QPushButton::clicked, this, &CyclicTimerEdit::buttonMoreClicked);
     connect(ButtonClear, &QPushButton::clicked, EditKeySequence, &QKeySequenceEdit::clear);
-    connect(SliderPeriod, &QSlider::valueChanged, this, &UiEditCyclicTimer::adjustPeriodLabel);
-    connect(SliderStart, &QSlider::valueChanged, this, &UiEditCyclicTimer::adjustStartLabel);
-    connect(SliderTerminate, &QSlider::valueChanged, this, &UiEditCyclicTimer::adjustTerminateLabel);
-    connect(SliderVolume, &QSlider::valueChanged, this, &UiEditCyclicTimer::adjustVolumeLabel);
-    connect(SliderStart, &QSlider::sliderReleased, this, &UiEditCyclicTimer::checkStart);
-    connect(SliderTerminate, &QSlider::sliderReleased, this, &UiEditCyclicTimer::checkTerminate);
+    connect(SliderPeriod, &QSlider::valueChanged, this, &CyclicTimerEdit::adjustPeriodLabel);
+    connect(SliderStart, &QSlider::valueChanged, this, &CyclicTimerEdit::adjustStartLabel);
+    connect(SliderTerminate, &QSlider::valueChanged, this, &CyclicTimerEdit::adjustTerminateLabel);
+    connect(SliderVolume, &QSlider::valueChanged, this, &CyclicTimerEdit::adjustVolumeLabel);
+    connect(SliderStart, &QSlider::sliderReleased, this, &CyclicTimerEdit::checkTerminate);
+    connect(SliderTerminate, &QSlider::sliderReleased, this, &CyclicTimerEdit::checkStart);
 
     /***********************************************************
      *
@@ -146,34 +146,51 @@ UiEditCyclicTimer::UiEditCyclicTimer(CyclicTimerSpec* spec)
     SliderVolume->setPageStep(spec->volumePageStep());
 
     // Dialog
+    adjustPeriodLabel(spec->defaultPeriod());
+    adjustStartLabel(spec->defaultStart());
+    adjustTerminateLabel(spec->defaultTerminate());
+    adjustVolumeLabel(spec->defaultVolume());
     AdvancedBox->setVisible(false);
     adjustSize();
     setWindowTitle(tr("New cyclic timer"));
-
 }
 
-UiEditCyclicTimer::~UiEditCyclicTimer()
+CyclicTimerEdit::~CyclicTimerEdit()
 {
 }
 
-CyclicTimerData* UiEditCyclicTimer::newCyclicTimer(CyclicTimerSpec* spec)
+CyclicTimerData* CyclicTimerEdit::newCyclicTimer(CyclicTimerSpec* spec)
 {
     CyclicTimerData* data = nullptr;
-    UiEditCyclicTimer ct(spec);
-    if (ct.exec() == QDialog::Accepted) {
-        data = new CyclicTimerData(ct.SliderPeriod->value(), ct.SliderStart->value(), ct.SliderTerminate->value(),
-                                   ct.SliderVolume->value(), ct.ComboSound->currentText(), ct.EditKeySequence->keySequence());
+    CyclicTimerEdit* ct = new CyclicTimerEdit(spec);
+    if (ct->exec() == QDialog::Accepted) {
+        data = new CyclicTimerData(ct->SliderPeriod->value(), ct->SliderStart->value(), ct->SliderTerminate->value(),
+                                   ct->SliderVolume->value(), ct->ComboSound->currentText(), ct->EditKeySequence->keySequence());
     }
     return data;
 }
 
-CyclicTimerData* UiEditCyclicTimer::editCyclictimer(CyclicTimerSpec* spec)
+/// BUG BUG BUG rewrite that !
+bool CyclicTimerEdit::editCyclicTimer(CyclicTimerSpec* spec, CyclicTimerData* data)
 {
-    (void) spec;
-    return nullptr;
+    CyclicTimerEdit* ct = new CyclicTimerEdit(spec);
+    ct->adjustPeriodLabel(data->period());
+    ct->adjustStartLabel(data->start());
+    ct->adjustTerminateLabel(data->terminate());
+    ct->adjustVolumeLabel(data->volume());
+    ct->ComboSound->setCurrentText(data->sound());
+    ct->EditKeySequence->setKeySequence(data->hotkey());
+    ct->adjustSize();
+    ct->setWindowTitle(tr("Edit cyclic timer"));
+    if (ct->exec() == QDialog::Accepted) {
+        delete data;
+        data = new CyclicTimerData(ct->SliderPeriod->value(), ct->SliderStart->value(), ct->SliderTerminate->value(),
+                                   ct->SliderVolume->value(), ct->ComboSound->currentText(), ct->EditKeySequence->keySequence());
+    }
+    return data;
 }
 
-void UiEditCyclicTimer::buttonMoreClicked()
+void CyclicTimerEdit::buttonMoreClicked()
 {
     if (Collapsed) {
         ButtonMore->setText(tr(BUTTON_MORE_TEXT));
@@ -187,17 +204,17 @@ void UiEditCyclicTimer::buttonMoreClicked()
     Collapsed = !Collapsed;
 }
 
-void UiEditCyclicTimer::adjustPeriodLabel(int seconds)
+void CyclicTimerEdit::adjustPeriodLabel(int seconds)
 {
     LabelPeriod->setText(QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0')));
 }
 
-void UiEditCyclicTimer::adjustStartLabel(int seconds)
+void CyclicTimerEdit::adjustStartLabel(int seconds)
 {
     LabelStart->setText(QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0')));
 }
 
-void UiEditCyclicTimer::adjustTerminateLabel(int seconds)
+void CyclicTimerEdit::adjustTerminateLabel(int seconds)
 {
     QString label = QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0'));
     if (seconds == 0) {
@@ -206,22 +223,21 @@ void UiEditCyclicTimer::adjustTerminateLabel(int seconds)
     LabelTerminate->setText(label);
 }
 
-void UiEditCyclicTimer::adjustVolumeLabel(int percent)
+void CyclicTimerEdit::adjustVolumeLabel(int percent)
 {
     LabelVolume->setText(QString("%1%").arg(percent));
 }
 
-void UiEditCyclicTimer::checkStart()
+void CyclicTimerEdit::checkStart()
 {
     if ((SliderStart->value() > SliderTerminate->value()) && (SliderTerminate->value() != 0)) {
         SliderStart->setValue(SliderTerminate->value());
     }
 }
 
-void UiEditCyclicTimer::checkTerminate()
+void CyclicTimerEdit::checkTerminate()
 {
     if ((SliderStart->value() > SliderTerminate->value()) && (SliderTerminate->value() != 0)) {
         SliderTerminate->setValue(SliderStart->value());
     }
 }
-

@@ -28,7 +28,7 @@ class Game : public QObject
     void setFilename(QString filename);
 
     CyclicTimerSpec* cyclicTimerSpec();
-    void addCyclicTimer(CyclicTimerData* data);
+    void newCyclicTimer(CyclicTimerData* data);
 
   private:
     Q_DISABLE_COPY(Game)

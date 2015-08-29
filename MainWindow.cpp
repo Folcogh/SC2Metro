@@ -61,6 +61,10 @@ MainWindow::MainWindow()
     ActionEditGameName = new QAction(this);
     connect(ActionEditGameName, &QAction::triggered, this, &MainWindow::editCurrentGameName);
 
+    // New cyclic timer
+    ActionNewCyclicTimer = new QAction(this);
+    ActionNewCyclicTimer->setShortcut(Qt::CTRL + Qt::Key_C);
+    connect(ActionNewCyclicTimer, &QAction::triggered, this, &MainWindow::newCyclicTimer);
 
     // Set default actions available
     adjustActions(0);
@@ -87,6 +91,10 @@ MainWindow::MainWindow()
     MenuEdit = new QMenu(this);
     MenuEdit->addAction(ActionEditGameName);
 
+    // Cyclic timers
+    MenuCyclicTimers = new QMenu(this);
+    MenuCyclicTimers->addAction(ActionNewCyclicTimer);
+
     // Help
     MenuHelp = new QMenu(this);
     MenuHelp->addAction(ActionAboutQt);
@@ -94,6 +102,7 @@ MainWindow::MainWindow()
     // Populate the menu bar
     menuBar()->addMenu(MenuGame);
     menuBar()->addMenu(MenuEdit);
+    menuBar()->addMenu(MenuCyclicTimers);
     menuBar()->addMenu(MenuHelp);
 
     /***********************************************************
@@ -162,6 +171,7 @@ void MainWindow::translate()
     // Menus
     MenuGame->setTitle(tr("Game"));
     MenuEdit->setTitle(tr("Edit"));
+    MenuCyclicTimers->setTitle(tr("Cyclic timers"));
     MenuHelp->setTitle(tr("Help"));
 
     // Actions
@@ -174,6 +184,7 @@ void MainWindow::translate()
     ActionQuitApplication->setText(tr("Quit"));
     ActionAboutQt->setText(tr("About Qt"));
     ActionEditGameName->setText(tr("Edit game name"));
+    ActionNewCyclicTimer->setText(tr("New cyclic timer"));
 }
 
 /**
@@ -287,4 +298,15 @@ void MainWindow::adjustActions(quint32 ActionsEnabled)
     ActionSaveAllGames->setEnabled(ActionsEnabled & SAVE_ALL_GAMES_ENABLED);
     ActionCloseCurrentGame->setEnabled(ActionsEnabled & CLOSE_CURRENT_GAME_ENABLED);
     ActionEditGameName->setEnabled(ActionsEnabled & EDIT_CURRENT_GAME_NAME);
+    ActionNewCyclicTimer->setEnabled(ActionsEnabled & NEW_CYCLIC_TIMER);
+}
+
+void MainWindow::newCyclicTimer()
+{
+    Controller::get()->newCyclicTimer(tabs->currentWidget());
+}
+
+QAction* MainWindow::actionNewCyclicTimer()
+{
+    return ActionNewCyclicTimer;
 }

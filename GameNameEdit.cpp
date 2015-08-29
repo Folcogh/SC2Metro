@@ -1,4 +1,4 @@
-#include "UiEditGameName.hpp"
+#include "GameNameEdit.hpp"
 #include "MainWindow.hpp"
 #include <QPushButton>
 #include <QFormLayout>
@@ -8,7 +8,7 @@
 /**
  * @brief Construct a dialog to request a new name
  */
-UiEditGameName::UiEditGameName()
+GameNameEdit::GameNameEdit()
     : QDialog(MainWindow::get())
     , buttons(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel))
     , mainLayout(new QVBoxLayout)
@@ -31,15 +31,15 @@ UiEditGameName::UiEditGameName()
     // Connexions
     connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);             // Ok
     connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);             // Cancel
-    connect(nameEdit, &QLineEdit::textChanged, this, &UiEditGameName::adjustButtonOk); // Disable the OK button if the name field is empty
+    connect(nameEdit, &QLineEdit::textChanged, this, &GameNameEdit::adjustButtonOk); // Disable the OK button if the name field is empty
 }
 
 /**
  * @brief Construct a dialog to edit an existing name
  * @param name Existing name
  */
-UiEditGameName::UiEditGameName(QString name)
-    : UiEditGameName()
+GameNameEdit::GameNameEdit(QString name)
+: GameNameEdit()
 {
     mainLayout->insertWidget(0, new QLabel(tr("Current name: %1").arg(name)));
     nameEdit->setText(name);
@@ -47,7 +47,7 @@ UiEditGameName::UiEditGameName(QString name)
     setWindowTitle(tr("Edit game name"));
 }
 
-UiEditGameName::~UiEditGameName()
+GameNameEdit::~GameNameEdit()
 {
 }
 
@@ -55,9 +55,9 @@ UiEditGameName::~UiEditGameName()
  * @brief Prompt for a new game name
  * @return QString A string containing the name. The string is empty if the dialog was cancelled
  */
-QString UiEditGameName::newGameName()
+QString GameNameEdit::newGameName()
 {
-    UiEditGameName* ui = new UiEditGameName;
+    GameNameEdit* ui = new GameNameEdit;
     QString retval = ui->commonEdit();
     delete ui;
     return retval;
@@ -68,9 +68,9 @@ QString UiEditGameName::newGameName()
  * @param name Current name
  * @return QString A string containing the new name. The string is empty if the dialog was cancelled
  */
-QString UiEditGameName::editGameName(QString name)
+QString GameNameEdit::editGameName(QString name)
 {
-    UiEditGameName* ui = new UiEditGameName(name);
+    GameNameEdit* ui = new GameNameEdit(name);
     QString retval = ui->commonEdit();
     delete ui;
     return retval;
@@ -80,7 +80,7 @@ QString UiEditGameName::editGameName(QString name)
  * @brief Common part of the static methods
  * @return QString A string containing the typed name. The string is empty if the dialog was cancelled
  */
-QString UiEditGameName::commonEdit()
+QString GameNameEdit::commonEdit()
 {
     QString retval;
     exec();
@@ -95,7 +95,7 @@ QString UiEditGameName::commonEdit()
  * @param text content of the input field
  * @return void
  */
-void UiEditGameName::adjustButtonOk(const QString& text)
+void GameNameEdit::adjustButtonOk(const QString& text)
 {
     buttons->button(QDialogButtonBox::Ok)->setDisabled(text.isEmpty());
 }

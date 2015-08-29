@@ -1,3 +1,8 @@
+2015-08-29
+- change the cyclic timer creation protocol, use a data class friend of Cyclic timer
+- change some class and files names
+- add ActionPushButton class
+
 2015-08-28
 - terminate cyclic timer edition ui
 - add the cyclic timer creation protocol

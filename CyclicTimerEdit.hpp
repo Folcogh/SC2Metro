@@ -1,5 +1,5 @@
-#ifndef UI_EDIT_CYCLIC_TIMER_HPP
-#define UI_EDIT_CYCLIC_TIMER_HPP
+#ifndef CYCLIC_TIMER_EDIT_HPP
+#define CYCLIC_TIMER_EDIT_HPP
 
 #include <QLabel>
 #include <QString>
@@ -13,15 +13,16 @@
 #include "CyclicTimerSpec.hpp"
 #include "CyclicTimerData.hpp"
 
-class UiEditCyclicTimer : public QDialog
+class CyclicTimerEdit : public QDialog
 {
   public:
-    explicit UiEditCyclicTimer(CyclicTimerSpec* spec);
-    ~UiEditCyclicTimer();
+    explicit CyclicTimerEdit(CyclicTimerSpec* spec);
+    ~CyclicTimerEdit();
     static CyclicTimerData* newCyclicTimer(CyclicTimerSpec* spec);
-    static CyclicTimerData* editCyclictimer(CyclicTimerSpec* spec);
+    static bool editCyclicTimer(CyclicTimerSpec* spec, CyclicTimerData* data);
 
   private:
+    Q_DISABLE_COPY(CyclicTimerEdit)
     void checkStart();
     void checkTerminate();
     void buttonMoreClicked();
@@ -48,4 +49,4 @@ class UiEditCyclicTimer : public QDialog
 
 #define BUTTON_MORE_TEXT "More..."
 
-#endif // UI_EDIT_CYCLIC_TIMER_HPP
+#endif // CYCLIC_TIMER_EDIT_HPP

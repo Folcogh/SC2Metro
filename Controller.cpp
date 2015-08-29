@@ -1,9 +1,9 @@
 #include "Global.hpp"
 #include "Controller.hpp"
 #include "MainWindow.hpp"
-#include "UiEditGameName.hpp"
+#include "GameNameEdit.hpp"
 #include "CyclicTimerSpec.hpp"
-#include "UiEditCyclicTimer.hpp"
+#include "CyclicTimerEdit.hpp"
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -125,7 +125,7 @@ void Controller::adjustActions(Game* game) const
 {
     quint32 ActionsEnabled = 0;
     if (game != nullptr) {
-        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED | CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME;
+        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED | CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME | NEW_CYCLIC_TIMER;
         if ((game->fullfilename().size() != 0) && (game->modified())) {
             ActionsEnabled |= SAVE_GAME_ENABLED;
         }
@@ -163,13 +163,13 @@ void Controller::adjustTitleBar(Game* game) const
 
 /**
  * @brief Create a new game
- *
+ *UiEdit
  * A game needs a name. To avoid a useless creation/destruction if the name input is cancelled,
  * this method prompts for a name, then sends it to the game when created
  */
 void Controller::newGame()
 {
-    QString name = UiEditGameName::newGameName();
+    QString name = GameNameEdit::newGameName();
     if (!name.isEmpty()) {
         Game* game = new Game(name);                      // Create the game
         GameUi* ui = new GameUi;                          // Create the ui
@@ -388,7 +388,7 @@ QString Controller::gameNameEditRequested(QWidget* ui)
 {
     Game* game = gameOf(static_cast<GameUi*>(ui));
     if (game != nullptr) {
-        QString newname = UiEditGameName::editGameName(game->name());
+        QString newname = GameNameEdit::editGameName(game->name());
         if (newname.size() != 0) {
             game->setName(newname);
             adjustActions(game);
@@ -404,20 +404,15 @@ QString Controller::gameNameEditRequested(QWidget* ui)
  *
  ***********************************************************/
 
-/**
- * @brief ...
- * @param ui ...
- * @param data ...
- * @return bool
- */
-CyclicTimerData* Controller::newCyclicTimer(GameUi* ui)
+void Controller::newCyclicTimer(QWidget* widget)
 {
+    GameUi* ui = static_cast<GameUi*>(widget);
     Game* game = gameOf(ui);
     CyclicTimerSpec* spec = game->cyclicTimerSpec();
-    CyclicTimerData* data = UiEditCyclicTimer::newCyclicTimer(spec);
+    CyclicTimerData* data = CyclicTimerEdit::newCyclicTimer(spec);
     if (data != nullptr) {
-        game->addCyclicTimer(data);
+        game->newCyclicTimer(data);
+        ui->newCyclicTimer(data);
     }
     delete spec;
-    return data;
 }

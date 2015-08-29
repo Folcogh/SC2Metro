@@ -1,5 +1,5 @@
-#ifndef UI_EDIT_GAME_NAME_HPP
-#define UI_EDIT_GAME_NAME_HPP
+#ifndef GAME_NAME_EDIT_HPP
+#define GAME_NAME_EDIT_HPP
 
 #include <QDialog>
 #include <QString>
@@ -12,17 +12,17 @@
  * Use the static method newGameName() to create a new name
  * Use the static method editGameName(QString) to edit an existing name
  */
-class UiEditGameName : public QDialog
+class GameNameEdit : public QDialog
 {
   public:
-    UiEditGameName();
-    explicit UiEditGameName(QString name);
-    ~UiEditGameName();
+      GameNameEdit();
+      explicit GameNameEdit(QString name);
+      ~GameNameEdit();
     static QString newGameName();
     static QString editGameName(QString name);
 
   private:
-    Q_DISABLE_COPY(UiEditGameName)
+    Q_DISABLE_COPY(GameNameEdit)
     void adjustButtonOk(const QString& text);
     QString commonEdit();
 
@@ -31,4 +31,4 @@ class UiEditGameName : public QDialog
     QLineEdit* nameEdit;
 };
 
-#endif // UI_EDIT_GAME_NAME_HPP
+#endif // GAME_NAME_EDIT_HPP

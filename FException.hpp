@@ -11,6 +11,7 @@ public:
     QString message() const;
 
 private:
+    Q_DISABLE_COPY(FException)
     QString Message;
 };
 

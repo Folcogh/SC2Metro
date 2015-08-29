@@ -10,13 +10,8 @@ class CyclicTimer
     ~CyclicTimer();
 
   private:
-    Q_DISABLE_COPY(CyclicTimer);
-    int Period;
-    int Start;
-    int Terminate;
-    int Volume;
-    QString Sound;
-    QKeySequence Hotkey;
+    Q_DISABLE_COPY(CyclicTimer)
+    CyclicTimerData* Data;
 };
 
 #endif // CYCLIC_TIMER_HPP

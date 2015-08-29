@@ -3,9 +3,18 @@ TODO
 - application icon
 - edit cyclic timer per item ??
 - save QPushButton* instead of QDialogButtonBox* in UiEditGameName.hpp ?
-- dialogs tooltips (Cyclic timer: explain that terminate == 0 -> infinite timer)
+- add commentaries to UiEditCyclicTimers
+- rewrite CyclicTimerEdit::editCyclicTimer
 
 
 HINTS
 
 - QStyle::StandardPixmap for icons
+
+
+NOW
+
+add created timer to the ui
+add edit and remove buttons mechanisms
+complete CyclicTimer data (timer, sound)
+make the combo box really work

@@ -2,14 +2,10 @@
 
 CyclicTimer::CyclicTimer(CyclicTimerData* data)
 {
-    Period = data->period();
-    Start = data->start();
-    Terminate = data->terminate();
-    Volume = data->volume();
-    Sound = data->sound();
-    Hotkey = data->hotkey();
+    Data = data;
 }
 
 CyclicTimer::~CyclicTimer()
 {
+    delete Data;
 }

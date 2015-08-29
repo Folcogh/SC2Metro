@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(FMetro)
 
-# Find the QtWidgets library
+# Find the Qt modules
 find_package(Qt5 REQUIRED Widgets)
 find_package(Qt5 REQUIRED Gui)
 
@@ -14,16 +14,20 @@ include_directories(FMetro PUBLIC
 
 # Create target
 add_executable(FMetro
+    ActionPushButton.cpp
     BOTimer.cpp
     Controller.cpp
     CyclicTimer.cpp
+    CyclicTimerData.cpp
+    CyclicTimerEdit.cpp
+    CyclicTimerRef.cpp
+    CyclicTimerSpec.cpp
     FException.cpp
     Game.cpp
+    GameNameEdit.cpp
     GameUi.cpp
     main.cpp
     MainWindow.cpp
-    UiEditCyclicTimer.cpp
-    UiEditGameName.cpp
     )
 
 target_compile_options(FMetro PUBLIC
