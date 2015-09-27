@@ -11,37 +11,42 @@ CyclicTimerData::CyclicTimerData(int period, int start, int terminate, int volum
     Enabled = true;
 }
 
-bool CyclicTimerData::enabled()
+bool CyclicTimerData::enabled() const
 {
     return Enabled;
 }
 
-int CyclicTimerData::period()
+int CyclicTimerData::period() const
 {
     return Period;
 }
 
-int CyclicTimerData::start()
+int CyclicTimerData::start() const
 {
     return Start;
 }
 
-int CyclicTimerData::terminate()
+int CyclicTimerData::terminate() const
 {
     return Terminate;
 }
 
-int CyclicTimerData::volume()
+int CyclicTimerData::volume() const
 {
     return Volume;
 }
 
-QString CyclicTimerData::sound()
+QString CyclicTimerData::sound() const
 {
     return Sound;
 }
 
-QKeySequence CyclicTimerData::hotkey()
+QKeySequence CyclicTimerData::hotkey() const
 {
     return Hotkey;
+}
+
+void CyclicTimerData::setEnabled(bool enabled)
+{
+    Enabled = enabled;
 }

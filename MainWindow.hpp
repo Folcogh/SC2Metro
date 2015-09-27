@@ -23,7 +23,11 @@ class MainWindow : public QMainWindow
     void RemoveGameUi(QWidget* ui);
     void adjustActions(quint32 ActionsEnabled);
     void newCyclicTimer();
-    QAction* actionNewCyclicTimer();
+    void editCyclicTimer();
+    void removeCyclicTimer();
+    QAction* actionNewCyclicTimer() const;
+    QAction* actionEditCyclicTimer() const;
+    QAction* actionRemoveCyclicTimer() const;
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -48,6 +52,8 @@ class MainWindow : public QMainWindow
     QAction* ActionAboutQt;
     QAction* ActionEditGameName;
     QAction* ActionNewCyclicTimer;
+    QAction* ActionEditCyclicTimer;
+    QAction* ActionRemoveCyclicTimer;
 
     // Game menus
     QMenu* MenuGame;
@@ -68,7 +74,9 @@ class MainWindow : public QMainWindow
 #define SAVE_GAME_AS_ENABLED 1 << 1
 #define SAVE_ALL_GAMES_ENABLED 1 << 2
 #define CLOSE_CURRENT_GAME_ENABLED 1 << 3
-#define EDIT_CURRENT_GAME_NAME 1 << 4
-#define NEW_CYCLIC_TIMER 1 << 5
+#define EDIT_CURRENT_GAME_NAME_ENABLED 1 << 4
+#define NEW_CYCLIC_TIMER_ENABLED 1 << 5
+#define EDIT_CYCLIC_TIMER_ENABLED 1 << 6
+#define REMOVE_CYCLIC_TIMER_ENABLED 1 << 7
 
 #endif // MAIN_WINDOW_HPP

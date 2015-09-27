@@ -10,6 +10,7 @@
 #include "CyclicTimerSpec.hpp"
 #include "CyclicTimerData.hpp"
 
+class CyclicTimer;
 class Game : public QObject
 {
     Q_OBJECT
@@ -26,7 +27,7 @@ class Game : public QObject
     void open(QString filename) throw(const FException &);
     void save() throw(const FException &);
     void setFilename(QString filename);
-
+    void cyclicTimerCheckModified(CyclicTimerData* ctdata, bool check);
     CyclicTimerSpec* cyclicTimerSpec();
     void newCyclicTimer(CyclicTimerData* data);
 

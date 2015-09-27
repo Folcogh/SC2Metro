@@ -9,4 +9,6 @@
 #define GAME_FILE_SIGNATURE "FMetro2 game file"
 #define GAME_FILE_VERSION 1
 
+#define FORMAT_DURATION_mm_ss(seconds) QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0'))
+
 #endif // GLOBAL_HPP

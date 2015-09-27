@@ -2,8 +2,8 @@ TODO
 
 - application icon
 - edit cyclic timer per item ??
-- save QPushButton* instead of QDialogButtonBox* in UiEditGameName.hpp ?
-- add commentaries to UiEditCyclicTimers
+- save QPushButton* instead of QDialogButtonBox* in GameNameEdit.hpp ?
+- add commentaries to CyclicTimerEdit
 - rewrite CyclicTimerEdit::editCyclicTimer
 
 

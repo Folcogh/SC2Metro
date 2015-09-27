@@ -140,6 +140,12 @@ void Game::open(QString filename) throw(const FException &)
 }
 
 // Cyclic timers
+
+/**
+ * @brief ...
+ *
+ * @return CyclicTimerSpec*
+ */
 CyclicTimerSpec* Game::cyclicTimerSpec()
 {
     return new CyclicTimerSpec; // No modification to do ATM
@@ -147,5 +153,25 @@ CyclicTimerSpec* Game::cyclicTimerSpec()
 
 void Game::newCyclicTimer(CyclicTimerData* data)
 {
-    CyclicTimerList.append(new CyclicTimer(data));
+    CyclicTimerList.append(new CyclicTimer(this, data));
+    Modified = true;
+}
+
+/**
+ * @brief ...
+ *
+ * @param ctdata ...
+ * @param check ...
+ * @return void
+ */
+void Game::cyclicTimerCheckModified(CyclicTimerData* ctdata, bool check)
+{
+    for (int i = 0; i < CyclicTimerList.size(); i ++) {
+        if (CyclicTimerList[i]->data() == ctdata) {
+            ctdata->setEnabled(check);
+            Modified = true;
+            return;
+        }
+    }
+    Q_ASSERT(false);
 }

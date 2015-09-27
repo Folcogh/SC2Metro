@@ -1,5 +1,6 @@
 #include "CyclicTimerEdit.hpp"
 #include "MainWindow.hpp"
+#include "Global.hpp"
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -157,6 +158,7 @@ CyclicTimerEdit::CyclicTimerEdit(CyclicTimerSpec* spec)
 
 CyclicTimerEdit::~CyclicTimerEdit()
 {
+    delete EditKeySequence;
 }
 
 CyclicTimerData* CyclicTimerEdit::newCyclicTimer(CyclicTimerSpec* spec)
@@ -167,10 +169,12 @@ CyclicTimerData* CyclicTimerEdit::newCyclicTimer(CyclicTimerSpec* spec)
         data = new CyclicTimerData(ct->SliderPeriod->value(), ct->SliderStart->value(), ct->SliderTerminate->value(),
                                    ct->SliderVolume->value(), ct->ComboSound->currentText(), ct->EditKeySequence->keySequence());
     }
+    delete ct;
     return data;
 }
 
 /// BUG BUG BUG rewrite that !
+/// and don't delete data, really bad idead, because it could be used as a reference elsewhere
 bool CyclicTimerEdit::editCyclicTimer(CyclicTimerSpec* spec, CyclicTimerData* data)
 {
     CyclicTimerEdit* ct = new CyclicTimerEdit(spec);
@@ -187,6 +191,7 @@ bool CyclicTimerEdit::editCyclicTimer(CyclicTimerSpec* spec, CyclicTimerData* da
         data = new CyclicTimerData(ct->SliderPeriod->value(), ct->SliderStart->value(), ct->SliderTerminate->value(),
                                    ct->SliderVolume->value(), ct->ComboSound->currentText(), ct->EditKeySequence->keySequence());
     }
+    delete ct;
     return data;
 }
 
@@ -206,19 +211,19 @@ void CyclicTimerEdit::buttonMoreClicked()
 
 void CyclicTimerEdit::adjustPeriodLabel(int seconds)
 {
-    LabelPeriod->setText(QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0')));
+    LabelPeriod->setText(FORMAT_DURATION_mm_ss(seconds));
 }
 
 void CyclicTimerEdit::adjustStartLabel(int seconds)
 {
-    LabelStart->setText(QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0')));
+    LabelStart->setText(FORMAT_DURATION_mm_ss(seconds));
 }
 
 void CyclicTimerEdit::adjustTerminateLabel(int seconds)
 {
-    QString label = QString("%1:%2").arg(seconds / 60, 2, 10, QChar('0')).arg(seconds % 60, 2, 10, QChar('0'));
+    QString label = FORMAT_DURATION_mm_ss(seconds);
     if (seconds == 0) {
-        label.append((" (never terminate)"));
+        label.append(tr(" (never terminate)"));
     }
     LabelTerminate->setText(label);
 }

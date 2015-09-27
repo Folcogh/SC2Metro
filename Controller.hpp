@@ -4,6 +4,7 @@
 #include <QList>
 #include <QPair>
 #include <QObject>
+#include <QTableWidgetItem>
 #include "Game.hpp"
 #include "GameUi.hpp"
 
@@ -31,6 +32,8 @@ class Controller : public QObject
     bool appCloseRequested();
     QString gameNameEditRequested(QWidget* ui);
     void newCyclicTimer(QWidget* widget);
+    void cyclicTimerCheckChanged(QWidget* widget, QTableWidgetItem* item);
+    void cyclicTimerSelectionChanged(QWidget* widge);
 
   private:
     Q_DISABLE_COPY(Controller)

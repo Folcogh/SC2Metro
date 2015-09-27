@@ -1,17 +1,21 @@
 #ifndef CYCLIC_TIMER_HPP
 #define CYCLIC_TIMER_HPP
 
+#include "Game.hpp"
 #include "CyclicTimerData.hpp"
 
+class Game;
 class CyclicTimer
 {
   public:
-    explicit CyclicTimer(CyclicTimerData* data);
+    CyclicTimer(Game* game, CyclicTimerData* data);
     ~CyclicTimer();
+    const CyclicTimerData* data();
 
   private:
     Q_DISABLE_COPY(CyclicTimer)
-    CyclicTimerData* Data;
+    Game* Parent;
+    const CyclicTimerData* Data;
 };
 
 #endif // CYCLIC_TIMER_HPP

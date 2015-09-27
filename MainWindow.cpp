@@ -66,6 +66,15 @@ MainWindow::MainWindow()
     ActionNewCyclicTimer->setShortcut(Qt::CTRL + Qt::Key_C);
     connect(ActionNewCyclicTimer, &QAction::triggered, this, &MainWindow::newCyclicTimer);
 
+    // Edit cyclic timer
+    ActionEditCyclicTimer = new QAction(this);
+    connect(ActionEditCyclicTimer, &QAction::triggered, this, &MainWindow::editCyclicTimer);
+
+    // Remove cyclic timer
+    ActionRemoveCyclicTimer = new QAction(this);
+    connect(ActionRemoveCyclicTimer, &QAction::triggered, this, &MainWindow::removeCyclicTimer);
+
+
     // Set default actions available
     adjustActions(0);
 
@@ -94,6 +103,8 @@ MainWindow::MainWindow()
     // Cyclic timers
     MenuCyclicTimers = new QMenu(this);
     MenuCyclicTimers->addAction(ActionNewCyclicTimer);
+    MenuCyclicTimers->addAction(ActionEditCyclicTimer);
+    MenuCyclicTimers->addAction(ActionRemoveCyclicTimer);
 
     // Help
     MenuHelp = new QMenu(this);
@@ -185,6 +196,8 @@ void MainWindow::translate()
     ActionAboutQt->setText(tr("About Qt"));
     ActionEditGameName->setText(tr("Edit game name"));
     ActionNewCyclicTimer->setText(tr("New cyclic timer"));
+    ActionEditCyclicTimer->setText(tr("Edit cyclic timer"));
+    ActionRemoveCyclicTimer->setText(tr("Remove cyclic timer"));
 }
 
 /**
@@ -297,8 +310,10 @@ void MainWindow::adjustActions(quint32 ActionsEnabled)
     ActionSaveAsGame->setEnabled(ActionsEnabled & SAVE_GAME_AS_ENABLED);
     ActionSaveAllGames->setEnabled(ActionsEnabled & SAVE_ALL_GAMES_ENABLED);
     ActionCloseCurrentGame->setEnabled(ActionsEnabled & CLOSE_CURRENT_GAME_ENABLED);
-    ActionEditGameName->setEnabled(ActionsEnabled & EDIT_CURRENT_GAME_NAME);
-    ActionNewCyclicTimer->setEnabled(ActionsEnabled & NEW_CYCLIC_TIMER);
+    ActionEditGameName->setEnabled(ActionsEnabled & EDIT_CURRENT_GAME_NAME_ENABLED);
+    ActionNewCyclicTimer->setEnabled(ActionsEnabled & NEW_CYCLIC_TIMER_ENABLED);
+    ActionEditCyclicTimer->setEnabled(ActionsEnabled & EDIT_CYCLIC_TIMER_ENABLED);
+    ActionRemoveCyclicTimer->setEnabled(ActionsEnabled & REMOVE_CYCLIC_TIMER_ENABLED);
 }
 
 void MainWindow::newCyclicTimer()
@@ -306,7 +321,27 @@ void MainWindow::newCyclicTimer()
     Controller::get()->newCyclicTimer(tabs->currentWidget());
 }
 
-QAction* MainWindow::actionNewCyclicTimer()
+void MainWindow::editCyclicTimer()
+{
+    //Controller::get()->editCyclicTimer(...);
+}
+
+void MainWindow::removeCyclicTimer()
+{
+    //Controller::get()->removeCyclicTimer(...);
+}
+
+QAction* MainWindow::actionNewCyclicTimer() const
 {
     return ActionNewCyclicTimer;
+}
+
+QAction* MainWindow::actionEditCyclicTimer() const
+{
+    return ActionEditCyclicTimer;
+}
+
+QAction* MainWindow::actionRemoveCyclicTimer() const
+{
+    return ActionRemoveCyclicTimer;
 }

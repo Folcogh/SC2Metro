@@ -20,7 +20,7 @@ add_executable(FMetro
     CyclicTimer.cpp
     CyclicTimerData.cpp
     CyclicTimerEdit.cpp
-    CyclicTimerRef.cpp
+    CyclicTimerItem.cpp
     CyclicTimerSpec.cpp
     FException.cpp
     Game.cpp

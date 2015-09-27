@@ -2,12 +2,15 @@
 #include "Controller.hpp"
 #include "MainWindow.hpp"
 #include "GameNameEdit.hpp"
-#include "CyclicTimerSpec.hpp"
 #include "CyclicTimerEdit.hpp"
+#include "CyclicTimerItem.hpp"
+#include "CyclicTimerSpec.hpp"
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
+
+Q_DECLARE_METATYPE(CyclicTimerData*)
 
 /***********************************************************
  *
@@ -125,7 +128,7 @@ void Controller::adjustActions(Game* game) const
 {
     quint32 ActionsEnabled = 0;
     if (game != nullptr) {
-        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED | CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME | NEW_CYCLIC_TIMER;
+        ActionsEnabled |= SAVE_GAME_AS_ENABLED | SAVE_ALL_GAMES_ENABLED | CLOSE_CURRENT_GAME_ENABLED | EDIT_CURRENT_GAME_NAME_ENABLED | NEW_CYCLIC_TIMER_ENABLED;
         if ((game->fullfilename().size() != 0) && (game->modified())) {
             ActionsEnabled |= SAVE_GAME_ENABLED;
         }
@@ -409,10 +412,28 @@ void Controller::newCyclicTimer(QWidget* widget)
     GameUi* ui = static_cast<GameUi*>(widget);
     Game* game = gameOf(ui);
     CyclicTimerSpec* spec = game->cyclicTimerSpec();
+
     CyclicTimerData* data = CyclicTimerEdit::newCyclicTimer(spec);
     if (data != nullptr) {
         game->newCyclicTimer(data);
         ui->newCyclicTimer(data);
     }
     delete spec;
+}
+
+void Controller::cyclicTimerCheckChanged(QWidget* widget, QTableWidgetItem* item)
+{
+    CyclicTimerItem* ctitem = static_cast<CyclicTimerItem*>(item);
+    ctitem->adjustText();
+    Game* game = gameOf(static_cast<GameUi*>(widget));
+    game->cyclicTimerCheckModified(ctitem->data(Role::CyclicTimerDataPointer).value<CyclicTimerData*>(), item->checkState() == Qt::Checked);
+}
+
+
+void Controller::cyclicTimerSelectionChanged(QWidget* widget)
+{
+    GameUi* ui = static_cast<GameUi*>(widget);
+
+    
+    adjustActions(gameOf(ui));
 }

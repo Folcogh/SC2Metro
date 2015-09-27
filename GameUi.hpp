@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QTableWidget>
+//#include <QTableWidgetItem>
 #include "CyclicTimerData.hpp"
+#include "CyclicTimerItem.hpp"
 
 class GameUi : public QWidget
 {
@@ -19,6 +21,14 @@ class GameUi : public QWidget
     QPushButton* ButtonAddCyclic; // Useless ?
     QPushButton* ButtonEditCyclic;
     QPushButton* ButtonRemoveCyclic;
+
+    void cyclicTableSelectionChanged();
+    void cyclicTimerCheckChanged(QTableWidgetItem* item);
 };
+
+namespace Column
+{
+    enum {EnabledStatus, Sound, Period, Start, Terminate, Hotkey, Volume};
+}
 
 #endif // GAME_UI_HPP
