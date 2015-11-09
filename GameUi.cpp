@@ -3,6 +3,7 @@
 #include "Controller.hpp"
 #include "MainWindow.hpp"
 #include "CyclicTimerData.hpp"
+#include "CyclicTimerItem.hpp"
 #include "ActionPushButton.hpp"
 #include <QString>
 #include <QVariant>
@@ -145,4 +146,11 @@ void GameUi::cyclicTableSelectionChanged()
 void GameUi::cyclicTimerCheckChanged(QTableWidgetItem* item)
 {
     Controller::get()->cyclicTimerCheckChanged(this, item);
+}
+
+CyclicTimerData* GameUi::currentCyclicTimerData()
+{
+    int x = CyclicTable->currentRow();
+    int y = Column::EnabledStatus;
+    CyclicTimerItem* item = static_cast<CyclicTimerItem*>(CyclicTable->item(x, y));
 }

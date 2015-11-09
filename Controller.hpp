@@ -4,6 +4,7 @@
 #include <QList>
 #include <QPair>
 #include <QObject>
+#include <QString>
 #include <QTableWidgetItem>
 #include "Game.hpp"
 #include "GameUi.hpp"
@@ -32,6 +33,8 @@ class Controller : public QObject
     bool appCloseRequested();
     QString gameNameEditRequested(QWidget* ui);
     void newCyclicTimer(QWidget* widget);
+    void editCyclicTimer(QWidget* widget);
+    void removeCyclicTimer(QWidget* widget);
     void cyclicTimerCheckChanged(QWidget* widget, QTableWidgetItem* item);
     void cyclicTimerSelectionChanged(QWidget* widge);
 

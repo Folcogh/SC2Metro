@@ -318,17 +318,20 @@ void MainWindow::adjustActions(quint32 ActionsEnabled)
 
 void MainWindow::newCyclicTimer()
 {
+    Q_ASSERT(tabs->currentIndex() != -1);
     Controller::get()->newCyclicTimer(tabs->currentWidget());
 }
 
 void MainWindow::editCyclicTimer()
 {
-    //Controller::get()->editCyclicTimer(...);
+    Q_ASSERT(tabs->currentIndex() != -1);
+    Controller::get()->editCyclicTimer(tabs->currentWidget());
 }
 
 void MainWindow::removeCyclicTimer()
 {
-    //Controller::get()->removeCyclicTimer(...);
+    Q_ASSERT(tabs->currentIndex() != -1);
+    Controller::get()->removeCyclicTimer(tabs->currentWidget());
 }
 
 QAction* MainWindow::actionNewCyclicTimer() const

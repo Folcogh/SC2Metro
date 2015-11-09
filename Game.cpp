@@ -142,7 +142,7 @@ void Game::open(QString filename) throw(const FException &)
 // Cyclic timers
 
 /**
- * @brief ...
+ * @brief Create a new Cyclic Timer Specification object, to be used by the Controller
  *
  * @return CyclicTimerSpec*
  */
@@ -151,6 +151,12 @@ CyclicTimerSpec* Game::cyclicTimerSpec()
     return new CyclicTimerSpec; // No modification to do ATM
 }
 
+/**
+ * @brief Add a new Cyclic Timer to the game
+ *
+ * @param data Timer data
+ * @return void
+ */
 void Game::newCyclicTimer(CyclicTimerData* data)
 {
     CyclicTimerList.append(new CyclicTimer(this, data));

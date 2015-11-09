@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QTableWidget>
-//#include <QTableWidgetItem>
+#include <QTableWidgetItem>
 #include "CyclicTimerData.hpp"
 #include "CyclicTimerItem.hpp"
 
@@ -14,6 +14,7 @@ class GameUi : public QWidget
     GameUi();
     ~GameUi();
     void newCyclicTimer(CyclicTimerData* data);
+    CyclicTimerData* currentCyclicTimerData();
 
   private:
     Q_DISABLE_COPY(GameUi)

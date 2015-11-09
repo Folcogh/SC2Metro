@@ -5,6 +5,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+
 /**
  * @brief Construct a dialog to request a new name
  */
@@ -29,8 +30,8 @@ GameNameEdit::GameNameEdit()
     buttons->button(QDialogButtonBox::Ok)->setDisabled(true);
 
     // Connexions
-    connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);             // Ok
-    connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);             // Cancel
+    connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);           // Ok
+    connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);           // Cancel
     connect(nameEdit, &QLineEdit::textChanged, this, &GameNameEdit::adjustButtonOk); // Disable the OK button if the name field is empty
 }
 

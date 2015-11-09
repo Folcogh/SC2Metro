@@ -433,7 +433,24 @@ void Controller::cyclicTimerCheckChanged(QWidget* widget, QTableWidgetItem* item
 void Controller::cyclicTimerSelectionChanged(QWidget* widget)
 {
     GameUi* ui = static_cast<GameUi*>(widget);
-
-    
     adjustActions(gameOf(ui));
+}
+
+void Controller::editCyclicTimer(QWidget* widget)
+{
+    GameUi* ui = static_cast<GameUi*>(widget);
+    Game* game = gameOf(ui);
+    CyclicTimerSpec* spec = game->cyclicTimerSpec();
+    
+
+    delete spec;
+}
+
+void Controller::removeCyclicTimer(QWidget* widget)
+{
+    GameUi* ui = static_cast<GameUi*>(widget);
+    Game* game = gameOf(ui);
+    CyclicTimerSpec* spec = game->cyclicTimerSpec();
+
+    delete spec;
 }
