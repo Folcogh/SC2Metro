@@ -232,7 +232,7 @@ font-weight:600;</string>
         <item>
          <widget class="QTabWidget" name="tabsCyclitTimers">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabGeneral">
            <attribute name="title">
@@ -263,7 +263,7 @@ font-weight:600;</string>
                <enum>Qt::NoPen</enum>
               </property>
               <attribute name="horizontalHeaderVisible">
-               <bool>false</bool>
+               <bool>true</bool>
               </attribute>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
@@ -732,9 +732,6 @@ font-weight:600;</string>
               </property>
               <property name="selectionBehavior">
                <enum>QAbstractItemView::SelectRows</enum>
-              </property>
-              <property name="gridStyle">
-               <enum>Qt::NoPen</enum>
               </property>
               <attribute name="horizontalHeaderVisible">
                <bool>false</bool>
