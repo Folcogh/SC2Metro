@@ -1,0 +1,1 @@
+- verifier la largeur mini de EditCyclicTimer

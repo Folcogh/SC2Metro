@@ -10,11 +10,34 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = FMetro
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    StartPage.cpp \
+    Game.cpp \
+    EditGameName.cpp \
+    CyclicTimer.cpp \
+    DlgNewGame.cpp
 
-HEADERS  += MainWindow.hpp
+HEADERS  += MainWindow.hpp \
+    StartPage.hpp \
+    Game.hpp \
+    EditGameName.hpp \
+    TimeFormat.hpp \
+    CyclicTimer.hpp \
+    Application.hpp \
+    DlgNewGame.hpp \
+    Race.hpp
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    StartPage.ui \
+    Game.ui \
+    EditGameName.ui \
+    DlgNewGame.ui
+
+DISTFILES += \
+    todo.txt
+
+RESOURCES += \
+    Pictures.qrc
