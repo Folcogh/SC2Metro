@@ -52,7 +52,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 }
 
 // The current game has changed: update the title of the main window
-void MainWindow::currenPageChanged(int index)
+void MainWindow::currentPageChanged(int index)
 {
     if (index != -1) {
         QString title = APP_NAME;

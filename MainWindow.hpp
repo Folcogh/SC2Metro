@@ -19,11 +19,11 @@ class MainWindow : public QMainWindow
         static MainWindow* get();
         void closeEvent(QCloseEvent* event) Q_DECL_OVERRIDE;
         void newGame();
-        void currentPageChanged(int index);
 
     private:
         Q_DISABLE_COPY(MainWindow)
         MainWindow();
+        void currentPageChanged(int index);
         static MainWindow* instance;
         Ui::MainWindow *ui;
 };
