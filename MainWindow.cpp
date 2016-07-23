@@ -1,8 +1,11 @@
 #include "MainWindow.hpp"
+#include "TimerList.hpp"
 #include <QList>
 #include <QIcon>
 #include <QSize>
 #include <QToolBar>
+
+MainWindow* MainWindow::mainWindow = nullptr;
 
 MainWindow::MainWindow()
 {
@@ -49,7 +52,7 @@ MainWindow::MainWindow()
                << actionNewTimer
                << actionEditTimer
                << actionRemovTimer
-               << actionSeparator2
+               << actionSeparator1
                << actionMisc;
 
     QSize iconSize;
@@ -59,15 +62,18 @@ MainWindow::MainWindow()
     QToolBar* toolBar = new QToolBar(this);
     toolBar->setIconSize(iconSize);
     toolBar->addActions(actionList);
-    addToolBar(toolBar);
-}
-
-MainWindow::MainWindow(QString arg)
-{
-    (void) arg;
+    this->addToolBar(toolBar);
 }
 
 MainWindow::~MainWindow()
 {
+    this->mainWindow = nullptr;
+}
 
+MainWindow* MainWindow::instance()
+{
+    if (mainWindow == nullptr) {
+        mainWindow = new MainWindow;
+    }
+    return mainWindow;
 }

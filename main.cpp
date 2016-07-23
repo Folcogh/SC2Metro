@@ -1,4 +1,5 @@
 #include "MainWindow.hpp"
+#include "TimerList.hpp"
 #include <QApplication>
 #include <QMessageBox>
 #include <QObject>
@@ -11,26 +12,23 @@ int main(int argc, char *argv[])
     QApplication application(argc, argv);
 
     // Initialize the main window differently if there is a file to open
-    MainWindow* mainWindow;
-    if (argc == 1) {
-        mainWindow = new MainWindow();
-    }
-    else if (argc == 2) {
-        mainWindow = new MainWindow(argv[1]);
-    }
-    else {
+    if (argc > 2) {
         QMessageBox::critical(nullptr,
                               QObject::tr("Invalid number of arguments"),
-                              QObject::tr("SC2Metro incovation must have zero or one argument"),
+                              QObject::tr("SC2Metro invocation must have zero or one argument"),
                               QMessageBox::Ok);
         return retval;
     }
 
     // Execution
-    mainWindow->show();
+    MainWindow::instance()->show();
+    TimerList::instance();
+    // Establish connections between both
+    // if argc == 2 => open file
     retval = application.exec();
 
     // Cleanup
-    delete mainWindow;
+    delete MainWindow::instance();
+    delete TimerList::instance();
     return retval;
 }

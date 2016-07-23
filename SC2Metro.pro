@@ -13,9 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    TimerList.cpp \
+    Timer.cpp \
+    Modified.cpp
 
-HEADERS  += MainWindow.hpp
+HEADERS  += MainWindow.hpp \
+    TimerList.hpp \
+    Timer.hpp \
+    Modified.hpp
 
 RESOURCES += \
     icon64.qrc \
