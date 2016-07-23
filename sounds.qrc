@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>sounds/creep.mp3</file>
+        <file>sounds/inject.mp3</file>
+        <file>sounds/minimap.mp3</file>
+        <file>sounds/mule.mp3</file>
+        <file>sounds/resource.mp3</file>
+        <file>sounds/scout.mp3</file>
+        <file>sounds/supply.mp3</file>
+        <file>sounds/worker.mp3</file>
+    </qresource>
+</RCC>
