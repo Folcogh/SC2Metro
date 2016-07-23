@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     TimerList.cpp \
     Timer.cpp \
-    Modified.cpp
+    Modified.cpp \
+    TableItem.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
     Timer.hpp \
-    Modified.hpp
+    Modified.hpp \
+    TableItem.hpp
 
 RESOURCES += \
     icon64.qrc \

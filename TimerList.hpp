@@ -1,6 +1,7 @@
 #ifndef TIMERLIST_HPP
 #define TIMERLIST_HPP
 
+#include "Timer.hpp"
 #include <QList>
 #include <QObject>
 
@@ -18,6 +19,8 @@ class TimerList: public QObject
         // TimerList is a singleton
         static TimerList* timerList;
         TimerList();
+
+        QList<Timer*> timers;
 };
 
 #endif // TIMERLIST_HPP

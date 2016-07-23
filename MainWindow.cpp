@@ -4,6 +4,9 @@
 #include <QIcon>
 #include <QSize>
 #include <QToolBar>
+#include <QStringList>
+#include <QHeaderView>
+#include <QAbstractItemView>
 
 MainWindow* MainWindow::mainWindow = nullptr;
 
@@ -13,7 +16,6 @@ MainWindow::MainWindow()
      * Create the actions. they will be available in the main toolbar
      *
      */
-
     QAction* actionNewList = new QAction(QIcon(":/icon64/NewList.png"), "", this);
     actionNewList->setToolTip(tr("Create a new empty list"));
 
@@ -52,7 +54,7 @@ MainWindow::MainWindow()
                << actionNewTimer
                << actionEditTimer
                << actionRemovTimer
-               << actionSeparator1
+               << actionSeparator2
                << actionMisc;
 
     QSize iconSize;
@@ -62,7 +64,40 @@ MainWindow::MainWindow()
     QToolBar* toolBar = new QToolBar(this);
     toolBar->setIconSize(iconSize);
     toolBar->addActions(actionList);
+    toolBar->setMovable(false);
     this->addToolBar(toolBar);
+
+    /*
+     * Create the main widget, a table which display the timers
+     * The table display three columns: sound name, period and shortcut
+     *
+     */
+    this->timerTable = new QTableWidget(0, 3, this);
+
+    // Table properties
+    this->timerTable->setShowGrid(true);
+    this->timerTable->setSortingEnabled(false);
+    this->timerTable->setAlternatingRowColors(true);
+    this->timerTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    this->timerTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->timerTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->timerTable->horizontalHeader()->setStretchLastSection(true);
+
+    // Set the columns header
+    QStringList labels;
+    labels << tr("Sound name")
+           << tr("Period")
+           << tr("Hotkey");
+    this->timerTable->setHorizontalHeaderLabels(labels);
+
+    this->timerTable->setColumnWidth(COLUMN_SOUND, 200);
+    this->timerTable->setColumnWidth(COLUMN_PERIOD, 100);
+    this->timerTable->setColumnWidth(COLUMN_HOTKEY, 200);
+
+    // Finally, install the table in the main window
+    this->setCentralWidget(this->timerTable);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -76,4 +111,9 @@ MainWindow* MainWindow::instance()
         mainWindow = new MainWindow;
     }
     return mainWindow;
+}
+
+QMenu* MainWindow::createPopupMenu()
+{
+    return nullptr;
 }

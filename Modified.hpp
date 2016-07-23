@@ -13,6 +13,7 @@ class Modified : public QObject
         void setModified(bool modified);
 
     private:
+        Q_DISABLE_COPY(Modified)
         bool modified;
 
     signals:

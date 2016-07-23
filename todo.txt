@@ -1,3 +1,4 @@
 - open file on icon doucle click
 - QApplication settings
 - mainwindow title update
+- edit timer icon looks wrong
