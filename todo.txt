@@ -1,4 +1,0 @@
-- help
-- sound credits
-- Qt credits
-- New/Edit timer must check the validity of the shortcut

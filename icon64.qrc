@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/">
-        <file>icon64/AddTimer.png</file>
+        <file>icon64/Misc.png</file>
         <file>icon64/NewList.png</file>
         <file>icon64/OpenList.png</file>
         <file>icon64/RemoveTimer.png</file>
         <file>icon64/SaveList.png</file>
-        <file>icon64/TimerProperties.png</file>
-        <file>icon64/Misc.png</file>
+        <file>icon64/NewTimer.png</file>
+        <file>icon64/EditTimer.png</file>
     </qresource>
 </RCC>
