@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     TimerList.cpp \
     Timer.cpp \
     Modified.cpp \
-    TableItem.cpp
+    TableItem.cpp \
+    DlgNewTimer.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
     Timer.hpp \
     Modified.hpp \
-    TableItem.hpp
+    TableItem.hpp \
+    DlgNewTimer.hpp
 
 RESOURCES += \
     icon64.qrc \

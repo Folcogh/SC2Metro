@@ -13,9 +13,6 @@ class TimerList: public QObject
         ~TimerList();
         static TimerList* instance();
 
-        // Methods called by the ui's actions using connections
-        void newTimer();
-
     private:
         Q_DISABLE_COPY(TimerList)
 

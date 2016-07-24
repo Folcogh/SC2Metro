@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     TimerList::instance();
 
     // Establish connections between both classes
-    MainWindow::instance()->establishConnections();
+    MainWindow::instance()->establishExternalConnections();
     //TODO: establish connections of TimerList
 
     // TODO: if argc == 2 => open file

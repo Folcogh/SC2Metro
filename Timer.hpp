@@ -3,6 +3,9 @@
 
 #include <QObject>
 
+#define PERIOD_MIN 1
+#define PERIOD_MAX 600
+
 class Timer
 {
     public:

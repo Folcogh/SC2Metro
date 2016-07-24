@@ -1,8 +1,10 @@
+#include "DlgNewTimer.hpp"
 #include "MainWindow.hpp"
 #include "TimerList.hpp"
 #include <QList>
 #include <QIcon>
 #include <QSize>
+#include <QPointer>
 #include <QToolBar>
 #include <QStringList>
 #include <QHeaderView>
@@ -94,6 +96,16 @@ MainWindow::MainWindow()
 
     // Finally, install the table in the main window
     this->setCentralWidget(this->timerTable);
+
+    /*
+     * Establish internal connections
+     *
+     */
+    connect(this->actionNewTimer, &QAction::triggered, this, &MainWindow::newTimer);
+}
+
+void MainWindow::establishExternalConnections()
+{
 }
 
 MainWindow::~MainWindow()
@@ -114,6 +126,16 @@ QMenu* MainWindow::createPopupMenu()
     return nullptr;
 }
 
-void MainWindow::establishConnections()
+
+/*
+ * Methods called when the toolbar actions are triggered
+ *
+ */
+
+void MainWindow::newTimer()
 {
+    QPointer<DlgNewTimer> dlg = new DlgNewTimer;
+    if (dlg->exec() == QDialog::Accepted) {
+
+    }
 }

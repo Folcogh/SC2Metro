@@ -22,7 +22,7 @@ class MainWindow: public QMainWindow
     public:
         ~MainWindow();
         static MainWindow* instance();
-        void establishConnections();
+        void establishExternalConnections();
 
     private:
         Q_DISABLE_COPY(MainWindow)
@@ -45,6 +45,9 @@ class MainWindow: public QMainWindow
 
         // Main widget, displaying the timers
         QTableWidget* timerTable;
+
+        // Methods called when the actions in the toolbar are triggerred*
+        void newTimer();
 };
 
 #endif // MAINWINDOW_HPP

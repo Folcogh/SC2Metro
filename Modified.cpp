@@ -5,7 +5,7 @@ Modified::Modified()
 {
 }
 
-bool Modified::isModified()
+bool Modified::isModified() const
 {
     return this->modified;
 }

@@ -9,7 +9,7 @@ class Modified: public QObject
 
     public:
         Modified();
-        bool isModified();
+        bool isModified() const;
         void setModified(bool modified);
 
     private:

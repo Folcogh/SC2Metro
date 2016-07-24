@@ -20,8 +20,3 @@ TimerList*TimerList::instance()
     }
     return timerList;
 }
-
-void TimerList::newTimer()
-{
-
-}
