@@ -13,6 +13,9 @@ class TimerList: public QObject
         ~TimerList();
         static TimerList* instance();
 
+        // Methods called by the ui's actions using connections
+        void newTimer();
+
     private:
         Q_DISABLE_COPY(TimerList)
 
@@ -20,6 +23,7 @@ class TimerList: public QObject
         static TimerList* timerList;
         TimerList();
 
+        // The list of the timers ptr. It's ordered like the table of the ui
         QList<Timer*> timers;
 };
 

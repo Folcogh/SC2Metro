@@ -16,17 +16,17 @@ MainWindow::MainWindow()
      * Create the actions. they will be available in the main toolbar
      *
      */
-    QAction* actionNewList = new QAction(QIcon(":/icon64/NewList.png"), "", this);
-    actionNewList->setToolTip(tr("Create a new empty list"));
+    this->actionNewList = new QAction(QIcon(":/icon64/NewList.png"), "", this);
+    this->actionNewList->setToolTip(tr("Create a new empty list"));
 
-    QAction* actionOpenList = new QAction(QIcon(":/icon64/OpenList.png"), "", this);
-    actionOpenList->setToolTip(tr("Open an existing list"));
+    this->actionOpenList = new QAction(QIcon(":/icon64/OpenList.png"), "", this);
+    this->actionOpenList->setToolTip(tr("Open an existing list"));
 
     this->actionSaveList = new QAction(QIcon(":/icon64/SaveList.png"), "", this);
     this->actionSaveList->setToolTip(tr("Save the current list"));
 
-    QAction* actionNewTimer = new QAction(QIcon(":/icon64/NewTimer.png"), "", this);
-    actionNewTimer->setToolTip(tr("Create a new Timer for the current list"));
+    this->actionNewTimer = new QAction(QIcon(":/icon64/NewTimer.png"), "", this);
+    this->actionNewTimer->setToolTip(tr("Create a new Timer for the current list"));
 
     this->actionEditTimer = new QAction(QIcon(":/icon64/EditTimer.png"), "", this);
     this->actionEditTimer->setToolTip(tr("Modify the currently selected Timer"));
@@ -34,8 +34,8 @@ MainWindow::MainWindow()
     this->actionRemovTimer = new QAction(QIcon(":/icon64/RemoveTimer.png"), "", this);
     this->actionRemovTimer->setToolTip(tr("Remove the currently selected timer"));
 
-    QAction* actionMisc = new QAction(QIcon(":/icon64/Misc.png"), "", this);
-    actionMisc->setToolTip(tr("About, Help and Licenses"));
+    this->actionMisc = new QAction(QIcon(":/icon64/Misc.png"), "", this);
+    this->actionMisc->setToolTip(tr("About, Help and Licenses"));
 
     QAction* actionSeparator1 = new QAction(this);
     QAction* actionSeparator2 = new QAction(this);
@@ -57,9 +57,7 @@ MainWindow::MainWindow()
                << actionSeparator2
                << actionMisc;
 
-    QSize iconSize;
-    iconSize.setWidth(MAIN_TOOLBAR_ICON_WIDTH);
-    iconSize.setHeight(MAIN_TOOLBAR_ICON_HEIGHT);
+    QSize iconSize(MAIN_TOOLBAR_ICON_WIDTH, MAIN_TOOLBAR_ICON_HEIGHT);
 
     QToolBar* toolBar = new QToolBar(this);
     toolBar->setIconSize(iconSize);
@@ -83,7 +81,7 @@ MainWindow::MainWindow()
     this->timerTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->timerTable->horizontalHeader()->setStretchLastSection(true);
 
-    // Set the columns header
+    // Set the columns header and size
     QStringList labels;
     labels << tr("Sound name")
            << tr("Period")
@@ -96,8 +94,6 @@ MainWindow::MainWindow()
 
     // Finally, install the table in the main window
     this->setCentralWidget(this->timerTable);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -116,4 +112,8 @@ MainWindow* MainWindow::instance()
 QMenu* MainWindow::createPopupMenu()
 {
     return nullptr;
+}
+
+void MainWindow::establishConnections()
+{
 }

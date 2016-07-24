@@ -7,7 +7,7 @@
 class TableItem: public QTableWidgetItem
 {
     public:
-        TableItem(QString text);
+        explicit TableItem(QString text);
         ~TableItem();
 };
 

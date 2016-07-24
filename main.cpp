@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     // Initialize the application
     QApplication application(argc, argv);
 
-    // Initialize the main window differently if there is a file to open
+    // Check that we have no more than one argumen in the command line
     if (argc > 2) {
         QMessageBox::critical(nullptr,
                               QObject::tr("Invalid number of arguments"),
@@ -20,11 +20,15 @@ int main(int argc, char *argv[])
         return retval;
     }
 
-    // Execution
+    // Prepare the ui and the data classes
     MainWindow::instance()->show();
     TimerList::instance();
-    // Establish connections between both
-    // if argc == 2 => open file
+
+    // Establish connections between both classes
+    MainWindow::instance()->establishConnections();
+    //TODO: establish connections of TimerList
+
+    // TODO: if argc == 2 => open file
     retval = application.exec();
 
     // Cleanup

@@ -2,3 +2,5 @@
 - QApplication settings
 - mainwindow title update
 - edit timer icon looks wrong
+- timerList must adjust actions at boot
+- check the first initialisation of TimerList/MainWindow

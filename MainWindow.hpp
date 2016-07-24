@@ -22,6 +22,7 @@ class MainWindow: public QMainWindow
     public:
         ~MainWindow();
         static MainWindow* instance();
+        void establishConnections();
 
     private:
         Q_DISABLE_COPY(MainWindow)
@@ -30,10 +31,14 @@ class MainWindow: public QMainWindow
         static MainWindow* mainWindow;
         MainWindow();
 
-        // These actions can be enabled or disabled depending on the timer list status
+        // These actions are icons in the main toolbar
+        QAction* actionNewList;
+        QAction* actionOpenList;
         QAction* actionSaveList;
+        QAction* actionNewTimer;
         QAction* actionEditTimer;
         QAction* actionRemovTimer;
+        QAction* actionMisc;
 
         // Prevent the toolbar to be hidden with a context menu
         QMenu* createPopupMenu() override;
