@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QDialog>
 #include <QString>
+#include <QPalette>
 #include <QSpinBox>
 #include <QKeyEvent>
 #include <QComboBox>
@@ -31,6 +32,7 @@ class DlgNewTimer: public QDialog
         QKeySequenceEdit* editHotkey;
         QDialogButtonBox* buttons;
         QLabel* labelInvalidHotkey;
+        QPalette* paletteInvalidHotkey;
 
         // Triggerred when the period is modified
         void periodChanged(int newPeriod);

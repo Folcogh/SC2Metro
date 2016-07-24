@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     Timer.cpp \
     Modified.cpp \
     TableItem.cpp \
-    DlgNewTimer.cpp
+    DlgNewTimer.cpp \
+    HotkeyInputWidget.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
     Timer.hpp \
     Modified.hpp \
     TableItem.hpp \
-    DlgNewTimer.hpp
+    DlgNewTimer.hpp \
+    HotkeyInputWidget.hpp
 
 RESOURCES += \
     icon64.qrc \

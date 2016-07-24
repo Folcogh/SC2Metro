@@ -1,6 +1,5 @@
 #include "DlgNewTimer.hpp"
 #include "Timer.hpp"
-#include <QPalette>
 #include <QVBoxLayout>
 #include <QFormLayout>
 
@@ -24,11 +23,10 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
 
     // The label displayed if an hotkey is invalid. It's red, an invisible by default
     this->labelInvalidHotkey = new QLabel(tr("Invalid hotkey"));
-    this->labelInvalidHotkey->setVisible(false);
 
-    QPalette invalidHotkeyPalette ;
-    invalidHotkeyPalette.setColor(QPalette::Text, Qt::red);
-    this->labelInvalidHotkey->setPalette(invalidHotkeyPalette);
+    this->paletteInvalidHotkey = new QPalette;
+    paletteInvalidHotkey->setColor(QPalette::Text, Qt::red);
+    this->labelInvalidHotkey->setPalette(*this->paletteInvalidHotkey);
 
     // OK/Cancel buttons
     this->buttons = new QDialogButtonBox(QDialogButtonBox::Ok |
@@ -38,7 +36,7 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     this->period->setRange(PERIOD_MIN, PERIOD_MAX);
     this->period->setAlignment(Qt::AlignHCenter);
 
-    // Finalize the dialog setup by placing the elements and adjusting their size
+    // Finalize the ui setup by placing the elements and adjusting their size
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->addLayout(formLayout);
     mainLayout->addWidget(this->labelInvalidHotkey);
@@ -58,6 +56,7 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
 
 DlgNewTimer::~DlgNewTimer()
 {
+    delete this->paletteInvalidHotkey;
 }
 
 QString DlgNewTimer::getSoundName() const
@@ -80,8 +79,7 @@ void DlgNewTimer::periodChanged(int newPeriod)
     if (newPeriod == 1) {
         this->period->setSuffix(tr(" second"));
     }
-    else
-    {
+    else {
         this->period->setSuffix(tr(" seconds"));
     }
 }
