@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     Modified.cpp \
     TableItem.cpp \
     DlgNewTimer.cpp \
-    HotkeyInputWidget.cpp
+    HotkeyInputWidget.cpp \
+    TimerItem.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
@@ -27,7 +28,9 @@ HEADERS  += MainWindow.hpp \
     Modified.hpp \
     TableItem.hpp \
     DlgNewTimer.hpp \
-    HotkeyInputWidget.hpp
+    HotkeyInputWidget.hpp \
+    TimerItem.hpp \
+    SC2Metro.hpp
 
 RESOURCES += \
     icon64.qrc \

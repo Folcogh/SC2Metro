@@ -1,6 +1,16 @@
 - open file on icon doucle click
 - QApplication settings
+- MainWindow settings. See SC2Metro.hpp
 - mainwindow title update
-- edit timer icon looks wrong
+- edit timer icon looks wrong (?)
 - timerList must adjust actions at boot
-- check the first initialisation of TimerList/MainWindow
+- for HotkeyInputWidget, use a stacked widget {QKeySequence/QPushButton} to display the modifiers when no virtual key is typed yet ?
+- GPLize the sources
+- check: constness, q_disable_copy
+- add an help in the DlgNewTimer/DlgEditTimer for the hotkey
+
+
+
+
+- Crédits :
+Zerosquare, KK

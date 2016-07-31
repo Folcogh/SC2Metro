@@ -1,13 +1,25 @@
+//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  Copyright (C) 2016 Martial Demolins AKA Folco
+
+//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+//  as published by the Free Software foundation, either version 3 of the License, or (at your option) any later version.
+
+//  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+//  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+//  You should have received a copy of the GNU General Public License along with this program.
+//  If not, see <http://www.gnu.org/licenses/>.
+
 #include "DlgNewTimer.hpp"
 #include "MainWindow.hpp"
 #include "TimerList.hpp"
-#include <QList>
-#include <QIcon>
 #include <QSize>
+#include <QIcon>
+#include <QList>
 #include <QPointer>
 #include <QToolBar>
-#include <QStringList>
 #include <QHeaderView>
+#include <QStringList>
 #include <QAbstractItemView>
 
 MainWindow* MainWindow::mainWindow = nullptr;
@@ -49,15 +61,8 @@ MainWindow::MainWindow()
      *
      */
     QList<QAction*> actionList;
-    actionList << actionNewList
-               << actionOpenList
-               << actionSaveList
-               << actionSeparator1
-               << actionNewTimer
-               << actionEditTimer
-               << actionRemovTimer
-               << actionSeparator2
-               << actionMisc;
+    actionList << actionNewList << actionOpenList << actionSaveList << actionSeparator1 << actionNewTimer << actionEditTimer << actionRemovTimer
+               << actionSeparator2 << actionMisc;
 
     QSize iconSize(MAIN_TOOLBAR_ICON_WIDTH, MAIN_TOOLBAR_ICON_HEIGHT);
 
@@ -85,9 +90,7 @@ MainWindow::MainWindow()
 
     // Set the columns header and size
     QStringList labels;
-    labels << tr("Sound name")
-           << tr("Period")
-           << tr("Hotkey");
+    labels << tr("Sound name") << tr("Period") << tr("Hotkey");
     this->timerTable->setHorizontalHeaderLabels(labels);
 
     this->timerTable->setColumnWidth(COLUMN_SOUND, 200);
@@ -95,7 +98,7 @@ MainWindow::MainWindow()
     this->timerTable->setColumnWidth(COLUMN_HOTKEY, 200);
 
     // Finally, install the table in the main window
-    this->setCentralWidget(this->timerTable);
+    setCentralWidget(this->timerTable);
 
     /*
      * Establish internal connections
@@ -136,6 +139,5 @@ void MainWindow::newTimer()
 {
     QPointer<DlgNewTimer> dlg = new DlgNewTimer;
     if (dlg->exec() == QDialog::Accepted) {
-
     }
 }

@@ -10,18 +10,19 @@
 //  You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TABLEITEM_HPP
-#define TABLEITEM_HPP
+/*
+ *  This file contains application-wide constants
+ *
+ */
 
-#include <QString>
-#include <QTableWidgetItem>
+#ifndef SC2METRO_HPP
+#define SC2METRO_HPP
 
-//
-class TableItem : public QTableWidgetItem
-{
-  public:
-    explicit TableItem(QString text);
-    ~TableItem();
-};
+#define LIST_FILTER "*.sml"
+#define SOUND_FILTER "*.mp3 *.wav"
+#define BUILTIN_TAG " (builtin)"
 
-#endif // TABLEITEM_HPP
+#define VERSION 2
+#define MAINWINDOW_TITLE "SC2 Metronome"
+
+#endif // SC2METRO_HPP
