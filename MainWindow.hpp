@@ -13,9 +13,11 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
+#include "NativeEventFilter.hpp"
 #include <QMenu>
 #include <QAction>
 #include <QMainWindow>
+#include <QKeySequence>
 #include <QTableWidget>
 
 // Size of the icons in the main toolbar
@@ -23,7 +25,7 @@
 #define MAIN_TOOLBAR_ICON_HEIGHT 64
 
 // Index of the columns in the timers table
-#define COLUMN_SOUND 0
+#define COLUMN_NAME 0
 #define COLUMN_PERIOD 1
 #define COLUMN_HOTKEY 2
 
@@ -36,12 +38,20 @@ class MainWindow : public QMainWindow
     static MainWindow* instance();
     void establishExternalConnections();
 
-  private:
+    // Methods called by the TimerList instance
+    void newTimer(QString filename, int period, QKeySequence keySequence);
+    void setTimerPlaying(int index);
+    void setTimerStopped(int index);
+
+    private:
     Q_DISABLE_COPY(MainWindow)
 
     // MainWindow is a singleton
     static MainWindow* mainWindow;
     MainWindow();
+
+    // Native event filter (for the hotkeys)
+    NativeEventFilter* nativeEventFilter;
 
     // These actions are icons in the main toolbar
     QAction* actionNewList;
@@ -59,7 +69,7 @@ class MainWindow : public QMainWindow
     QTableWidget* timerTable;
 
     // Methods called when the actions in the toolbar are triggerred*
-    void newTimer();
+    void newTimerTriggerred();
 };
 
 #endif // MAINWINDOW_HPP

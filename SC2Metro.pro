@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     TableItem.cpp \
     DlgNewTimer.cpp \
     HotkeyInputWidget.cpp \
-    TimerItem.cpp
+    TimerItem.cpp \
+    SMException.cpp \
+    NativeEventFilter.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
@@ -30,7 +32,9 @@ HEADERS  += MainWindow.hpp \
     DlgNewTimer.hpp \
     HotkeyInputWidget.hpp \
     TimerItem.hpp \
-    SC2Metro.hpp
+    SC2Metro.hpp \
+    SMException.hpp \
+    NativeEventFilter.hpp
 
 RESOURCES += \
     icon64.qrc \

@@ -26,8 +26,10 @@
 #include <QDialogButtonBox>
 
 /*
- * This class provides a dialog which requests for a new Timer
- *
+ *  This class provides a dialog which requests for a new Timer.
+ *  It uses the data of TimerItem instances to fill the ui.
+ *  Then the interface is handled with its own data,
+ *  without updating the TimerItem ones
  */
 
 class DlgNewTimer : public QDialog
@@ -40,7 +42,7 @@ class DlgNewTimer : public QDialog
 
     // Method used by the constructor to fill the sound combo box
     void addTimerItem();
-    void addTimerItem(QString file, int period, int shortcut, UINT nativeVirtualKey, UINT nativeModifiers);
+    void addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers);
 
     // Getters used by the caller to retrieve user inputs
     QString getFilename() const;
@@ -60,7 +62,7 @@ class DlgNewTimer : public QDialog
     QLabel* labelInvalidHotkey;
 
     int previousIndex;
-    QString previousPath;
+    static QString previousPath;
 
     // Slots
     void soundModified();

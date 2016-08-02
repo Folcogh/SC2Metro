@@ -16,6 +16,9 @@
 #include "Timer.hpp"
 #include <QList>
 #include <QObject>
+#include <QString>
+#include <windows.h>
+#include <QKeySequence>
 
 /*
  *  This class is the container of the timers created by the user
@@ -28,6 +31,9 @@ class TimerList : public QObject
   public:
     ~TimerList();
     static TimerList* instance();
+    bool hotkeyReceived(WPARAM keyId);
+
+    void newTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers);
 
   private:
     Q_DISABLE_COPY(TimerList)
@@ -38,6 +44,8 @@ class TimerList : public QObject
 
     // The list of the timers ptr. It's ordered like the table of the ui
     QList<Timer*> timers;
+
+    unsigned int hotkeyId;
 };
 
 #endif // TIMERLIST_HPP

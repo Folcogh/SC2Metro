@@ -8,7 +8,7 @@
 - GPLize the sources
 - check: constness, q_disable_copy
 - add an help in the DlgNewTimer/DlgEditTimer for the hotkey
-
+- fix previous path not working in DlgNewTimer
 
 
 

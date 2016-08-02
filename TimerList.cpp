@@ -10,12 +10,17 @@
 //  You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
+#include "SMException.hpp"
 #include "MainWindow.hpp"
 #include "TimerList.hpp"
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QApplication>
 
 TimerList* TimerList::timerList = nullptr;
 
 TimerList::TimerList()
+    : hotkeyId(1)
 {
 }
 
@@ -30,4 +35,38 @@ TimerList* TimerList::instance()
         timerList = new TimerList;
     }
     return timerList;
+}
+
+bool TimerList::hotkeyReceived(WPARAM keyId)
+{
+    for (int i = 0; i < this->timers.count(); i++) {
+        Timer* timer = this->timers.at(i);
+        if (timer->getHotkeyId() == keyId) {
+            if (timer->togglePlayStop()) {
+                MainWindow::instance()->setTimerPlaying(i);
+            }
+            else {
+                MainWindow::instance()->setTimerStopped(i);
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void TimerList::newTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers)
+{
+    try {
+        Timer* timer = new Timer(filename, period, keySequence, virtualKey, modifiers, this->hotkeyId);
+        this->hotkeyId++;
+        MainWindow::instance()->newTimer(filename, period, keySequence);
+
+        this->timers.append(timer);
+    }
+    catch (const SMException& exc) {
+        QString readableFilename = QFileInfo(filename).completeBaseName();
+        QString message          = QString(tr("Failed to add the timer %1. Reason: %2")).arg(readableFilename).arg(exc.getMessage());
+        QMessageBox::critical(MainWindow::instance(), tr("Error"), message, QMessageBox::Ok);
+        return;
+    }
 }

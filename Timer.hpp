@@ -13,19 +13,48 @@
 #ifndef TIMER_HPP
 #define TIMER_HPP
 
+#include <QTimer>
 #include <QObject>
+#include <QString>
+#include <windows.h>
+#include <QKeySequence>
+#include <QMediaPlayer>
+#include <QMediaContent>
 
 #define PERIOD_MIN 1
 #define PERIOD_MAX 600
 
-class Timer
+/*
+ *  This class contains a timer, which can be started and stopped with a hotkey
+ *
+ */
+
+class Timer : public QObject
 {
+    Q_OBJECT
+
   public:
-    Timer();
+    Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
     ~Timer();
+    unsigned int getHotkeyId() const;
+    void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+    bool togglePlayStop(); // Return true if the player is now playing
 
   private:
     Q_DISABLE_COPY(Timer)
+
+    QString filename;
+    int period;
+    QKeySequence keySequence;
+    UINT virtualKey;
+    UINT modifiers;
+
+    QTimer* timer;
+    QMediaPlayer* player;
+    QMediaContent* mediaContent;
+    int hotkeyId;
+
+    void playSound();
 };
 
 #endif // TIMER_HPP

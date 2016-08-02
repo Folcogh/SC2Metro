@@ -17,7 +17,7 @@
 TimerItem::TimerItem()
     : filename(QString())
     , period(0)
-    , shortcut(QKeySequence())
+    , keySequence(QKeySequence())
     , nativeVirtualKey(0)
     , nativeModifiers(0)
     , promptForFile(true)
@@ -25,17 +25,17 @@ TimerItem::TimerItem()
     this->displayedName = QObject::tr("<Custom...>");
 }
 
-// Create an item with a filename given by the user, with a default period and no shortcut
+// Create an item with a filename given by the user, with a default period and no hotkey
 TimerItem::TimerItem(QString filename)
     : TimerItem(filename, CUSTOM_TIMER_PERIOD, QKeySequence(), 0, 0)
 {
 }
 
 // Create an item with all values defined. Used for builtin items
-TimerItem::TimerItem(QString filename, int period, QKeySequence shortcut, UINT nativeVirtualKey, UINT nativeModifiers)
+TimerItem::TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers)
     : filename(filename)
     , period(period)
-    , shortcut(shortcut)
+    , keySequence(keySequence)
     , nativeVirtualKey(nativeVirtualKey)
     , nativeModifiers(nativeModifiers)
     , promptForFile(false)
@@ -59,9 +59,9 @@ int TimerItem::getPeriod() const
     return this->period;
 }
 
-QKeySequence TimerItem::getShortcut() const
+QKeySequence TimerItem::getKeySequence() const
 {
-    return this->shortcut;
+    return this->keySequence;
 }
 
 UINT TimerItem::getNativeVirtualKey() const

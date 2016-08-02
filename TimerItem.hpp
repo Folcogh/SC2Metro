@@ -20,22 +20,23 @@
 
 #define CUSTOM_TIMER_PERIOD 30
 
-//
-//  This class contains a predefined timer used to be proposed
-//  in the list when the user creates a new timer
-//
+/*
+ *  This class contains a predefined timer used to be proposed in the list when the user creates a new timer
+ *  The data of the objects are used only to initialize the interface when their are displayed
+ *
+ */
 
 class TimerItem
 {
   public:
     TimerItem();
     explicit TimerItem(QString filename);
-    TimerItem(QString filename, int period, QKeySequence shortcut, UINT nativeVirtualKey, UINT nativeModifiers);
+    TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers);
 
     // Getters
     QString getFilename() const;
     int getPeriod() const;
-    QKeySequence getShortcut() const;
+    QKeySequence getKeySequence() const;
     UINT getNativeVirtualKey() const;
     UINT getNativeModifiers() const;
     QString getDisplayedName() const;
@@ -50,7 +51,7 @@ class TimerItem
     // Data of a timer
     QString filename;
     int period;
-    QKeySequence shortcut;
+    QKeySequence keySequence;
     UINT nativeVirtualKey;
     UINT nativeModifiers;
     bool promptForFile;

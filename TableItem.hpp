@@ -16,7 +16,11 @@
 #include <QString>
 #include <QTableWidgetItem>
 
-//
+/*
+ *  This class initializes some vars of QTableWidgetItem
+ *
+ */
+
 class TableItem : public QTableWidgetItem
 {
   public:

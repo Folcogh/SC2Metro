@@ -13,6 +13,7 @@
 #include "HotkeyInputWidget.hpp"
 #include <QKeyEvent>
 
+// The data are initialized to 0, accordingly to an empty QKeySequenceEdit
 HotkeyInputWidget::HotkeyInputWidget()
     : nativeModifiers(0)
     , nativeVirtualKey(0)
@@ -25,11 +26,16 @@ HotkeyInputWidget::~HotkeyInputWidget()
 {
 }
 
+// Keep only the first item of a sequence
 void HotkeyInputWidget::truncateHotkey()
 {
     QKeySequence firstHotkey = this->keySequence()[0];
     setKeySequence(firstHotkey);
 }
+
+//
+// Getters
+//
 
 UINT HotkeyInputWidget::getNativeModifiers() const
 {
@@ -56,6 +62,7 @@ void HotkeyInputWidget::setHotkey(QKeySequence sequence, UINT nativeVirtualKey, 
     setKeySequence(sequence);
 }
 
+// This keyboard event handler replaces the original one
 bool HotkeyInputWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::KeyPress) {
@@ -66,28 +73,29 @@ bool HotkeyInputWidget::eventFilter(QObject* object, QEvent* event)
         int key                         = keyEvent->key() & QtKeysMask;
         UINT virtualKey                 = keyEvent->nativeVirtualKey();
 
-        // Save the modifiers
+        // Reset the modifiers then read them
+        this->nativeModifiers = 0;
         if (modifiers & Qt::CTRL) {
-            this->nativeModifiers += MOD_CONTROL;
+            this->nativeModifiers |= MOD_CONTROL;
             if (key == Qt::Key_Control) {
                 key = 0;
             }
         }
         if (modifiers & Qt::ALT) {
-            this->nativeModifiers += MOD_ALT;
+            this->nativeModifiers |= MOD_ALT;
             if (key == Qt::Key_Alt) {
                 key = 0;
             }
         }
         if (modifiers & Qt::SHIFT) {
-            this->nativeModifiers += MOD_SHIFT;
+            this->nativeModifiers |= MOD_SHIFT;
             if (key == Qt::Key_Shift) {
                 key = 0;
             }
         }
 
         // Invalid hotkeys, stoping the keyboard handling:
-        // - all which involve the Meta key (Reserved by Windows)
+        // - all which involve the Meta key (reserved by the system)
         // - events with no modifiers
         // - events with no key
         if ((modifiers & Qt::META) || (modifiers == 0) || (key == 0)) {

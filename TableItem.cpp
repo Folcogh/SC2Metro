@@ -12,9 +12,11 @@
 
 #include "TableItem.hpp"
 
+
 TableItem::TableItem(QString text)
     : QTableWidgetItem(text, Qt::DisplayRole)
 {
+    // Center the items in the cell
     setTextAlignment(Qt::AlignCenter);
 }
 

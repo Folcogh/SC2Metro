@@ -20,9 +20,11 @@
 #include <QVBoxLayout>
 #include <QKeySequenceEdit>
 
+// Initial path of the custom sound selection dialog. previousPath stores the last used one
+QString DlgNewTimer::previousPath = QDir::homePath();
+
 DlgNewTimer::DlgNewTimer(QWidget* parent)
     : QDialog(parent)
-    , previousPath(QDir::homePath()) // Initial path of the custom sound selection dialog. previousPath stores the last used one
 {
     // Build the form layout which contains input widgets
     this->timerList  = new QComboBox;
@@ -46,14 +48,14 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     this->editPeriod->setAlignment(Qt::AlignHCenter);
 
     // Create and add the items in the sound list
-    addTimerItem(":/sounds/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, 0x4D, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, 0x53, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, 0x52, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, 0x50, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, 0x43, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, 0x49, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, 0x57, MOD_CONTROL + MOD_SHIFT);
-    addTimerItem(":/sounds/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, 0x4C, MOD_CONTROL + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, 0x4D, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, 0x53, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, 0x52, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, 0x50, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, 0x43, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, 0x49, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, 0x57, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, 0x4C, MOD_ALT + MOD_SHIFT);
     addTimerItem();
 
     // Finalize the ui setup by placing the elements and adjusting their size
@@ -99,10 +101,10 @@ void DlgNewTimer::addTimerItem()
 }
 
 // Add an item to the sound list
-void DlgNewTimer::addTimerItem(QString file, int period, int shortcut, UINT nativeVirtualKey, UINT nativeModifiers)
+void DlgNewTimer::addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers)
 {
-    QKeySequence shortcutKeys = QKeySequence(shortcut);
-    TimerItem* timerItem      = new TimerItem(file, period, shortcutKeys, nativeVirtualKey, nativeModifiers);
+    QKeySequence keySequence = QKeySequence(keys);
+    TimerItem* timerItem      = new TimerItem(file, period, keySequence, nativeVirtualKey, nativeModifiers);
     QString displayedName     = timerItem->getDisplayedName();
     QVariant data             = QVariant::fromValue(timerItem);
 
@@ -116,8 +118,7 @@ void DlgNewTimer::addTimerItem(QString file, int period, int shortcut, UINT nati
 // Return the current item of the sound list
 TimerItem* DlgNewTimer::getCurrentTimerItem() const
 {
-    int index     = this->timerList->currentIndex();
-    QVariant data = this->timerList->itemData(index);
+    QVariant data = this->timerList->currentData();
     return data.value<TimerItem*>();
 }
 
@@ -127,7 +128,9 @@ TimerItem* DlgNewTimer::getCurrentTimerItem() const
 
 QString DlgNewTimer::getFilename() const
 {
-    return this->timerList->currentText();
+    QVariant data = this->timerList->currentData();
+    TimerItem* timerItem = data.value<TimerItem*>();
+    return timerItem->getFilename();
 }
 
 int DlgNewTimer::getPeriod() const
@@ -190,13 +193,13 @@ void DlgNewTimer::soundModified()
     // Update the ui, save the current index and restore events handling
     TimerItem* currentItem = getCurrentTimerItem();
     this->editPeriod->setValue(currentItem->getPeriod());
-    this->editHotkey->setHotkey(currentItem->getShortcut(), currentItem->getNativeVirtualKey(), currentItem->getNativeModifiers());
+    this->editHotkey->setHotkey(currentItem->getKeySequence(), currentItem->getNativeVirtualKey(), currentItem->getNativeModifiers());
 
     this->previousIndex = this->timerList->currentIndex();
     this->timerList->blockSignals(false);
 }
 
-// Set the OK button according to the existence of a valid shortcut
+// Set the OK button according to the existence of a valid hotkey
 void DlgNewTimer::hotkeyModified()
 {
     QPushButton* buttonOk = this->buttons->button(QDialogButtonBox::Ok);
