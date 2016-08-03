@@ -12,7 +12,6 @@
 
 #include "SMException.hpp"
 #include "Timer.hpp"
-#include <QUrl>
 #include <QMediaPlaylist>
 
 Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId)
@@ -23,14 +22,15 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     , modifiers(modifiers)
     , hotkeyId(hotkeyId)
 {
-    // Create the media contained in a playlist, and give it to the player
+    // Create the player, the playlist and the media container
     this->mediaContent = new QMediaContent(filename);
-    QMediaPlaylist* playlist = new QMediaPlaylist(this);
-    playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
-    playlist->addMedia(*this->mediaContent);
-
     this->player = new QMediaPlayer(this);
-    player->setPlaylist(playlist);
+    QMediaPlaylist* playlist = new QMediaPlaylist(this);
+
+    // Give the media to the playlist, and the playlist to the player
+    playlist->addMedia(*mediaContent);
+    playlist->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
+    player->setMedia(playlist);
 
     // Create the timer
     this->timer = new QTimer(this);
