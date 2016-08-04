@@ -44,8 +44,7 @@ bool TimerList::hotkeyReceived(WPARAM keyId)
         if (timer->getHotkeyId() == keyId) {
             if (timer->togglePlayStop()) {
                 MainWindow::instance()->setTimerPlaying(i);
-            }
-            else {
+            } else {
                 MainWindow::instance()->setTimerStopped(i);
             }
             return true;
@@ -66,7 +65,53 @@ void TimerList::newTimer(QString filename, int period, QKeySequence keySequence,
     catch (const SMException& exc) {
         QString readableFilename = QFileInfo(filename).completeBaseName();
         QString message          = QString(tr("Failed to add the timer %1. Reason: %2")).arg(readableFilename).arg(exc.getMessage());
-        QMessageBox::critical(MainWindow::instance(), tr("Error"), message, QMessageBox::Ok);
-        return;
+        QMessageBox::critical(MainWindow::instance(), tr("Timer creation failed"), message, QMessageBox::Ok);
     }
+}
+
+void TimerList::editTimer(int index, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers)
+{
+    Timer* timer = this->timers.at(index);
+    try {
+        this->timers.at(index)->setNewData(period, keySequence, virtualKey, modifiers, this->hotkeyId);
+        this->hotkeyId++;
+        MainWindow::instance()->editTimer(index, timer->getPeriod(), timer->getKeySequence());
+    }
+    catch (const SMException& exc) {
+        QString readableFilename = QFileInfo(timer->getFilename()).completeBaseName();
+        QString message          = QString(tr("Failed to edit the timer %1. Reason: %2")).arg(readableFilename).arg(exc.getMessage());
+        QMessageBox::critical(MainWindow::instance(), tr("Timer edition failed"), message, QMessageBox::Ok);
+    }
+}
+
+void TimerList::removeTimer(int index)
+{
+    Timer* timer = this->timers.takeAt(index);
+    delete timer;
+    MainWindow::instance()->removeTimer(index);
+}
+
+QString TimerList::getTimerFilename(int index)
+{
+    return this->timers.at(index)->getFilename();
+}
+
+int TimerList::getTimerPeriod(int index)
+{
+    return this->timers.at(index)->getPeriod();
+}
+
+QKeySequence TimerList::getTimerKeySequence(int index)
+{
+    return this->timers.at(index)->getKeySequence();
+}
+
+UINT TimerList::getTimerVirtualKey(int index)
+{
+    return this->timers.at(index)->getVirtualKey();
+}
+
+UINT TimerList::getTimerModifiers(int index)
+{
+    return this->timers.at(index)->getModifiers();
 }

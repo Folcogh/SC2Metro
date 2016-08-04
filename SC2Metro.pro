@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     HotkeyInputWidget.cpp \
     TimerItem.cpp \
     SMException.cpp \
-    NativeEventFilter.cpp
+    NativeEventFilter.cpp \
+    DlgEditTimer.cpp
 
 HEADERS  += MainWindow.hpp \
     TimerList.hpp \
@@ -34,7 +35,8 @@ HEADERS  += MainWindow.hpp \
     TimerItem.hpp \
     SC2Metro.hpp \
     SMException.hpp \
-    NativeEventFilter.hpp
+    NativeEventFilter.hpp \
+    DlgEditTimer.hpp
 
 RESOURCES += \
     icon64.qrc \

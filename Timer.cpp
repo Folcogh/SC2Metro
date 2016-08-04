@@ -53,15 +53,69 @@ Timer::~Timer()
     UnregisterHotKey(nullptr, this->hotkeyId);
 }
 
+void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId)
+{
+    // First, try to register the new hotkey if needed
+    if ((this->virtualKey != virtualKey) || (this->modifiers != modifiers)) {
+        if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
+            throw SMException(tr("failed to register the hotkey"));
+        }
+        UnregisterHotKey(nullptr, this->hotkeyId);
+        this->hotkeyId = hotkeyId;
+    }
+
+    bool active = this->timer->isActive();
+    if (active) {
+        this->timer->stop();
+        this->player->stop();
+    }
+
+    timer->setInterval(period * 1000);
+    this->period = period;
+    this->keySequence = keySequence;
+    this->virtualKey = virtualKey;
+    this->modifiers = modifiers;
+
+    if (active) {
+        this->timer->start();
+        playSound();
+    }
+}
+
 unsigned int Timer::getHotkeyId() const
 {
     return this->hotkeyId;
 }
 
+QString Timer::getFilename() const
+{
+    return this->filename;
+}
+
+int Timer::getPeriod() const
+{
+    return this->period;
+}
+
+QKeySequence Timer::getKeySequence() const
+{
+    return this->keySequence;
+}
+
+UINT Timer::getVirtualKey() const
+{
+    return this->virtualKey;
+}
+
+UINT Timer::getModifiers() const
+{
+    return this->modifiers;
+}
+
 void Timer::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::InvalidMedia) {
-        //TODO: disable timer
+        //TODO: disable timer, update status in the ui
     }
 }
 

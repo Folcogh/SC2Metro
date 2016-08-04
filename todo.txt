@@ -9,8 +9,17 @@
 - check: constness, q_disable_copy
 - add an help in the DlgNewTimer/DlgEditTimer for the hotkey
 - fix previous path not working in DlgNewTimer
+- use a QVector<QPair>(Timer, id) instead of giving an id to each timer ?
+- better adjustement of the columns size
+- icons for the timer'status in the table
+- create a widget for the key tooltip/invalid hotkey message
+- MainWindow::setTimerStatus instead of playing/stopped
+- various status icons depending on media status (loading etc...)
+- refactor Timer to factorize play/pause operations
+- test if we can keep the same ID when editing a timer
+
 
 
 
 - Crédits :
-Zerosquare, KK
+Zerosquare, KK, freepik (broken media), Fantasque (icon font)

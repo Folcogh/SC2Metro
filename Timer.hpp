@@ -36,7 +36,16 @@ class Timer : public QObject
   public:
     Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
     ~Timer();
+
+    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId);
+
     unsigned int getHotkeyId() const;
+    QString getFilename() const;
+    int getPeriod() const;
+    QKeySequence getKeySequence() const;
+    UINT getVirtualKey() const;
+    UINT getModifiers() const;
+
     void mediaStatusChanged(QMediaPlayer::MediaStatus status);
     bool togglePlayStop(); // Return true if the player is now playing
 

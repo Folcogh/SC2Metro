@@ -25,9 +25,11 @@
 #define MAIN_TOOLBAR_ICON_HEIGHT 64
 
 // Index of the columns in the timers table
-#define COLUMN_NAME 0
-#define COLUMN_PERIOD 1
-#define COLUMN_HOTKEY 2
+#define COLUMN_STATUS 0
+#define COLUMN_NAME 1
+#define COLUMN_PERIOD 2
+#define COLUMN_HOTKEY 3
+#define COLUMN_COUNT 4
 
 class MainWindow : public QMainWindow
 {
@@ -40,6 +42,8 @@ class MainWindow : public QMainWindow
 
     // Methods called by the TimerList instance
     void newTimer(QString filename, int period, QKeySequence keySequence);
+    void editTimer(int row, int period, QKeySequence keySequence);
+    void removeTimer(int row);
     void setTimerPlaying(int index);
     void setTimerStopped(int index);
 
@@ -59,7 +63,7 @@ class MainWindow : public QMainWindow
     QAction* actionSaveList;
     QAction* actionNewTimer;
     QAction* actionEditTimer;
-    QAction* actionRemovTimer;
+    QAction* actionRemoveTimer;
     QAction* actionMisc;
 
     // Prevent the toolbar to be hidden with a context menu
@@ -70,6 +74,11 @@ class MainWindow : public QMainWindow
 
     // Methods called when the actions in the toolbar are triggerred*
     void newTimerTriggerred();
+    void editTimerTriggerred();
+    void removeTimerTriggerred();
+
+    // Methods triggered by the table signals
+    void timerSelectionChanged();
 };
 
 #endif // MAINWINDOW_HPP

@@ -11,10 +11,12 @@
 //  If not, see <http://www.gnu.org/licenses/>.
 
 #include "NativeEventFilter.hpp"
+#include "DlgEditTimer.hpp"
 #include "DlgNewTimer.hpp"
 #include "MainWindow.hpp"
 #include "TimerList.hpp"
 #include "TableItem.hpp"
+#include <QList>
 #include <QSize>
 #include <QIcon>
 #include <QList>
@@ -49,8 +51,8 @@ MainWindow::MainWindow()
     this->actionEditTimer = new QAction(QIcon(":/icon64/EditTimer.png"), "", this);
     this->actionEditTimer->setToolTip(tr("Modify the currently selected Timer"));
 
-    this->actionRemovTimer = new QAction(QIcon(":/icon64/RemoveTimer.png"), "", this);
-    this->actionRemovTimer->setToolTip(tr("Remove the currently selected timer"));
+    this->actionRemoveTimer = new QAction(QIcon(":/icon64/RemoveTimer.png"), "", this);
+    this->actionRemoveTimer->setToolTip(tr("Remove the currently selected timer"));
 
     this->actionMisc = new QAction(QIcon(":/icon64/Misc.png"), "", this);
     this->actionMisc->setToolTip(tr("About, Help and Licenses"));
@@ -62,7 +64,7 @@ MainWindow::MainWindow()
 
     // Create the main toolbar and insert the actions
     QList<QAction*> actionList;
-    actionList << actionNewList << actionOpenList << actionSaveList << actionSeparator1 << actionNewTimer << actionEditTimer << actionRemovTimer
+    actionList << actionNewList << actionOpenList << actionSaveList << actionSeparator1 << actionNewTimer << actionEditTimer << actionRemoveTimer
                << actionSeparator2 << actionMisc;
 
     QSize iconSize(MAIN_TOOLBAR_ICON_WIDTH, MAIN_TOOLBAR_ICON_HEIGHT);
@@ -75,7 +77,7 @@ MainWindow::MainWindow()
 
     // Create the main widget, a table which display the timers
     // The table display three columns: sound name, period and hotkey
-    this->timerTable = new QTableWidget(0, 3, this);
+    this->timerTable = new QTableWidget(0, COLUMN_COUNT, this);
 
     // Table properties
     this->timerTable->setShowGrid(true);
@@ -89,9 +91,10 @@ MainWindow::MainWindow()
 
     // Set the columns header and size
     QStringList labels;
-    labels << tr("Sound name") << tr("Period") << tr("Hotkey");
+    labels << tr("Status") << tr("Sound name") << tr("Period") << tr("Hotkey");
     this->timerTable->setHorizontalHeaderLabels(labels);
 
+    this->timerTable->setColumnWidth(COLUMN_STATUS, 60);
     this->timerTable->setColumnWidth(COLUMN_NAME, 200);
     this->timerTable->setColumnWidth(COLUMN_PERIOD, 100);
     this->timerTable->setColumnWidth(COLUMN_HOTKEY, 200);
@@ -99,8 +102,17 @@ MainWindow::MainWindow()
     // Finally, install the table in the main window
     setCentralWidget(this->timerTable);
 
-    // Establish internal connections
+    // Main toolbar connections
     connect(this->actionNewTimer, &QAction::triggered, this, &MainWindow::newTimerTriggerred);
+    connect(this->actionEditTimer, &QAction::triggered, this, &MainWindow::editTimerTriggerred);
+    connect(this->actionRemoveTimer, &QAction::triggered, this, &MainWindow::removeTimerTriggerred);
+
+    // Table connections
+    connect(this->timerTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::timerSelectionChanged);
+    connect(this->timerTable, &QTableWidget::itemDoubleClicked, this, &MainWindow::editTimerTriggerred);
+
+    // Trigger some slots to have a consistent interface
+    timerSelectionChanged();
 }
 
 void MainWindow::establishExternalConnections()
@@ -132,11 +144,53 @@ QMenu* MainWindow::createPopupMenu()
 
 void MainWindow::newTimerTriggerred()
 {
-    QPointer<DlgNewTimer> dlg = new DlgNewTimer;
+    QPointer<DlgNewTimer> dlg = new DlgNewTimer(this);
     if (dlg->exec() == QDialog::Accepted) {
         TimerList::instance()->newTimer(dlg->getFilename(), dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers());
     }
     delete dlg;
+}
+
+void MainWindow::editTimerTriggerred()
+{
+    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
+    int row = selectedItems.at(0)->row();
+
+    QString filename = TimerList::instance()->getTimerFilename(row);
+    int period = TimerList::instance()->getTimerPeriod(row);
+    QKeySequence keySequence = TimerList::instance()->getTimerKeySequence(row);
+    UINT virtualKey = TimerList::instance()->getTimerVirtualKey(row);
+    UINT modifiers = TimerList::instance()->getTimerModifiers(row);
+
+    QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
+    if (dlg->exec() == QDialog::Accepted) {
+        TimerList::instance()->editTimer(row, dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers());
+    }
+    delete dlg;
+}
+
+void MainWindow::removeTimerTriggerred()
+{
+    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
+    int row = selectedItems.at(0)->row();
+    TimerList::instance()->removeTimer(row);
+}
+
+//
+//  Methods triggerred by the timer list
+//
+
+void MainWindow::timerSelectionChanged()
+{
+    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
+    if (selectedItems.isEmpty()) {
+        this->actionEditTimer->setDisabled(true);
+        this->actionRemoveTimer->setDisabled(true);
+    }
+    else {
+        this->actionEditTimer->setEnabled(true);
+        this->actionRemoveTimer->setEnabled(true);
+    }
 }
 
 //
@@ -161,14 +215,31 @@ void MainWindow::newTimer(QString filename, int period, QKeySequence keySequence
     this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
 }
 
+void MainWindow::editTimer(int row, int period, QKeySequence keySequence)
+{
+    QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
+    TableItem* itemPeriod = new TableItem(displayedPeriod);
+
+    QString displayedHotkey = keySequence.toString();
+    TableItem* itemHotkey = new TableItem(displayedHotkey);
+
+    this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
+    this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+}
+
+void MainWindow::removeTimer(int row)
+{
+    this->timerTable->removeRow(row);
+}
+
 void MainWindow::setTimerPlaying(int index)
 {
-    TableItem* item = new TableItem("playing !");
+    TableItem* item = new TableItem("playing");
     this->timerTable->setItem(index, 0, item);
 }
 
 void MainWindow::setTimerStopped(int index)
 {
-    TableItem* item = new TableItem("stopped !");
+    TableItem* item = new TableItem("stopped");
     this->timerTable->setItem(index, 0, item);
 }

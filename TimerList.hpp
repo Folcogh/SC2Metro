@@ -34,6 +34,14 @@ class TimerList : public QObject
     bool hotkeyReceived(WPARAM keyId);
 
     void newTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers);
+    void editTimer(int index, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers);
+    void removeTimer(int index);
+
+    QString getTimerFilename(int index);
+    int getTimerPeriod(int index);
+    QKeySequence getTimerKeySequence(int index);
+    UINT getTimerVirtualKey(int index);
+    UINT getTimerModifiers(int index);
 
   private:
     Q_DISABLE_COPY(TimerList)
