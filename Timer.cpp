@@ -23,8 +23,8 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     , hotkeyId(hotkeyId)
 {
     // Create the player, the playlist and the media container
-    this->mediaContent = new QMediaContent(filename);
-    this->player = new QMediaPlayer(this);
+    this->mediaContent       = new QMediaContent(filename);
+    this->player             = new QMediaPlayer(this);
     QMediaPlaylist* playlist = new QMediaPlaylist(this);
 
     // Give the media to the playlist, and the playlist to the player
@@ -71,10 +71,10 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UI
     }
 
     timer->setInterval(period * 1000);
-    this->period = period;
+    this->period      = period;
     this->keySequence = keySequence;
-    this->virtualKey = virtualKey;
-    this->modifiers = modifiers;
+    this->virtualKey  = virtualKey;
+    this->modifiers   = modifiers;
 
     if (active) {
         this->timer->start();
@@ -115,7 +115,7 @@ UINT Timer::getModifiers() const
 void Timer::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::InvalidMedia) {
-        //TODO: disable timer, update status in the ui
+        // TODO: disable timer, update status in the ui
     }
 }
 

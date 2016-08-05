@@ -43,4 +43,5 @@ RESOURCES += \
     builtinsound.qrc
 
 DISTFILES += \
-    Todo.txt
+    Todo.txt \
+    _clang-format

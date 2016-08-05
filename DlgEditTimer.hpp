@@ -21,30 +21,29 @@
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
-class DlgEditTimer : public QDialog
-{
-    public:
-        DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, QWidget* parent = nullptr);
-        ~DlgEditTimer();
+class DlgEditTimer : public QDialog {
+  public:
+    DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, QWidget* parent = nullptr);
+    ~DlgEditTimer();
 
-        // Getters used by the caller to retrieve user inputs
-        int getPeriod() const;
-        QKeySequence getKeySquence() const;
-        UINT getNativeVirtualKey() const;
-        UINT getNativeModifiers() const;
+    // Getters used by the caller to retrieve user inputs
+    int getPeriod() const;
+    QKeySequence getKeySquence() const;
+    UINT getNativeVirtualKey() const;
+    UINT getNativeModifiers() const;
 
-      private:
-        Q_DISABLE_COPY(DlgEditTimer)
+  private:
+    Q_DISABLE_COPY(DlgEditTimer)
 
-        // Elements of the ui which are used by some slots
-        QSpinBox* editPeriod;
-        HotkeyInputWidget* editHotkey;
-        QDialogButtonBox* buttons;
-        QLabel* labelInvalidHotkey;
+    // Elements of the ui which are used by some slots
+    QSpinBox* editPeriod;
+    HotkeyInputWidget* editHotkey;
+    QDialogButtonBox* buttons;
+    QLabel* labelInvalidHotkey;
 
-        // Slots
-        void periodModified(int period);
-        void hotkeyModified();
+    // Slots
+    void periodModified(int period);
+    void hotkeyModified();
 };
 
 #endif // DLGEDITTIMER_HPP

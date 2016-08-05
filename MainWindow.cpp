@@ -154,13 +154,13 @@ void MainWindow::newTimerTriggerred()
 void MainWindow::editTimerTriggerred()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    int row = selectedItems.at(0)->row();
+    int row                                = selectedItems.at(0)->row();
 
-    QString filename = TimerList::instance()->getTimerFilename(row);
-    int period = TimerList::instance()->getTimerPeriod(row);
+    QString filename         = TimerList::instance()->getTimerFilename(row);
+    int period               = TimerList::instance()->getTimerPeriod(row);
     QKeySequence keySequence = TimerList::instance()->getTimerKeySequence(row);
-    UINT virtualKey = TimerList::instance()->getTimerVirtualKey(row);
-    UINT modifiers = TimerList::instance()->getTimerModifiers(row);
+    UINT virtualKey          = TimerList::instance()->getTimerVirtualKey(row);
+    UINT modifiers           = TimerList::instance()->getTimerModifiers(row);
 
     QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
     if (dlg->exec() == QDialog::Accepted) {
@@ -172,7 +172,7 @@ void MainWindow::editTimerTriggerred()
 void MainWindow::removeTimerTriggerred()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    int row = selectedItems.at(0)->row();
+    int row                                = selectedItems.at(0)->row();
     TimerList::instance()->removeTimer(row);
 }
 
@@ -200,13 +200,13 @@ void MainWindow::timerSelectionChanged()
 void MainWindow::newTimer(QString filename, int period, QKeySequence keySequence)
 {
     QString displayedName = QFileInfo(filename).completeBaseName();
-    TableItem* itemName = new TableItem(displayedName);
+    TableItem* itemName   = new TableItem(displayedName);
 
     QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-    TableItem* itemPeriod = new TableItem(displayedPeriod);
+    TableItem* itemPeriod   = new TableItem(displayedPeriod);
 
     QString displayedHotkey = keySequence.toString();
-    TableItem* itemHotkey = new TableItem(displayedHotkey);
+    TableItem* itemHotkey   = new TableItem(displayedHotkey);
 
     int row = this->timerTable->rowCount();
     this->timerTable->insertRow(row);
@@ -218,10 +218,10 @@ void MainWindow::newTimer(QString filename, int period, QKeySequence keySequence
 void MainWindow::editTimer(int row, int period, QKeySequence keySequence)
 {
     QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-    TableItem* itemPeriod = new TableItem(displayedPeriod);
+    TableItem* itemPeriod   = new TableItem(displayedPeriod);
 
     QString displayedHotkey = keySequence.toString();
-    TableItem* itemHotkey = new TableItem(displayedHotkey);
+    TableItem* itemHotkey   = new TableItem(displayedHotkey);
 
     this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
     this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);

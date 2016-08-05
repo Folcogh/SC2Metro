@@ -104,7 +104,8 @@ void DlgEditTimer::periodModified(int period)
 {
     if (period == 1) {
         this->editPeriod->setSuffix(tr(" second"));
-    } else {
+    }
+    else {
         this->editPeriod->setSuffix(tr(" seconds"));
     }
 }
@@ -116,7 +117,8 @@ void DlgEditTimer::hotkeyModified()
     if (this->editHotkey->getNativeVirtualKey() != 0) {
         buttonOk->setEnabled(true);
         this->labelInvalidHotkey->setVisible(false);
-    } else {
+    }
+    else {
         buttonOk->setDisabled(true);
         this->labelInvalidHotkey->setVisible(true);
     }

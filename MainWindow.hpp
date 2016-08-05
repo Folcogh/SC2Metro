@@ -31,8 +31,7 @@
 #define COLUMN_HOTKEY 3
 #define COLUMN_COUNT 4
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
   public:
@@ -47,7 +46,7 @@ class MainWindow : public QMainWindow
     void setTimerPlaying(int index);
     void setTimerStopped(int index);
 
-    private:
+  private:
     Q_DISABLE_COPY(MainWindow)
 
     // MainWindow is a singleton

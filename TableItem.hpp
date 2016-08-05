@@ -21,8 +21,7 @@
  *
  */
 
-class TableItem : public QTableWidgetItem
-{
+class TableItem : public QTableWidgetItem {
   public:
     explicit TableItem(QString text);
     ~TableItem();

@@ -44,7 +44,8 @@ bool TimerList::hotkeyReceived(WPARAM keyId)
         if (timer->getHotkeyId() == keyId) {
             if (timer->togglePlayStop()) {
                 MainWindow::instance()->setTimerPlaying(i);
-            } else {
+            }
+            else {
                 MainWindow::instance()->setTimerStopped(i);
             }
             return true;

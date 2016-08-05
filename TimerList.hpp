@@ -24,8 +24,7 @@
  *  This class is the container of the timers created by the user
  *
  */
-class TimerList : public QObject
-{
+class TimerList : public QObject {
     Q_OBJECT
 
   public:

@@ -104,9 +104,9 @@ void DlgNewTimer::addTimerItem()
 void DlgNewTimer::addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers)
 {
     QKeySequence keySequence = QKeySequence(keys);
-    TimerItem* timerItem      = new TimerItem(file, period, keySequence, nativeVirtualKey, nativeModifiers);
-    QString displayedName     = timerItem->getDisplayedName();
-    QVariant data             = QVariant::fromValue(timerItem);
+    TimerItem* timerItem     = new TimerItem(file, period, keySequence, nativeVirtualKey, nativeModifiers);
+    QString displayedName    = timerItem->getDisplayedName();
+    QVariant data            = QVariant::fromValue(timerItem);
 
     this->timerList->addItem(displayedName, data);
 }
@@ -128,7 +128,7 @@ TimerItem* DlgNewTimer::getCurrentTimerItem() const
 
 QString DlgNewTimer::getFilename() const
 {
-    QVariant data = this->timerList->currentData();
+    QVariant data        = this->timerList->currentData();
     TimerItem* timerItem = data.value<TimerItem*>();
     return timerItem->getFilename();
 }
@@ -162,7 +162,8 @@ void DlgNewTimer::periodModified(int period)
 {
     if (period == 1) {
         this->editPeriod->setSuffix(tr(" second"));
-    } else {
+    }
+    else {
         this->editPeriod->setSuffix(tr(" seconds"));
     }
 }
@@ -181,7 +182,8 @@ void DlgNewTimer::soundModified()
         if (filename.isEmpty()) {
             // File selection canceled, reset the timer change
             this->timerList->setCurrentIndex(this->previousIndex);
-        } else {
+        }
+        else {
             // File selection validated, save the file path and add the new timer to the combo
             this->previousPath      = QFileInfo(filename).absoluteFilePath();
             TimerItem* newTimerItem = new TimerItem(filename);
@@ -206,7 +208,8 @@ void DlgNewTimer::hotkeyModified()
     if (this->editHotkey->getNativeVirtualKey() != 0) {
         buttonOk->setEnabled(true);
         this->labelInvalidHotkey->setVisible(false);
-    } else {
+    }
+    else {
         buttonOk->setDisabled(true);
         this->labelInvalidHotkey->setVisible(true);
     }
