@@ -27,7 +27,8 @@
  *  It also allows to forbid some hotkeys, and limits the key sequence to one entry
  */
 
-class HotkeyInputWidget : public QKeySequenceEdit {
+class HotkeyInputWidget : public QKeySequenceEdit
+{
     Q_OBJECT
 
   public:

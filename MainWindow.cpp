@@ -1,36 +1,44 @@
 //  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
-//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-//  as published by the Free Software foundation, either version 3 of the License, or (at your option) any later version.
+//  This program is free software: you can redistribute it and/or modify it
+//  under the terms of the GNU General Public License
+//  as published by the Free Software foundation, either version 3 of the
+//  License, or (at your option) any later version.
 
-//  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
-//  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+//  This program is distributed in the hope that it will be useful, but WITHOUT
+//  ANY WARRANTY; without even the implied warranty
+//  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+//  Public License for more details.
 
-//  You should have received a copy of the GNU General Public License along with this program.
+//  You should have received a copy of the GNU General Public License along with
+//  this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
 #include "NativeEventFilter.hpp"
 #include "DlgEditTimer.hpp"
 #include "DlgNewTimer.hpp"
+#include "SMException.hpp"
 #include "MainWindow.hpp"
-#include "TimerList.hpp"
 #include "TableItem.hpp"
-#include <QList>
 #include <QSize>
+#include <QChar>
 #include <QIcon>
 #include <QList>
-#include <QChar>
-#include <QPointer>
+#include <QList>
 #include <QToolBar>
+#include <QVariant>
+#include <QPointer>
 #include <QFileInfo>
-#include <QHeaderView>
 #include <QStringList>
+#include <QHeaderView>
+#include <QMessageBox>
 #include <QAbstractItemView>
 
 MainWindow* MainWindow::mainWindow = nullptr;
 
 MainWindow::MainWindow()
+    : hotkeyID(0)
 {
     // Install a native event filter to handle the hotkeys
     this->nativeEventFilter = new NativeEventFilter;
@@ -115,16 +123,13 @@ MainWindow::MainWindow()
     timerSelectionChanged();
 }
 
-void MainWindow::establishExternalConnections()
-{
-}
-
 MainWindow::~MainWindow()
 {
     delete this->nativeEventFilter;
     this->mainWindow = nullptr;
 }
 
+// MainWindow is a singleton
 MainWindow* MainWindow::instance()
 {
     if (mainWindow == nullptr) {
@@ -133,6 +138,16 @@ MainWindow* MainWindow::instance()
     return mainWindow;
 }
 
+// Return the timer currently selected
+Timer* MainWindow::getCurrentTimer()
+{
+    QList<QTableWidgetItem*> selection = this->timerTable->selectedItems();
+    QTableWidgetItem* item             = selection.at(DATA_COLUMN);
+    QVariant data                      = item->data(TIMER_PTR);
+    return data.value<Timer*>();
+}
+
+// Prevent a menu to pop up when right clicking the toolbar, which would allow to hide it
 QMenu* MainWindow::createPopupMenu()
 {
     return nullptr;
@@ -146,7 +161,41 @@ void MainWindow::newTimerTriggerred()
 {
     QPointer<DlgNewTimer> dlg = new DlgNewTimer(this);
     if (dlg->exec() == QDialog::Accepted) {
-        TimerList::instance()->newTimer(dlg->getFilename(), dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers());
+        Timer* timer;
+        try {
+            timer =
+                new Timer(dlg->getFilename(), dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
+            this->hotkeyID++;
+        }
+        catch (const SMException& exception) {
+            QMessageBox::critical(this, "Error", exception.getMessage(), QMessageBox::Ok);
+            return;
+        }
+
+        QString displayedStatus = tr("stopped");
+        TableItem* itemStatus   = new TableItem(displayedStatus);
+
+        QString filename      = timer->getFilename();
+        QString displayedName = QFileInfo(filename).completeBaseName();
+        TableItem* itemName   = new TableItem(displayedName);
+
+        int period              = timer->getPeriod();
+        QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
+        TableItem* itemPeriod   = new TableItem(displayedPeriod);
+
+        QKeySequence keySequence = timer->getKeySequence();
+        QString displayedHotkey  = keySequence.toString();
+        TableItem* itemHotkey    = new TableItem(displayedHotkey);
+
+        int row = this->timerTable->rowCount();
+        this->timerTable->insertRow(row);
+        this->timerTable->setItem(row, COLUMN_STATUS, itemStatus);
+        this->timerTable->setItem(row, COLUMN_NAME, itemName);
+        this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
+        this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+
+        QVariant data = QVariant::fromValue<Timer*>(timer);
+        this->timerTable->item(row, DATA_COLUMN)->setData(TIMER_PTR, data);
     }
     delete dlg;
 }
@@ -156,15 +205,34 @@ void MainWindow::editTimerTriggerred()
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
     int row                                = selectedItems.at(0)->row();
 
-    QString filename         = TimerList::instance()->getTimerFilename(row);
-    int period               = TimerList::instance()->getTimerPeriod(row);
-    QKeySequence keySequence = TimerList::instance()->getTimerKeySequence(row);
-    UINT virtualKey          = TimerList::instance()->getTimerVirtualKey(row);
-    UINT modifiers           = TimerList::instance()->getTimerModifiers(row);
+    Timer* timer             = getCurrentTimer();
+    QString filename         = timer->getFilename();
+    int period               = timer->getPeriod();
+    QKeySequence keySequence = timer->getKeySequence();
+    UINT virtualKey          = timer->getVirtualKey();
+    UINT modifiers           = timer->getModifiers();
 
     QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
     if (dlg->exec() == QDialog::Accepted) {
-        TimerList::instance()->editTimer(row, dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers());
+        try {
+            timer->setNewData(dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
+            this->hotkeyID++;
+        }
+        catch (const SMException& exception) {
+            QMessageBox::critical(this, "Error", exception.getMessage(), QMessageBox::Ok);
+            return;
+        }
+
+        int period              = timer->getPeriod();
+        QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
+        TableItem* itemPeriod   = new TableItem(displayedPeriod);
+
+        QKeySequence keySequence = timer->getKeySequence();
+        QString displayedHotkey  = keySequence.toString();
+        TableItem* itemHotkey    = new TableItem(displayedHotkey);
+
+        this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
+        this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
     }
     delete dlg;
 }
@@ -172,14 +240,29 @@ void MainWindow::editTimerTriggerred()
 void MainWindow::removeTimerTriggerred()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    int row                                = selectedItems.at(0)->row();
-    TimerList::instance()->removeTimer(row);
+    int rowToRemove                        = selectedItems.at(0)->row();
+    Timer* timer                           = getCurrentTimer();
+
+    delete timer;
+    this->timerTable->removeRow(rowToRemove);
 }
 
-//
-//  Methods triggerred by the timer list
-//
+// Called by the native event filter when a global hotkey is received
+bool MainWindow::hotkeyReceived(unsigned int id)
+{
+    for (int row = 0; row < this->timerTable->rowCount(); row++) {
+        QVariant data = this->timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR);
+        Timer* timer  = data.value<Timer*>();
 
+        if (timer->getHotkeyId() == id) {
+            timer->togglePlayStop();
+            return true;
+        }
+    }
+    return false;
+}
+
+// slot called when the selection changes in the table
 void MainWindow::timerSelectionChanged()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
@@ -193,53 +276,27 @@ void MainWindow::timerSelectionChanged()
     }
 }
 
-//
-//  Methods called by the TimerList instance
-//
-
-void MainWindow::newTimer(QString filename, int period, QKeySequence keySequence)
+// Called by the timers when their status change
+void MainWindow::setTimerStatus(Timer* timer, int status)
 {
-    QString displayedName = QFileInfo(filename).completeBaseName();
-    TableItem* itemName   = new TableItem(displayedName);
-
-    QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-    TableItem* itemPeriod   = new TableItem(displayedPeriod);
-
-    QString displayedHotkey = keySequence.toString();
-    TableItem* itemHotkey   = new TableItem(displayedHotkey);
-
-    int row = this->timerTable->rowCount();
-    this->timerTable->insertRow(row);
-    this->timerTable->setItem(row, COLUMN_NAME, itemName);
-    this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
-    this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
-}
-
-void MainWindow::editTimer(int row, int period, QKeySequence keySequence)
-{
-    QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-    TableItem* itemPeriod   = new TableItem(displayedPeriod);
-
-    QString displayedHotkey = keySequence.toString();
-    TableItem* itemHotkey   = new TableItem(displayedHotkey);
-
-    this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
-    this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
-}
-
-void MainWindow::removeTimer(int row)
-{
-    this->timerTable->removeRow(row);
-}
-
-void MainWindow::setTimerPlaying(int index)
-{
-    TableItem* item = new TableItem("playing");
-    this->timerTable->setItem(index, 0, item);
-}
-
-void MainWindow::setTimerStopped(int index)
-{
-    TableItem* item = new TableItem("stopped");
-    this->timerTable->setItem(index, 0, item);
+    for (int row = 0; row < this->timerTable->rowCount(); row++) {
+        QVariant data = this->timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR);
+        if (timer == data.value<Timer*>()) {
+            QString displayedStatus;
+            switch (status) {
+                case STATUS_STOPPED:
+                    displayedStatus = tr("stopped");
+                    break;
+                case STATUS_PLAYING:
+                    displayedStatus = tr("playing");
+                    break;
+                case STATUS_BROKEN:
+                    displayedStatus = tr("broken");
+                    break;
+                default:
+                    displayedStatus = tr("<undefined>");
+            }
+            this->timerTable->item(row, COLUMN_STATUS)->setText(displayedStatus);
+        }
+    }
 }

@@ -20,7 +20,8 @@
  *
  */
 
-class Modified : public QObject {
+class Modified : public QObject
+{
     Q_OBJECT
 
   public:

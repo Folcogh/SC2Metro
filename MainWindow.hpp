@@ -14,6 +14,7 @@
 #define MAINWINDOW_HPP
 
 #include "NativeEventFilter.hpp"
+#include "Timer.hpp"
 #include <QMenu>
 #include <QAction>
 #include <QMainWindow>
@@ -31,30 +32,30 @@
 #define COLUMN_HOTKEY 3
 #define COLUMN_COUNT 4
 
-class MainWindow : public QMainWindow {
+#define DATA_COLUMN COLUMN_NAME
+
+#define TIMER_PTR Qt::UserRole
+
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
   public:
     ~MainWindow();
     static MainWindow* instance();
-    void establishExternalConnections();
 
-    // Methods called by the TimerList instance
-    void newTimer(QString filename, int period, QKeySequence keySequence);
-    void editTimer(int row, int period, QKeySequence keySequence);
-    void removeTimer(int row);
-    void setTimerPlaying(int index);
-    void setTimerStopped(int index);
+    // Hotkey handling
+    bool hotkeyReceived(unsigned int id);
+
+    void setTimerStatus(Timer* timer, int status);
+
 
   private:
     Q_DISABLE_COPY(MainWindow)
 
     // MainWindow is a singleton
-    static MainWindow* mainWindow;
     MainWindow();
-
-    // Native event filter (for the hotkeys)
-    NativeEventFilter* nativeEventFilter;
+    static MainWindow* mainWindow;
 
     // These actions are icons in the main toolbar
     QAction* actionNewList;
@@ -78,6 +79,13 @@ class MainWindow : public QMainWindow {
 
     // Methods triggered by the table signals
     void timerSelectionChanged();
+
+    // Return the timer currently selected, or nullptr
+    Timer* getCurrentTimer();
+
+    // Hotkey handling
+    NativeEventFilter* nativeEventFilter;
+    unsigned int hotkeyID;
 };
 
 #endif // MAINWINDOW_HPP

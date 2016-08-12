@@ -102,12 +102,11 @@ UINT DlgEditTimer::getNativeModifiers() const
 // Adjust the plural of "second" when the period input is modified
 void DlgEditTimer::periodModified(int period)
 {
-    if (period == 1) {
-        this->editPeriod->setSuffix(tr(" second"));
+    QString suffix = tr(" second");
+    if (period > 1) {
+        suffix = tr(" seconds");
     }
-    else {
-        this->editPeriod->setSuffix(tr(" seconds"));
-    }
+    this->editPeriod->setSuffix(suffix);
 }
 
 // Set the OK button according to the existence of a valid hotkey

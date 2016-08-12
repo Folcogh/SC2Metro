@@ -17,6 +17,7 @@
 #include <QObject>
 #include <QString>
 #include <windows.h>
+#include <QMetaType>
 #include <QKeySequence>
 #include <QMediaPlayer>
 #include <QMediaContent>
@@ -24,19 +25,26 @@
 #define PERIOD_MIN 1
 #define PERIOD_MAX 600
 
+#define STATUS_UNDEFINED 0
+#define STATUS_STOPPED 1
+#define STATUS_PLAYING 2
+#define STATUS_BROKEN 3
+
 /*
  *  This class contains a timer, which can be started and stopped with a hotkey
  *
  */
 
-class Timer : public QObject {
+class Timer : public QObject
+{
     Q_OBJECT
 
   public:
     Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
     ~Timer();
 
-    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId);
+    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
+    void togglePlayStop();
 
     unsigned int getHotkeyId() const;
     QString getFilename() const;
@@ -44,9 +52,6 @@ class Timer : public QObject {
     QKeySequence getKeySequence() const;
     UINT getVirtualKey() const;
     UINT getModifiers() const;
-
-    void mediaStatusChanged(QMediaPlayer::MediaStatus status);
-    bool togglePlayStop(); // Return true if the player is now playing
 
   private:
     Q_DISABLE_COPY(Timer)
@@ -61,8 +66,17 @@ class Timer : public QObject {
     QMediaPlayer* player;
     QMediaContent* mediaContent;
     int hotkeyId;
+    bool alive;
 
+    void play();
+    void stop();
     void playSound();
+
+    void setBroken();
+    void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void error(QMediaPlayer::Error error);
 };
+
+Q_DECLARE_METATYPE(Timer*)
 
 #endif // TIMER_HPP

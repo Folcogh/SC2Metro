@@ -21,7 +21,8 @@
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
-class DlgEditTimer : public QDialog {
+class DlgEditTimer : public QDialog
+{
   public:
     DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, QWidget* parent = nullptr);
     ~DlgEditTimer();

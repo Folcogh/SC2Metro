@@ -1,9 +1,9 @@
 ---
 AccessModifierOffset: -2
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: true
 AlignConsecutiveAssignments: true
 AlignOperands: true
-AlignEscapedNewlinesLeft: true
+AlignEscapedNewlinesLeft: false
 AlignTrailingComments: true
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: false
@@ -14,10 +14,21 @@ AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: false
-BinPackArguments: true
-BinPackParameters: true
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping :
+ AfterClass: true
+ AfterControlStatement: false
+ AfterEnum: false
+ AfterFunction: true
+ AfterNamespace: true
+ AfterStruct: false
+ AfterUnion: false
+ BeforeCatch: true
+ BeforeElse: true
+ IndentBraces: false
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Stroustrup
+BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 ColumnLimit: 160

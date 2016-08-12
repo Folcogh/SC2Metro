@@ -3,7 +3,8 @@
 
 #include <QString>
 
-class SMException {
+class SMException
+{
   public:
     explicit SMException(QString message);
     QString getMessage() const;

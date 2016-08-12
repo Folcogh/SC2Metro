@@ -11,6 +11,7 @@
 //  If not, see <http://www.gnu.org/licenses/>.
 
 #include "SMException.hpp"
+#include "MainWindow.hpp"
 #include "Timer.hpp"
 #include <QMediaPlaylist>
 
@@ -21,7 +22,13 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     , virtualKey(virtualKey)
     , modifiers(modifiers)
     , hotkeyId(hotkeyId)
+    , alive(true)
 {
+    // Register the hotkey (add the MOD_NOREPEAT flag)
+    if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
+        throw SMException(tr("failed to register the hotkey."));
+    }
+
     // Create the player, the playlist and the media container
     this->mediaContent       = new QMediaContent(filename);
     this->player             = new QMediaPlayer(this);
@@ -36,14 +43,9 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     this->timer = new QTimer(this);
     this->timer->setInterval(period * 1000);
 
-    // Finally, register the hotkey (add the MOD_NOREPEAT flag)
-    if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
-        delete this->mediaContent;
-        delete this->timer;
-        throw SMException(tr("failed to register the hotkey"));
-    }
-
+    // Connections
     connect(this->player, &QMediaPlayer::mediaStatusChanged, this, &Timer::mediaStatusChanged);
+    connect(this->player, static_cast<void (QMediaPlayer::*)(QMediaPlayer::Error)>(&QMediaPlayer::error), this, &Timer::error);
     connect(this->timer, &QTimer::timeout, this, &Timer::playSound);
 }
 
@@ -53,22 +55,20 @@ Timer::~Timer()
     UnregisterHotKey(nullptr, this->hotkeyId);
 }
 
-void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId)
+// Method called when the timer has been edited
+void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId)
 {
     // First, try to register the new hotkey if needed
     if ((this->virtualKey != virtualKey) || (this->modifiers != modifiers)) {
         if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
-            throw SMException(tr("failed to register the hotkey"));
+            throw SMException(tr("failed to register the hotkey. No modification done."));
         }
         UnregisterHotKey(nullptr, this->hotkeyId);
         this->hotkeyId = hotkeyId;
     }
 
     bool active = this->timer->isActive();
-    if (active) {
-        this->timer->stop();
-        this->player->stop();
-    }
+    stop();
 
     timer->setInterval(period * 1000);
     this->period      = period;
@@ -77,11 +77,11 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UI
     this->modifiers   = modifiers;
 
     if (active) {
-        this->timer->start();
-        playSound();
+        play();
     }
 }
 
+// Getters
 unsigned int Timer::getHotkeyId() const
 {
     return this->hotkeyId;
@@ -112,29 +112,58 @@ UINT Timer::getModifiers() const
     return this->modifiers;
 }
 
+// Slots called when an event occurs to the player
 void Timer::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     if (status == QMediaPlayer::InvalidMedia) {
-        // TODO: disable timer, update status in the ui
+        setBroken();
     }
 }
 
-bool Timer::togglePlayStop()
+void Timer::error(QMediaPlayer::Error error)
 {
-    bool ret;
-    if (this->timer->isActive()) {
-        this->timer->stop();
-        this->player->stop();
-        ret = false;
+    if (error != QMediaPlayer::NoError) {
+        setBroken();
     }
-    else {
-        this->timer->start();
-        playSound();
-        ret = true;
-    }
-    return ret;
 }
 
+void Timer::setBroken()
+{
+    this->timer->stop();
+    this->player->stop();
+    this->alive = false;
+    MainWindow::instance()->setTimerStatus(this, STATUS_BROKEN);
+}
+
+// Slot called when the timer expires
+void Timer::togglePlayStop()
+{
+    if (this->alive) {
+        if (this->timer->isActive()) {
+            stop();
+        }
+        else {
+            play();
+        }
+    }
+}
+
+// Start and stop the Timer
+void Timer::play()
+{
+    MainWindow::instance()->setTimerStatus(this, STATUS_PLAYING);
+    this->timer->start();
+    playSound();
+}
+
+void Timer::stop()
+{
+    MainWindow::instance()->setTimerStatus(this, STATUS_STOPPED);
+    this->timer->stop();
+    this->player->stop();
+}
+
+// Play the sound, ensuring that it's stopped
 void Timer::playSound()
 {
     this->player->stop();

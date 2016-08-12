@@ -32,7 +32,8 @@
  *  without updating the TimerItem ones
  */
 
-class DlgNewTimer : public QDialog {
+class DlgNewTimer : public QDialog
+{
     Q_OBJECT
 
   public:

@@ -1,5 +1,5 @@
 #include "NativeEventFilter.hpp"
-#include "TimerList.hpp"
+#include "MainWindow.hpp"
 #include "windows.h"
 #include <QCoreApplication>
 
@@ -14,7 +14,7 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType, void* mes
     if (eventType == "windows_generic_MSG") {
         MSG* msg = static_cast<MSG*>(message);
         if (msg->message == WM_HOTKEY) {
-            return TimerList::instance()->hotkeyReceived(msg->wParam);
+            return MainWindow::instance()->hotkeyReceived(msg->wParam);
         }
     }
     return false;

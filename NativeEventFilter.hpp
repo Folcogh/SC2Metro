@@ -4,7 +4,8 @@
 #include <QByteArray>
 #include <QAbstractNativeEventFilter>
 
-class NativeEventFilter : public QAbstractNativeEventFilter {
+class NativeEventFilter : public QAbstractNativeEventFilter
+{
   public:
     NativeEventFilter();
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;

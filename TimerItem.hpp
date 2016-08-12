@@ -26,7 +26,8 @@
  *
  */
 
-class TimerItem {
+class TimerItem
+{
   public:
     TimerItem();
     explicit TimerItem(QString filename);

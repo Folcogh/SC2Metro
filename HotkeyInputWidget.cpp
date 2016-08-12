@@ -75,6 +75,7 @@ bool HotkeyInputWidget::eventFilter(QObject* object, QEvent* event)
 
         // Reset the modifiers then read them
         this->nativeModifiers = 0;
+
         if (modifiers & Qt::CTRL) {
             this->nativeModifiers |= MOD_CONTROL;
             if (key == Qt::Key_Control) {
