@@ -22,7 +22,7 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     , virtualKey(virtualKey)
     , modifiers(modifiers)
     , hotkeyId(hotkeyId)
-    , alive(true)
+    , broken(false)
 {
     // Register the hotkey (add the MOD_NOREPEAT flag)
     if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
@@ -51,8 +51,8 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
 
 Timer::~Timer()
 {
-    delete this->mediaContent;
     UnregisterHotKey(nullptr, this->hotkeyId);
+    delete this->mediaContent;
 }
 
 // Method called when the timer has been edited
@@ -127,18 +127,23 @@ void Timer::error(QMediaPlayer::Error error)
     }
 }
 
+bool Timer::isBroken() const
+{
+    return this->broken;
+}
+
 void Timer::setBroken()
 {
     this->timer->stop();
     this->player->stop();
-    this->alive = false;
+    this->broken = true;
     MainWindow::instance()->setTimerStatus(this, STATUS_BROKEN);
 }
 
-// Slot called when the timer expires
+// Triggerred when the hotkey is pressed
 void Timer::togglePlayStop()
 {
-    if (this->alive) {
+    if (!this->broken) {
         if (this->timer->isActive()) {
             stop();
         }

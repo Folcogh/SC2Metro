@@ -125,7 +125,16 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    // First, delete the event filter to disable all the hotkeys at once
     delete this->nativeEventFilter;
+
+    // Remove all the timers
+    for (int row = 0; row < this->timerTable->rowCount(); row++) {
+        Timer* timer = getTimer(row);
+        delete timer;
+    }
+
+    // Safety: set the singleton ptr to null
     this->mainWindow = nullptr;
 }
 
@@ -145,6 +154,22 @@ Timer* MainWindow::getCurrentTimer()
     QTableWidgetItem* item             = selection.at(DATA_COLUMN);
     QVariant data                      = item->data(TIMER_PTR);
     return data.value<Timer*>();
+}
+
+// Return the timer of a row
+Timer* MainWindow::getTimer(int row)
+{
+    QTableWidgetItem* item = this->timerTable->item(row, DATA_COLUMN);
+    QVariant data          = item->data(TIMER_PTR);
+    Timer* timer           = data.value<Timer*>();
+    return timer;
+}
+
+// Return the current row
+int MainWindow::getCurrentRow()
+{
+    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
+    return selectedItems.at(0)->row();
 }
 
 // Prevent a menu to pop up when right clicking the toolbar, which would allow to hide it
@@ -168,12 +193,12 @@ void MainWindow::newTimerTriggerred()
             this->hotkeyID++;
         }
         catch (const SMException& exception) {
-            QMessageBox::critical(this, "Error", exception.getMessage(), QMessageBox::Ok);
+            QString message = QString(tr("Couldn't create the timer: %1")).arg(exception.getMessage());
+            QMessageBox::critical(this, "Error", message, QMessageBox::Ok);
             return;
         }
 
-        QString displayedStatus = tr("stopped");
-        TableItem* itemStatus   = new TableItem(displayedStatus);
+        TableItem* itemStatus = new TableItem(QString());
 
         QString filename      = timer->getFilename();
         QString displayedName = QFileInfo(filename).completeBaseName();
@@ -196,51 +221,58 @@ void MainWindow::newTimerTriggerred()
 
         QVariant data = QVariant::fromValue<Timer*>(timer);
         this->timerTable->item(row, DATA_COLUMN)->setData(TIMER_PTR, data);
+
+        setTimerStatus(timer, STATUS_STOPPED);
     }
     delete dlg;
 }
 
 void MainWindow::editTimerTriggerred()
 {
-    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    int row                                = selectedItems.at(0)->row();
+    Timer* timer = getCurrentTimer();
 
-    Timer* timer             = getCurrentTimer();
-    QString filename         = timer->getFilename();
-    int period               = timer->getPeriod();
-    QKeySequence keySequence = timer->getKeySequence();
-    UINT virtualKey          = timer->getVirtualKey();
-    UINT modifiers           = timer->getModifiers();
-
-    QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
-    if (dlg->exec() == QDialog::Accepted) {
-        try {
-            timer->setNewData(dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
-            this->hotkeyID++;
-        }
-        catch (const SMException& exception) {
-            QMessageBox::critical(this, "Error", exception.getMessage(), QMessageBox::Ok);
-            return;
-        }
-
-        int period              = timer->getPeriod();
-        QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-        TableItem* itemPeriod   = new TableItem(displayedPeriod);
-
-        QKeySequence keySequence = timer->getKeySequence();
-        QString displayedHotkey  = keySequence.toString();
-        TableItem* itemHotkey    = new TableItem(displayedHotkey);
-
-        this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
-        this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+    // Prevent the user to edit the timer if its media is broken
+    if (timer->isBroken()) {
+        QMessageBox::warning(this, tr("Error"), tr("This timer can't be modified because it's broken"), QMessageBox::Ok);
     }
-    delete dlg;
+    else {
+        QString filename         = timer->getFilename();
+        int period               = timer->getPeriod();
+        QKeySequence keySequence = timer->getKeySequence();
+        UINT virtualKey          = timer->getVirtualKey();
+        UINT modifiers           = timer->getModifiers();
+
+        QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
+        if (dlg->exec() == QDialog::Accepted) {
+            try {
+                timer->setNewData(dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
+                this->hotkeyID++;
+            }
+            catch (const SMException& exception) {
+                QString message = QString(tr("Couldn't modify the timer: %1")).arg(exception.getMessage());
+                QMessageBox::critical(this, "Error", message, QMessageBox::Ok);
+                return;
+            }
+
+            int period              = timer->getPeriod();
+            QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
+            TableItem* itemPeriod   = new TableItem(displayedPeriod);
+
+            QKeySequence keySequence = timer->getKeySequence();
+            QString displayedHotkey  = keySequence.toString();
+            TableItem* itemHotkey    = new TableItem(displayedHotkey);
+
+            int row = getCurrentRow();
+            this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
+            this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+        }
+        delete dlg;
+    }
 }
 
 void MainWindow::removeTimerTriggerred()
 {
-    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    int rowToRemove                        = selectedItems.at(0)->row();
+    int rowToRemove = getCurrentRow();
     Timer* timer                           = getCurrentTimer();
 
     delete timer;
@@ -251,18 +283,18 @@ void MainWindow::removeTimerTriggerred()
 bool MainWindow::hotkeyReceived(unsigned int id)
 {
     for (int row = 0; row < this->timerTable->rowCount(); row++) {
-        QVariant data = this->timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR);
-        Timer* timer  = data.value<Timer*>();
-
+        Timer* timer = getTimer(row);
         if (timer->getHotkeyId() == id) {
-            timer->togglePlayStop();
+            if (!timer->isBroken()) {
+                timer->togglePlayStop();
+            }
             return true;
         }
     }
     return false;
 }
 
-// slot called when the selection changes in the table
+// Slot called when the selection changes in the table
 void MainWindow::timerSelectionChanged()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
@@ -280,8 +312,8 @@ void MainWindow::timerSelectionChanged()
 void MainWindow::setTimerStatus(Timer* timer, int status)
 {
     for (int row = 0; row < this->timerTable->rowCount(); row++) {
-        QVariant data = this->timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR);
-        if (timer == data.value<Timer*>()) {
+        Timer* candidateTimer = getTimer(row);
+        if (timer == candidateTimer) {
             QString displayedStatus;
             switch (status) {
                 case STATUS_STOPPED:

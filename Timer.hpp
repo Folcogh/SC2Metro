@@ -52,6 +52,7 @@ class Timer : public QObject
     QKeySequence getKeySequence() const;
     UINT getVirtualKey() const;
     UINT getModifiers() const;
+    bool isBroken() const;
 
   private:
     Q_DISABLE_COPY(Timer)
@@ -66,7 +67,7 @@ class Timer : public QObject
     QMediaPlayer* player;
     QMediaContent* mediaContent;
     int hotkeyId;
-    bool alive;
+    bool broken;
 
     void play();
     void stop();

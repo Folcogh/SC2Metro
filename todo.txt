@@ -6,12 +6,11 @@
 - for HotkeyInputWidget, use a stacked widget {QKeySequence/QPushButton} to display the modifiers when no virtual key is typed yet ?
 - GPLize the sources
 - check: constness, q_disable_copy
-- add an help in the DlgNewTimer/DlgEditTimer for the hotkey
 - better adjustement of the columns size
 - create a widget for the key tooltip/invalid hotkey message
 - remove "qrc:/" prefix in DlgEditTimer
+- complete exception messages
 
 
-
-- Crédits :
+- Credits :
 Zerosquare, KK, Fantasque (icon font)

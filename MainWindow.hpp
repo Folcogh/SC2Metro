@@ -46,9 +46,7 @@ class MainWindow : public QMainWindow
 
     // Hotkey handling
     bool hotkeyReceived(unsigned int id);
-
     void setTimerStatus(Timer* timer, int status);
-
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -80,8 +78,10 @@ class MainWindow : public QMainWindow
     // Methods triggered by the table signals
     void timerSelectionChanged();
 
-    // Return the timer currently selected, or nullptr
+    // Timer getters
     Timer* getCurrentTimer();
+    Timer* getTimer(int row);
+    int getCurrentRow();
 
     // Hotkey handling
     NativeEventFilter* nativeEventFilter;
