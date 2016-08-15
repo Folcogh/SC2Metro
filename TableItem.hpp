@@ -1,4 +1,4 @@
-//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
 //  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License

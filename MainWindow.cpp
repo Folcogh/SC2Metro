@@ -1,4 +1,4 @@
-//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
 //  This program is free software: you can redistribute it and/or modify it
@@ -21,6 +21,7 @@
 #include "SMException.hpp"
 #include "MainWindow.hpp"
 #include "TableItem.hpp"
+#include "DlgMisc.hpp"
 #include <QSize>
 #include <QChar>
 #include <QIcon>
@@ -38,7 +39,7 @@
 MainWindow* MainWindow::mainWindow = nullptr;
 
 MainWindow::MainWindow()
-    : hotkeyID(0)
+    : hotkeyID(1)
 {
     // Install a native event filter to handle the hotkeys
     this->nativeEventFilter = new NativeEventFilter;
@@ -114,6 +115,7 @@ MainWindow::MainWindow()
     connect(this->actionNewTimer, &QAction::triggered, this, &MainWindow::newTimerTriggerred);
     connect(this->actionEditTimer, &QAction::triggered, this, &MainWindow::editTimerTriggerred);
     connect(this->actionRemoveTimer, &QAction::triggered, this, &MainWindow::removeTimerTriggerred);
+    connect(this->actionMisc, &QAction::triggered, [this] { DlgMisc::showDlgMisc(this); });
 
     // Table connections
     connect(this->timerTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::timerSelectionChanged);
@@ -151,6 +153,7 @@ MainWindow* MainWindow::instance()
 //  Methods called when the toolbar actions are triggered
 //
 
+// Add a timer to the list
 void MainWindow::newTimerTriggerred()
 {
     QPointer<DlgNewTimer> dlg = new DlgNewTimer(this);
@@ -196,6 +199,7 @@ void MainWindow::newTimerTriggerred()
     delete dlg;
 }
 
+// Edit a timer of the list
 void MainWindow::editTimerTriggerred()
 {
     Timer* timer = getCurrentTimer();
@@ -239,16 +243,14 @@ void MainWindow::editTimerTriggerred()
     }
 }
 
+// Delete a timer of the list
 void MainWindow::removeTimerTriggerred()
 {
-    int rowToRemove = getCurrentRow();
-    Timer* timer                           = getCurrentTimer();
-
-    delete timer;
-    this->timerTable->removeRow(rowToRemove);
+    delete getCurrentTimer();
+    this->timerTable->removeRow(getCurrentRow());
 }
 
-// Slot called when the selection changes in the table
+// Slot called when the selection changes in the table. Update the available actions according to the selection
 void MainWindow::timerSelectionChanged()
 {
     QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();

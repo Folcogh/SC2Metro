@@ -8,6 +8,7 @@ NativeEventFilter::NativeEventFilter()
     QCoreApplication::instance()->installNativeEventFilter(this);
 }
 
+// Receive native Windows event and emit a message containing the hotkey ID
 bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
 {
     (void)result;

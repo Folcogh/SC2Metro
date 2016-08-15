@@ -1,4 +1,4 @@
-//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
 //  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -19,10 +19,12 @@ HotkeyInputWidget::HotkeyInputWidget()
     , nativeModifiers(0)
 {
     this->installEventFilter(this);
-    connect(this, &QKeySequenceEdit::editingFinished, [=]() { setKeySequence(keySequence()[0]); });
 }
 
-HotkeyInputWidget::~HotkeyInputWidget() {}
+HotkeyInputWidget::~HotkeyInputWidget()
+{
+}
+
 void HotkeyInputWidget::setHotkey(QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers)
 {
     this->nativeVirtualKey = nativeVirtualKey;

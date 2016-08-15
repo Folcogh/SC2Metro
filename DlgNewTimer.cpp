@@ -1,4 +1,4 @@
-//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
 //  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -26,6 +26,9 @@ QString DlgNewTimer::previousPath = QDir::homePath();
 DlgNewTimer::DlgNewTimer(QWidget* parent)
     : QDialog(parent)
 {
+    // Remove the '?' button
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     // Build the form layout which contains input widgets
     this->timerList  = new QComboBox;
     this->editPeriod = new QSpinBox;

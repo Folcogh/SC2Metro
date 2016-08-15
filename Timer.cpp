@@ -1,4 +1,4 @@
-//  SC2 Metronome, a tool for improving mechanics in StarCraft 2(TM)
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
 //  Copyright (C) 2016 Martial Demolins AKA Folco
 
 //  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
@@ -68,15 +68,18 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UI
         this->hotkeyId = hotkeyId;
     }
 
+    // Stop the timer if it's currently active
     bool active = this->timer->isActive();
     stop();
 
+    // Update timer's data
     timer->setInterval(period * 1000);
     this->period      = period;
     this->keySequence = keySequence;
     this->virtualKey  = virtualKey;
     this->modifiers   = modifiers;
 
+    // Enable the timer if it was previously active
     if (active) {
         play();
     }
@@ -100,6 +103,7 @@ void Timer::error(QMediaPlayer::Error error)
 
 void Timer::setBroken()
 {
+    // Disconnect the timer from the hotkey handler and stop it
     disconnect(MainWindow::instance()->getNativeEventFilter(), &NativeEventFilter::hotkeyReceived, this, &Timer::togglePlayStop);
     this->broken = true;
     this->timer->stop();

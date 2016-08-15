@@ -1,0 +1,27 @@
+SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
+Copyright (C) 2016 Martial Demolins AKA Folco
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+*************************************************************
+
+
+The Fantasque Sans Mono font, used for the toolbar icons, is Copyright (C) 2013-2016 Jany Belluz, and licensed under the SIL Open Font License terms. See https://github.com/belluzj/fantasque-sans for more informations.
+
+
+*************************************************************
+
+
+StarCraft(R) (C)1998 Blizzard Entertainment, Inc. All rights reserved. StarCraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.
+
+Blizzard Entertainment(R) Blizzard Entertainment is a trademark or registered trademark of Blizzard Entertainment, Inc. in the U.S. and/or other countries. All rights reserved.
+
+More details about Blizzard Entertainment(R) licenses here: http://us.blizzard.com/en-us/company/about/legal-faq.html
+
+
+(ps: hey Blizzard, "StarCraft(R) II" or "StarCraft(R) II : Legacy of the Void" lack in your legal FAQ ! See http://us.blizzard.com/en-us/company/about/copyrightnotices.html)

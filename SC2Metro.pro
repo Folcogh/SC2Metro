@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     HotkeyInputWidget.cpp \
     TimerItem.cpp \
     NativeEventFilter.cpp \
-    DlgEditTimer.cpp
+    DlgEditTimer.cpp \
+    DlgMisc.cpp
 
 HEADERS  += MainWindow.hpp \
     Timer.hpp \
@@ -33,11 +34,13 @@ HEADERS  += MainWindow.hpp \
     SC2Metro.hpp \
     SMException.hpp \
     NativeEventFilter.hpp \
-    DlgEditTimer.hpp
+    DlgEditTimer.hpp \
+    DlgMisc.hpp
 
 RESOURCES += \
     icon64.qrc \
-    builtinsound.qrc
+    builtinsound.qrc \
+    texts.qrc
 
 DISTFILES += \
     Todo.txt \
