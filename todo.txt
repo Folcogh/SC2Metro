@@ -9,7 +9,6 @@
 - better adjustement of the columns size
 - create a widget for the key tooltip/invalid hotkey message
 - remove "qrc:/" prefix in DlgEditTimer
-- complete exception messages
 
 
 - Credits :

@@ -147,37 +147,6 @@ MainWindow* MainWindow::instance()
     return mainWindow;
 }
 
-// Return the timer currently selected
-Timer* MainWindow::getCurrentTimer()
-{
-    QList<QTableWidgetItem*> selection = this->timerTable->selectedItems();
-    QTableWidgetItem* item             = selection.at(DATA_COLUMN);
-    QVariant data                      = item->data(TIMER_PTR);
-    return data.value<Timer*>();
-}
-
-// Return the timer of a row
-Timer* MainWindow::getTimer(int row)
-{
-    QTableWidgetItem* item = this->timerTable->item(row, DATA_COLUMN);
-    QVariant data          = item->data(TIMER_PTR);
-    Timer* timer           = data.value<Timer*>();
-    return timer;
-}
-
-// Return the current row
-int MainWindow::getCurrentRow()
-{
-    QList<QTableWidgetItem*> selectedItems = this->timerTable->selectedItems();
-    return selectedItems.at(0)->row();
-}
-
-// Prevent a menu to pop up when right clicking the toolbar, which would allow to hide it
-QMenu* MainWindow::createPopupMenu()
-{
-    return nullptr;
-}
-
 //
 //  Methods called when the toolbar actions are triggered
 //
@@ -277,21 +246,6 @@ void MainWindow::removeTimerTriggerred()
 
     delete timer;
     this->timerTable->removeRow(rowToRemove);
-}
-
-// Called by the native event filter when a global hotkey is received
-bool MainWindow::hotkeyReceived(unsigned int id)
-{
-    for (int row = 0; row < this->timerTable->rowCount(); row++) {
-        Timer* timer = getTimer(row);
-        if (timer->getHotkeyId() == id) {
-            if (!timer->isBroken()) {
-                timer->togglePlayStop();
-            }
-            return true;
-        }
-    }
-    return false;
 }
 
 // Slot called when the selection changes in the table

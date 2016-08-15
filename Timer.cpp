@@ -47,6 +47,7 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtua
     connect(this->player, &QMediaPlayer::mediaStatusChanged, this, &Timer::mediaStatusChanged);
     connect(this->player, static_cast<void (QMediaPlayer::*)(QMediaPlayer::Error)>(&QMediaPlayer::error), this, &Timer::error);
     connect(this->timer, &QTimer::timeout, this, &Timer::playSound);
+    connect(MainWindow::instance()->getNativeEventFilter(), &NativeEventFilter::hotkeyReceived, this, &Timer::togglePlayStop);
 }
 
 Timer::~Timer()
@@ -56,7 +57,7 @@ Timer::~Timer()
 }
 
 // Method called when the timer has been edited
-void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId)
+void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId)
 {
     // First, try to register the new hotkey if needed
     if ((this->virtualKey != virtualKey) || (this->modifiers != modifiers)) {
@@ -81,36 +82,6 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UI
     }
 }
 
-// Getters
-unsigned int Timer::getHotkeyId() const
-{
-    return this->hotkeyId;
-}
-
-QString Timer::getFilename() const
-{
-    return this->filename;
-}
-
-int Timer::getPeriod() const
-{
-    return this->period;
-}
-
-QKeySequence Timer::getKeySequence() const
-{
-    return this->keySequence;
-}
-
-UINT Timer::getVirtualKey() const
-{
-    return this->virtualKey;
-}
-
-UINT Timer::getModifiers() const
-{
-    return this->modifiers;
-}
 
 // Slots called when an event occurs to the player
 void Timer::mediaStatusChanged(QMediaPlayer::MediaStatus status)
@@ -127,29 +98,20 @@ void Timer::error(QMediaPlayer::Error error)
     }
 }
 
-bool Timer::isBroken() const
-{
-    return this->broken;
-}
-
 void Timer::setBroken()
 {
+    disconnect(MainWindow::instance()->getNativeEventFilter(), &NativeEventFilter::hotkeyReceived, this, &Timer::togglePlayStop);
+    this->broken = true;
     this->timer->stop();
     this->player->stop();
-    this->broken = true;
     MainWindow::instance()->setTimerStatus(this, STATUS_BROKEN);
 }
 
 // Triggerred when the hotkey is pressed
-void Timer::togglePlayStop()
+void Timer::togglePlayStop(int hotkeyId)
 {
-    if (!this->broken) {
-        if (this->timer->isActive()) {
-            stop();
-        }
-        else {
-            play();
-        }
+    if (this->hotkeyId == hotkeyId) {
+        this->timer->isActive() ? stop() : play();
     }
 }
 

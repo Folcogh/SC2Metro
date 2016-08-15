@@ -28,10 +28,10 @@ class DlgEditTimer : public QDialog
     ~DlgEditTimer();
 
     // Getters used by the caller to retrieve user inputs
-    int getPeriod() const;
-    QKeySequence getKeySquence() const;
-    UINT getNativeVirtualKey() const;
-    UINT getNativeModifiers() const;
+    int getPeriod() const { return editPeriod->value(); }
+    QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
+    UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
+    UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
 
   private:
     Q_DISABLE_COPY(DlgEditTimer)

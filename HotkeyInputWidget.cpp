@@ -15,52 +15,24 @@
 
 // The data are initialized to 0, accordingly to an empty QKeySequenceEdit
 HotkeyInputWidget::HotkeyInputWidget()
-    : nativeModifiers(0)
-    , nativeVirtualKey(0)
+    : nativeVirtualKey(0)
+    , nativeModifiers(0)
 {
     this->installEventFilter(this);
-    connect(this, &QKeySequenceEdit::editingFinished, this, &HotkeyInputWidget::truncateHotkey);
+    connect(this, &QKeySequenceEdit::editingFinished, [=]() { setKeySequence(keySequence()[0]); });
 }
 
-HotkeyInputWidget::~HotkeyInputWidget()
-{
-}
-
-// Keep only the first item of a sequence
-void HotkeyInputWidget::truncateHotkey()
-{
-    QKeySequence firstHotkey = this->keySequence()[0];
-    setKeySequence(firstHotkey);
-}
-
-//
-// Getters
-//
-
-UINT HotkeyInputWidget::getNativeModifiers() const
-{
-    return this->nativeModifiers;
-}
-
-UINT HotkeyInputWidget::getNativeVirtualKey() const
-{
-    return this->nativeVirtualKey;
-}
-
-QKeySequence HotkeyInputWidget::getSequence() const
-{
-    return this->keySequence();
-}
-
-// Change the sequence and set the hotkeys value accordingly
-// Set the native values before the sequence, to have consistent data
-// when the keySequenceChanged signal is emitted
-void HotkeyInputWidget::setHotkey(QKeySequence sequence, UINT nativeVirtualKey, UINT nativeModifiers)
+HotkeyInputWidget::~HotkeyInputWidget() {}
+void HotkeyInputWidget::setHotkey(QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers)
 {
     this->nativeVirtualKey = nativeVirtualKey;
     this->nativeModifiers  = nativeModifiers;
-    setKeySequence(sequence);
+
+    // Set the key sequence after the native keys, to ensure consistent data
+    // when the QKeySequence::keySequenceChanged event is emitted
+    setKeySequence(keySequence);
 }
+
 
 // This keyboard event handler replaces the original one
 bool HotkeyInputWidget::eventFilter(QObject* object, QEvent* event)

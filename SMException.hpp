@@ -6,8 +6,8 @@
 class SMException
 {
   public:
-    explicit SMException(QString message);
-    QString getMessage() const;
+    explicit SMException(QString message) : message(message) {}
+    QString getMessage() const { return message; }
 
   private:
     QString message;

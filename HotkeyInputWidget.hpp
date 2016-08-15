@@ -34,20 +34,17 @@ class HotkeyInputWidget : public QKeySequenceEdit
   public:
     HotkeyInputWidget();
     ~HotkeyInputWidget();
+    void setHotkey(QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers);
 
     // Getters
-    QKeySequence getSequence() const;
-    UINT getNativeVirtualKey() const;
-    UINT getNativeModifiers() const;
-
-    // Setter used by the parent dialog to change the sequence and the native key codes accordingly
-    void setHotkey(QKeySequence sequence, UINT nativeVirtualKey, UINT nativeModifiers);
+    QKeySequence getKeySequence() const { return keySequence(); }
+    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
+    UINT getNativeModifiers() const { return nativeModifiers; }
 
   private:
     bool eventFilter(QObject* object, QEvent* event) override;
-    void truncateHotkey();
-    UINT nativeModifiers;
     UINT nativeVirtualKey;
+    UINT nativeModifiers;
 };
 
 #endif // HOTKEYINPUTWIDGET_HPP

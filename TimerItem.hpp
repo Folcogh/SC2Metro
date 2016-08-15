@@ -34,30 +34,27 @@ class TimerItem
     TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers);
 
     // Getters
-    QString getFilename() const;
-    int getPeriod() const;
-    QKeySequence getKeySequence() const;
-    UINT getNativeVirtualKey() const;
-    UINT getNativeModifiers() const;
-    QString getDisplayedName() const;
-    bool mustPromptForFile() const;
+    QString getFilename() const { return filename; }
+    int getPeriod() const { return period; }
+    QKeySequence getKeySequence() const { return keySequence; }
+    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
+    UINT getNativeModifiers() const { return nativeModifiers; }
+    bool mustPromptForFile() const { return promptForFile; }
+    QString getDisplayedName() const { return displayedName; }
 
   private:
     Q_DISABLE_COPY(TimerItem)
 
-    // Name displayed in the combo box. It's build from the file name
-    QString displayedName;
-
-    // Data of a timer
     QString filename;
     int period;
     QKeySequence keySequence;
     UINT nativeVirtualKey;
     UINT nativeModifiers;
     bool promptForFile;
+    QString displayedName;
 };
 
-// BuiltinTimerItem* may be stored as a QVariant
+// TimerItem* may be stored as a QVariant
 Q_DECLARE_METATYPE(TimerItem*)
 
 #endif // TIMERITEM_HPP

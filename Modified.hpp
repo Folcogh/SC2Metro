@@ -26,7 +26,7 @@ class Modified : public QObject
 
   public:
     Modified();
-    bool isModified() const;
+    bool isModified() const { return modified; }
     void setModified(bool modified);
 
   private:

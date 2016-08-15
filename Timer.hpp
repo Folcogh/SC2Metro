@@ -42,17 +42,15 @@ class Timer : public QObject
   public:
     Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
     ~Timer();
+    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId);
 
-    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
-    void togglePlayStop();
-
-    unsigned int getHotkeyId() const;
-    QString getFilename() const;
-    int getPeriod() const;
-    QKeySequence getKeySequence() const;
-    UINT getVirtualKey() const;
-    UINT getModifiers() const;
-    bool isBroken() const;
+    QString getFilename() const { return filename; }
+    int getPeriod() const { return period; }
+    QKeySequence getKeySequence() const { return keySequence; }
+    UINT getVirtualKey() const { return virtualKey; }
+    UINT getModifiers() const { return modifiers; }
+    unsigned int getHotkeyId() const { return hotkeyId; }
+    bool isBroken() const { return broken; }
 
   private:
     Q_DISABLE_COPY(Timer)
@@ -62,16 +60,17 @@ class Timer : public QObject
     QKeySequence keySequence;
     UINT virtualKey;
     UINT modifiers;
+    int hotkeyId;
 
     QTimer* timer;
     QMediaPlayer* player;
     QMediaContent* mediaContent;
-    int hotkeyId;
     bool broken;
 
     void play();
     void stop();
     void playSound();
+    void togglePlayStop(int hotkeyId);
 
     void setBroken();
     void mediaStatusChanged(QMediaPlayer::MediaStatus status);

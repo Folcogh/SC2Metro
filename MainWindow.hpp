@@ -45,8 +45,8 @@ class MainWindow : public QMainWindow
     static MainWindow* instance();
 
     // Hotkey handling
-    bool hotkeyReceived(unsigned int id);
     void setTimerStatus(Timer* timer, int status);
+    NativeEventFilter* getNativeEventFilter() const { return nativeEventFilter; }
 
   private:
     Q_DISABLE_COPY(MainWindow)
@@ -65,7 +65,7 @@ class MainWindow : public QMainWindow
     QAction* actionMisc;
 
     // Prevent the toolbar to be hidden with a context menu
-    QMenu* createPopupMenu() override;
+    QMenu* createPopupMenu() override { return nullptr; }
 
     // Main widget, displaying the timers
     QTableWidget* timerTable;
@@ -78,14 +78,14 @@ class MainWindow : public QMainWindow
     // Methods triggered by the table signals
     void timerSelectionChanged();
 
-    // Timer getters
-    Timer* getCurrentTimer();
-    Timer* getTimer(int row);
-    int getCurrentRow();
+    // Convenient methods
+    Timer* getCurrentTimer() const { return timerTable->selectedItems().at(DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
+    Timer* getTimer(int row) const { return timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
+    int getCurrentRow() const { return timerTable->selectedItems().at(0)->row(); }
 
     // Hotkey handling
     NativeEventFilter* nativeEventFilter;
-    unsigned int hotkeyID;
+    int hotkeyID;
 };
 
 #endif // MAINWINDOW_HPP

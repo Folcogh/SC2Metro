@@ -43,38 +43,3 @@ TimerItem::TimerItem(QString filename, int period, QKeySequence keySequence, UIN
     QFileInfo info(filename);
     this->displayedName = info.completeBaseName();
 }
-
-QString TimerItem::getDisplayedName() const
-{
-    return this->displayedName;
-}
-
-QString TimerItem::getFilename() const
-{
-    return this->filename;
-}
-
-int TimerItem::getPeriod() const
-{
-    return this->period;
-}
-
-QKeySequence TimerItem::getKeySequence() const
-{
-    return this->keySequence;
-}
-
-UINT TimerItem::getNativeVirtualKey() const
-{
-    return this->nativeVirtualKey;
-}
-
-UINT TimerItem::getNativeModifiers() const
-{
-    return this->nativeModifiers;
-}
-
-bool TimerItem::mustPromptForFile() const
-{
-    return this->promptForFile;
-}

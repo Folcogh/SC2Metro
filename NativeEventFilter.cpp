@@ -14,7 +14,7 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType, void* mes
     if (eventType == "windows_generic_MSG") {
         MSG* msg = static_cast<MSG*>(message);
         if (msg->message == WM_HOTKEY) {
-            return MainWindow::instance()->hotkeyReceived(msg->wParam);
+            emit hotkeyReceived(msg->wParam);
         }
     }
     return false;

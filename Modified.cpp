@@ -17,11 +17,6 @@ Modified::Modified()
 {
 }
 
-bool Modified::isModified() const
-{
-    return this->modified;
-}
-
 void Modified::setModified(bool modified)
 {
     this->modified = modified;

@@ -40,27 +40,31 @@ class DlgNewTimer : public QDialog
     explicit DlgNewTimer(QWidget* parent = nullptr);
     ~DlgNewTimer();
 
-    // Method used by the constructor to fill the sound combo box
-    void addTimerItem();
-    void addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers);
-
-    // Getters used by the caller to retrieve user inputs
-    QString getFilename() const;
-    int getPeriod() const;
-    QKeySequence getKeySquence() const;
-    UINT getNativeVirtualKey() const;
-    UINT getNativeModifiers() const;
+    // Getters
+    QString getFilename() const { return getCurrentTimerItem()->getFilename(); }
+    int getPeriod() const { return editPeriod->value(); }
+    QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
+    UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
+    UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
 
   private:
     Q_DISABLE_COPY(DlgNewTimer)
 
-    // Elements of the ui which are used by some slots
+    // Method used by the constructor to fill the sound combo box
+    void addTimerItem();
+    void addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers);
+
+    // General purpose method
+    TimerItem* getCurrentTimerItem() const { return timerList->currentData().value<TimerItem*>(); }
+
+    // Widget containing user data
     QComboBox* timerList;
     QSpinBox* editPeriod;
     HotkeyInputWidget* editHotkey;
     QDialogButtonBox* buttons;
     QLabel* labelInvalidHotkey;
 
+    // Convenient storages
     int previousIndex;
     static QString previousPath;
 
@@ -68,9 +72,6 @@ class DlgNewTimer : public QDialog
     void soundModified();
     void periodModified(int period);
     void hotkeyModified();
-
-    // General purpose method
-    TimerItem* getCurrentTimerItem() const;
 };
 
 #endif // DLGNEWTIMER_HPP

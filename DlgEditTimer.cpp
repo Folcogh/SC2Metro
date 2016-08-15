@@ -67,34 +67,7 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     hotkeyModified();
 }
 
-DlgEditTimer::~DlgEditTimer()
-{
-}
-
-//
-//  Getters. Used by the caller to retrieve the user inputs
-//
-
-int DlgEditTimer::getPeriod() const
-{
-    return this->editPeriod->value();
-}
-
-QKeySequence DlgEditTimer::getKeySquence() const
-{
-    return this->editHotkey->keySequence();
-}
-
-UINT DlgEditTimer::getNativeVirtualKey() const
-{
-    return this->editHotkey->getNativeVirtualKey();
-}
-
-UINT DlgEditTimer::getNativeModifiers() const
-{
-    return this->editHotkey->getNativeModifiers();
-}
-
+DlgEditTimer::~DlgEditTimer() {}
 //
 //  Slots
 //
@@ -102,10 +75,7 @@ UINT DlgEditTimer::getNativeModifiers() const
 // Adjust the plural of "second" when the period input is modified
 void DlgEditTimer::periodModified(int period)
 {
-    QString suffix = tr(" second");
-    if (period > 1) {
-        suffix = tr(" seconds");
-    }
+    QString suffix = (period == 1 ? tr(" second") : tr(" seconds"));
     this->editPeriod->setSuffix(suffix);
 }
 

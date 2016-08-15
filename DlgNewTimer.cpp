@@ -111,47 +111,6 @@ void DlgNewTimer::addTimerItem(QString file, int period, int keys, UINT nativeVi
     this->timerList->addItem(displayedName, data);
 }
 
-//
-//  General methods
-//
-
-// Return the current item of the sound list
-TimerItem* DlgNewTimer::getCurrentTimerItem() const
-{
-    QVariant data = this->timerList->currentData();
-    return data.value<TimerItem*>();
-}
-
-//
-//  Getters. Used by the caller to retrieve the user inputs
-//
-
-QString DlgNewTimer::getFilename() const
-{
-    QVariant data        = this->timerList->currentData();
-    TimerItem* timerItem = data.value<TimerItem*>();
-    return timerItem->getFilename();
-}
-
-int DlgNewTimer::getPeriod() const
-{
-    return this->editPeriod->value();
-}
-
-QKeySequence DlgNewTimer::getKeySquence() const
-{
-    return this->editHotkey->keySequence();
-}
-
-UINT DlgNewTimer::getNativeVirtualKey() const
-{
-    return this->editHotkey->getNativeVirtualKey();
-}
-
-UINT DlgNewTimer::getNativeModifiers() const
-{
-    return this->editHotkey->getNativeModifiers();
-}
 
 //
 //  Slots

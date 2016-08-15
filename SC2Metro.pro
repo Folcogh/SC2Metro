@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     DlgNewTimer.cpp \
     HotkeyInputWidget.cpp \
     TimerItem.cpp \
-    SMException.cpp \
     NativeEventFilter.cpp \
     DlgEditTimer.cpp
 
