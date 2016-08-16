@@ -51,14 +51,14 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     this->editPeriod->setAlignment(Qt::AlignHCenter);
 
     // Create and add the items in the sound list
-    addTimerItem("qrc:/sounds/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, 0x4D, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, 0x53, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, 0x52, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, 0x50, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, 0x43, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, 0x49, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, 0x57, MOD_ALT + MOD_SHIFT);
-    addTimerItem("qrc:/sounds/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, 0x4C, MOD_ALT + MOD_SHIFT);
+    addTimerItem("qrc:/sounds/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, MOD_ALT + MOD_SHIFT, 0x4D);
+    addTimerItem("qrc:/sounds/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, MOD_ALT + MOD_SHIFT, 0x53);
+    addTimerItem("qrc:/sounds/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, MOD_ALT + MOD_SHIFT, 0x52);
+    addTimerItem("qrc:/sounds/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, MOD_ALT + MOD_SHIFT, 0x50);
+    addTimerItem("qrc:/sounds/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, MOD_ALT + MOD_SHIFT, 0x43);
+    addTimerItem("qrc:/sounds/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, MOD_ALT + MOD_SHIFT, 0x49);
+    addTimerItem("qrc:/sounds/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, MOD_ALT + MOD_SHIFT, 0x57);
+    addTimerItem("qrc:/sounds/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, MOD_ALT + MOD_SHIFT, 0x4C);
     addTimerItem();
 
     // Finalize the ui setup by placing the elements and adjusting their size

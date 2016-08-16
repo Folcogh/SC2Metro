@@ -37,8 +37,8 @@ class HotkeyInputWidget : public QKeySequenceEdit
 
     // Getters
     QKeySequence getKeySequence() const { return keySequence(); }
-    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
     UINT getNativeModifiers() const { return nativeModifiers; }
+    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
 
   private:
     bool eventFilter(QObject* object, QEvent* event) override;

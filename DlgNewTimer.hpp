@@ -43,8 +43,8 @@ class DlgNewTimer : public QDialog
     QString getFilename() const { return getCurrentTimerItem()->getFilename(); }
     int getPeriod() const { return editPeriod->value(); }
     QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
-    UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
     UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
+    UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
 
   private:
     Q_DISABLE_COPY(DlgNewTimer)

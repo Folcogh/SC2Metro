@@ -66,6 +66,10 @@ class MainWindow : public QMainWindow
     // Prevent the toolbar to be hidden with a context menu
     QMenu* createPopupMenu() override { return nullptr; }
 
+    // Slot triggered to update the main window title
+    void updateWindowTitle();
+    void clearList();
+
     // Methods triggered by the table signals
     void timerSelectionChanged();
 

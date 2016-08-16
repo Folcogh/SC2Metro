@@ -76,8 +76,8 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT modifiers, UIN
     timer->setInterval(period * 1000);
     this->period      = period;
     this->keySequence = keySequence;
-    this->virtualKey  = virtualKey;
     this->modifiers   = modifiers;
+    this->virtualKey  = virtualKey;
 
     // Enable the timer if it was previously active
     if (active) {

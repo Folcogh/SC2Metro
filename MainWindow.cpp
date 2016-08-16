@@ -129,9 +129,12 @@ MainWindow::MainWindow()
     connect(this->timerTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::timerSelectionChanged);
     connect(this->timerTable, &QTableWidget::itemDoubleClicked, this, &MainWindow::editTimerTriggerred);
 
+    // Window title update
+    connect(&this->modified, &Modified::changed, this, &MainWindow::updateWindowTitle);
+
     // Trigger some slots to have a consistent interface
     timerSelectionChanged();
-    // updateWindowTitle();
+    updateWindowTitle();
 }
 
 MainWindow::~MainWindow()
@@ -151,6 +154,21 @@ MainWindow* MainWindow::instance()
     return mainWindow;
 }
 
+void MainWindow::updateWindowTitle()
+{
+    QString title(MAINWINDOW_TITLE " - ");
+    if (this->currentFilename.isEmpty()) {
+        title.append(tr("<Unsaved list>"));
+    }
+    else {
+        title.append(this->currentFilename);
+    }
+    if (this->modified.isModified()) {
+        title.append(QChar('*'));
+    }
+    setWindowTitle(title);
+}
+
 //
 //  Methods called when the toolbar actions are triggered
 //
@@ -160,10 +178,7 @@ void MainWindow::newListTriggerred()
     if (this->modified.isModified() && promptForSaving() && promptForFilename() && !save()) {
         return;
     }
-    deleteAllTimers();
-    this->timerTable->clearContents();
-    this->currentFilename.clear();
-    this->modified.setModified(false);
+    clearList();
 }
 
 void MainWindow::openListTriggerred()
@@ -178,6 +193,9 @@ void MainWindow::openListTriggerred()
         return;
     }
     this->previousPath = QFileInfo(filename).absolutePath();
+
+    // Clear the editor
+    clearList();
 
     // Open the file
     QFile file(filename);
@@ -206,10 +224,19 @@ void MainWindow::openListTriggerred()
         catch (const SMException& exception) {
             QString message = tr("Couldn't create the timer: %1").arg(exception.getMessage());
             QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+            continue;
         }
-
         addTimerToTable(timer);
     }
+
+    if (stream.status() != QDataStream::Ok) {
+        QString message = tr("An error occured while reading the file %1.").arg(this->currentFilename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+    }
+
+    // Update manually the window title, because if the file is empty, the Modified signal won't be triggerred
+    this->currentFilename = filename;
+    updateWindowTitle();
 }
 
 // Add a timer to the list
@@ -230,6 +257,7 @@ void MainWindow::newTimerTriggerred()
         }
 
         addTimerToTable(timer);
+        this->modified.setModified(true);
     }
     delete dlg;
 }
@@ -273,6 +301,8 @@ void MainWindow::editTimerTriggerred()
             int row = getCurrentRow();
             this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
             this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+
+            this->modified.setModified(true);
         }
         delete dlg;
     }
@@ -283,6 +313,7 @@ void MainWindow::removeTimerTriggerred()
 {
     delete getCurrentTimer();
     this->timerTable->removeRow(getCurrentRow());
+    this->modified.setModified(true);
 }
 
 //
@@ -351,6 +382,7 @@ bool MainWindow::promptForFilename()
         if (filename.isEmpty()) {
             return false;
         }
+        this->currentFilename = filename;
         this->previousPath = QFileInfo(filename).absolutePath();
     }
     return true;
@@ -379,6 +411,7 @@ bool MainWindow::save()
         return false;
     }
 
+    this->modified.setModified(false);
     return true;
 }
 
@@ -409,4 +442,13 @@ void MainWindow::addTimerToTable(Timer* timer)
     this->timerTable->item(row, DATA_COLUMN)->setData(TIMER_PTR, data);
 
     setTimerStatus(timer, STATUS_STOPPED);
+}
+
+void MainWindow::clearList()
+{
+    deleteAllTimers();
+    this->timerTable->clearContents();
+    this->timerTable->setRowCount(0);
+    this->currentFilename.clear();
+    this->modified.setModified(false);
 }

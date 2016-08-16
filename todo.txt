@@ -10,6 +10,7 @@
 - create a widget for the key tooltip/invalid hotkey message
 - remove "qrc:/" prefix in DlgEditTimer
 - derive QDialog to remove systematically the '?' button
+- intercept QCloseEvent of MainWindow
 
 
 - Credits :
