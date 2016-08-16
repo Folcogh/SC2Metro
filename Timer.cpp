@@ -15,12 +15,12 @@
 #include "Timer.hpp"
 #include <QMediaPlaylist>
 
-Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId)
+Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId)
     : filename(filename)
     , period(period)
     , keySequence(keySequence)
-    , virtualKey(virtualKey)
     , modifiers(modifiers)
+    , virtualKey(virtualKey)
     , hotkeyId(hotkeyId)
     , broken(false)
 {
@@ -57,7 +57,7 @@ Timer::~Timer()
 }
 
 // Method called when the timer has been edited
-void Timer::setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId)
+void Timer::setNewData(int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, int hotkeyId)
 {
     // First, try to register the new hotkey if needed
     if ((this->virtualKey != virtualKey) || (this->modifiers != modifiers)) {

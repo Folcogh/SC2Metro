@@ -16,9 +16,9 @@
 #include "HotkeyInputWidget.hpp"
 #include "TimerItem.hpp"
 #include <QLabel>
-#include <QString>
 #include <QDialog>
 #include <QObject>
+#include <QString>
 #include <QSpinBox>
 #include <QComboBox>
 #include <windows.h>
@@ -38,7 +38,6 @@ class DlgNewTimer : public QDialog
 
   public:
     explicit DlgNewTimer(QWidget* parent = nullptr);
-    ~DlgNewTimer();
 
     // Getters
     QString getFilename() const { return getCurrentTimerItem()->getFilename(); }
@@ -52,7 +51,7 @@ class DlgNewTimer : public QDialog
 
     // Method used by the constructor to fill the sound combo box
     void addTimerItem();
-    void addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers);
+    void addTimerItem(QString file, int period, int keys, UINT nativeModifiers, UINT nativeVirtualKey);
 
     // General purpose method
     TimerItem* getCurrentTimerItem() const { return timerList->currentData().value<TimerItem*>(); }

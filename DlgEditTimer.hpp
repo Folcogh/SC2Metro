@@ -15,8 +15,8 @@
 
 #include "HotkeyInputWidget.hpp"
 #include <QLabel>
-#include <QString>
 #include <QDialog>
+#include <QString>
 #include <QSpinBox>
 #include <QKeySequence>
 #include <QDialogButtonBox>
@@ -24,8 +24,7 @@
 class DlgEditTimer : public QDialog
 {
   public:
-    DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, QWidget* parent = nullptr);
-    ~DlgEditTimer();
+    DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, QWidget* parent = nullptr);
 
     // Getters used by the caller to retrieve user inputs
     int getPeriod() const { return editPeriod->value(); }

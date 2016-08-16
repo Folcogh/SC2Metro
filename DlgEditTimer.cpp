@@ -17,7 +17,7 @@
 #include <QVBoxLayout>
 #include <QKeySequenceEdit>
 
-DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, QWidget* parent)
+DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, QWidget* parent)
     : QDialog(parent)
 {
     // Remove the '?' button
@@ -47,7 +47,7 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
 
     // Set default values
     this->editPeriod->setValue(period);
-    this->editHotkey->setHotkey(keySequence, virtualKey, modifiers);
+    this->editHotkey->setHotkey(keySequence, modifiers, virtualKey);
 
     // Finalize the ui setup by placing the elements and adjusting their size
     QVBoxLayout* mainLayout = new QVBoxLayout;
@@ -70,7 +70,6 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     hotkeyModified();
 }
 
-DlgEditTimer::~DlgEditTimer() {}
 //
 //  Slots
 //

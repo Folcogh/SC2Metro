@@ -25,7 +25,6 @@ class TableItem : public QTableWidgetItem
 {
   public:
     explicit TableItem(QString text);
-    ~TableItem();
 };
 
 #endif // TABLEITEM_HPP

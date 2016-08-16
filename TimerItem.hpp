@@ -31,14 +31,14 @@ class TimerItem
   public:
     TimerItem();
     explicit TimerItem(QString filename);
-    TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers);
+    TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeModifiers, UINT nativeVirtualKey);
 
     // Getters
     QString getFilename() const { return filename; }
     int getPeriod() const { return period; }
     QKeySequence getKeySequence() const { return keySequence; }
-    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
     UINT getNativeModifiers() const { return nativeModifiers; }
+    UINT getNativeVirtualKey() const { return nativeVirtualKey; }
     bool mustPromptForFile() const { return promptForFile; }
     QString getDisplayedName() const { return displayedName; }
 
@@ -48,8 +48,8 @@ class TimerItem
     QString filename;
     int period;
     QKeySequence keySequence;
-    UINT nativeVirtualKey;
     UINT nativeModifiers;
+    UINT nativeVirtualKey;
     bool promptForFile;
     QString displayedName;
 };

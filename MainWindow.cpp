@@ -21,25 +21,30 @@
 #include "SMException.hpp"
 #include "MainWindow.hpp"
 #include "TableItem.hpp"
+#include "SC2Metro.hpp"
 #include "DlgMisc.hpp"
-#include <QSize>
+#include <QDir>
 #include <QChar>
+#include <QFile>
 #include <QIcon>
 #include <QList>
-#include <QList>
+#include <QSize>
+#include <QPointer>
 #include <QToolBar>
 #include <QVariant>
-#include <QPointer>
 #include <QFileInfo>
-#include <QStringList>
+#include <QDataStream>
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QStringList>
 #include <QAbstractItemView>
 
 MainWindow* MainWindow::mainWindow = nullptr;
 
 MainWindow::MainWindow()
     : hotkeyID(1)
+    , previousPath(QDir::homePath())
 {
     // Install a native event filter to handle the hotkeys
     this->nativeEventFilter = new NativeEventFilter;
@@ -112,6 +117,9 @@ MainWindow::MainWindow()
     setCentralWidget(this->timerTable);
 
     // Main toolbar connections
+    connect(this->actionNewList, &QAction::triggered, this, &MainWindow::newListTriggerred);
+    connect(this->actionOpenList, &QAction::triggered, this, &MainWindow::openListTriggerred);
+    connect(this->actionSaveList, &QAction::triggered, [this] { promptForFilename() && save(); });
     connect(this->actionNewTimer, &QAction::triggered, this, &MainWindow::newTimerTriggerred);
     connect(this->actionEditTimer, &QAction::triggered, this, &MainWindow::editTimerTriggerred);
     connect(this->actionRemoveTimer, &QAction::triggered, this, &MainWindow::removeTimerTriggerred);
@@ -123,20 +131,14 @@ MainWindow::MainWindow()
 
     // Trigger some slots to have a consistent interface
     timerSelectionChanged();
+    // updateWindowTitle();
 }
 
 MainWindow::~MainWindow()
 {
     // First, delete the event filter to disable all the hotkeys at once
     delete this->nativeEventFilter;
-
-    // Remove all the timers
-    for (int row = 0; row < this->timerTable->rowCount(); row++) {
-        Timer* timer = getTimer(row);
-        delete timer;
-    }
-
-    // Safety: set the singleton ptr to null
+    deleteAllTimers();
     this->mainWindow = nullptr;
 }
 
@@ -153,6 +155,63 @@ MainWindow* MainWindow::instance()
 //  Methods called when the toolbar actions are triggered
 //
 
+void MainWindow::newListTriggerred()
+{
+    if (this->modified.isModified() && promptForSaving() && promptForFilename() && !save()) {
+        return;
+    }
+    deleteAllTimers();
+    this->timerTable->clearContents();
+    this->currentFilename.clear();
+    this->modified.setModified(false);
+}
+
+void MainWindow::openListTriggerred()
+{
+    if (this->modified.isModified() && promptForSaving() && promptForFilename() && !save()) {
+        return;
+    }
+
+    // Get a filename
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open a " SHORT_NAME " file"), this->previousPath, tr(SHORT_NAME " (" LIST_FILTER ")"));
+    if (filename.isEmpty()) {
+        return;
+    }
+    this->previousPath = QFileInfo(filename).absolutePath();
+
+    // Open the file
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QString message = tr("Couldn't open the file %1.").arg(filename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+        return;
+    }
+
+    QDataStream stream(&file);
+    while (!stream.atEnd()) {
+        // Read the stream
+        QString fname;
+        int period;
+        QKeySequence keySequence;
+        UINT modifiers;
+        UINT virtualKey;
+        stream >> fname >> period >> keySequence >> modifiers >> virtualKey;
+
+        // Try to create the timer
+        Timer* timer;
+        try {
+            timer = new Timer(fname, period, keySequence, modifiers, virtualKey, this->hotkeyID);
+            this->hotkeyID++;
+        }
+        catch (const SMException& exception) {
+            QString message = tr("Couldn't create the timer: %1").arg(exception.getMessage());
+            QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+        }
+
+        addTimerToTable(timer);
+    }
+}
+
 // Add a timer to the list
 void MainWindow::newTimerTriggerred()
 {
@@ -161,40 +220,16 @@ void MainWindow::newTimerTriggerred()
         Timer* timer;
         try {
             timer =
-                new Timer(dlg->getFilename(), dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
+                new Timer(dlg->getFilename(), dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeModifiers(), dlg->getNativeVirtualKey(), this->hotkeyID);
             this->hotkeyID++;
         }
         catch (const SMException& exception) {
-            QString message = QString(tr("Couldn't create the timer: %1")).arg(exception.getMessage());
-            QMessageBox::critical(this, "Error", message, QMessageBox::Ok);
+            QString message = tr("Couldn't create the timer: %1").arg(exception.getMessage());
+            QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
             return;
         }
 
-        TableItem* itemStatus = new TableItem(QString());
-
-        QString filename      = timer->getFilename();
-        QString displayedName = QFileInfo(filename).completeBaseName();
-        TableItem* itemName   = new TableItem(displayedName);
-
-        int period              = timer->getPeriod();
-        QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
-        TableItem* itemPeriod   = new TableItem(displayedPeriod);
-
-        QKeySequence keySequence = timer->getKeySequence();
-        QString displayedHotkey  = keySequence.toString();
-        TableItem* itemHotkey    = new TableItem(displayedHotkey);
-
-        int row = this->timerTable->rowCount();
-        this->timerTable->insertRow(row);
-        this->timerTable->setItem(row, COLUMN_STATUS, itemStatus);
-        this->timerTable->setItem(row, COLUMN_NAME, itemName);
-        this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
-        this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
-
-        QVariant data = QVariant::fromValue<Timer*>(timer);
-        this->timerTable->item(row, DATA_COLUMN)->setData(TIMER_PTR, data);
-
-        setTimerStatus(timer, STATUS_STOPPED);
+        addTimerToTable(timer);
     }
     delete dlg;
 }
@@ -215,15 +250,15 @@ void MainWindow::editTimerTriggerred()
         UINT virtualKey          = timer->getVirtualKey();
         UINT modifiers           = timer->getModifiers();
 
-        QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, virtualKey, modifiers, this);
+        QPointer<DlgEditTimer> dlg = new DlgEditTimer(filename, period, keySequence, modifiers, virtualKey, this);
         if (dlg->exec() == QDialog::Accepted) {
             try {
-                timer->setNewData(dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeVirtualKey(), dlg->getNativeModifiers(), this->hotkeyID);
+                timer->setNewData(dlg->getPeriod(), dlg->getKeySquence(), dlg->getNativeModifiers(), dlg->getNativeVirtualKey(), this->hotkeyID);
                 this->hotkeyID++;
             }
             catch (const SMException& exception) {
-                QString message = QString(tr("Couldn't modify the timer: %1")).arg(exception.getMessage());
-                QMessageBox::critical(this, "Error", message, QMessageBox::Ok);
+                QString message = tr("Couldn't modify the timer: %1").arg(exception.getMessage());
+                QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
                 return;
             }
 
@@ -249,6 +284,10 @@ void MainWindow::removeTimerTriggerred()
     delete getCurrentTimer();
     this->timerTable->removeRow(getCurrentRow());
 }
+
+//
+// Misc
+//
 
 // Slot called when the selection changes in the table. Update the available actions according to the selection
 void MainWindow::timerSelectionChanged()
@@ -287,4 +326,87 @@ void MainWindow::setTimerStatus(Timer* timer, int status)
             this->timerTable->item(row, COLUMN_STATUS)->setText(displayedStatus);
         }
     }
+}
+
+void MainWindow::deleteAllTimers()
+{
+    for (int row = 0; row < this->timerTable->rowCount(); row++) {
+        Timer* timer = getTimer(row);
+        delete timer;
+    }
+}
+
+// Return true if the user wants to save the current file and defines a valid one
+bool MainWindow::promptForSaving()
+{
+    // Ask the user if he wants to save the current list
+    int answer = QMessageBox::question(this, tr("File saving"), tr("Do you want to save the current timer list?"), QMessageBox::Yes | QMessageBox::No);
+    return answer == QMessageBox::Yes;
+}
+
+bool MainWindow::promptForFilename()
+{
+    if (this->currentFilename.isEmpty()) {
+        QString filename = QFileDialog::getSaveFileName(this, tr("Save a " SHORT_NAME " file"), this->previousPath, tr(SHORT_NAME " (" LIST_FILTER ")"));
+        if (filename.isEmpty()) {
+            return false;
+        }
+        this->previousPath = QFileInfo(filename).absolutePath();
+    }
+    return true;
+}
+
+// Save the list to the current filename, rturn true if success
+bool MainWindow::save()
+{
+    // Open the file
+    QFile file(this->currentFilename);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QString message = tr("Couldn't open the file %1.").arg(this->currentFilename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+        return false;
+    }
+
+    // Write into the file
+    QDataStream stream(&file);
+    for (int row = 0; row < this->timerTable->rowCount(); row++) {
+        Timer* timer = getTimer(row);
+        stream << timer->getFilename() << timer->getPeriod() << timer->getKeySequence() << timer->getModifiers() << timer->getVirtualKey();
+    }
+    if (stream.status() != QDataStream::Ok) {
+        QString message = tr("Couldn't write into the file %1.").arg(this->currentFilename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::addTimerToTable(Timer* timer)
+{
+    TableItem* itemStatus = new TableItem(QString());
+
+    QString filename      = timer->getFilename();
+    QString displayedName = QFileInfo(filename).completeBaseName();
+    TableItem* itemName   = new TableItem(displayedName);
+
+    int period              = timer->getPeriod();
+    QString displayedPeriod = QString("%1:%2").arg(period / 60, 2, 10, QChar('0')).arg(period % 60, 2, 10, QChar('0'));
+    TableItem* itemPeriod   = new TableItem(displayedPeriod);
+
+    QKeySequence keySequence = timer->getKeySequence();
+    QString displayedHotkey  = keySequence.toString();
+    TableItem* itemHotkey    = new TableItem(displayedHotkey);
+
+    int row = this->timerTable->rowCount();
+    this->timerTable->insertRow(row);
+    this->timerTable->setItem(row, COLUMN_STATUS, itemStatus);
+    this->timerTable->setItem(row, COLUMN_NAME, itemName);
+    this->timerTable->setItem(row, COLUMN_PERIOD, itemPeriod);
+    this->timerTable->setItem(row, COLUMN_HOTKEY, itemHotkey);
+
+    QVariant data = QVariant::fromValue<Timer*>(timer);
+    this->timerTable->item(row, DATA_COLUMN)->setData(TIMER_PTR, data);
+
+    setTimerStatus(timer, STATUS_STOPPED);
 }

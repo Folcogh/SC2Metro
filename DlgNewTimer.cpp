@@ -85,10 +85,6 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     soundModified();
 }
 
-DlgNewTimer::~DlgNewTimer()
-{
-}
-
 //
 //  Methods used by the constructor
 //
@@ -104,10 +100,10 @@ void DlgNewTimer::addTimerItem()
 }
 
 // Add an item to the sound list
-void DlgNewTimer::addTimerItem(QString file, int period, int keys, UINT nativeVirtualKey, UINT nativeModifiers)
+void DlgNewTimer::addTimerItem(QString file, int period, int keys, UINT nativeModifiers, UINT nativeVirtualKey)
 {
     QKeySequence keySequence = QKeySequence(keys);
-    TimerItem* timerItem     = new TimerItem(file, period, keySequence, nativeVirtualKey, nativeModifiers);
+    TimerItem* timerItem     = new TimerItem(file, period, keySequence, nativeModifiers, nativeVirtualKey);
     QString displayedName    = timerItem->getDisplayedName();
     QVariant data            = QVariant::fromValue(timerItem);
 
@@ -156,7 +152,7 @@ void DlgNewTimer::soundModified()
     // Update the ui, save the current index and restore events handling
     TimerItem* currentItem = getCurrentTimerItem();
     this->editPeriod->setValue(currentItem->getPeriod());
-    this->editHotkey->setHotkey(currentItem->getKeySequence(), currentItem->getNativeVirtualKey(), currentItem->getNativeModifiers());
+    this->editHotkey->setHotkey(currentItem->getKeySequence(), currentItem->getNativeModifiers(), currentItem->getNativeVirtualKey());
 
     this->previousIndex = this->timerList->currentIndex();
     this->timerList->blockSignals(false);

@@ -1,18 +1,15 @@
 #include "DlgMisc.hpp"
 #include <QFile>
 #include <QPointer>
-#include <QPlainTextEdit>
 #include <QFileInfo>
 #include <QDataStream>
 #include <QHBoxLayout>
+#include <QPlainTextEdit>
 #include <QDialogButtonBox>
 
 DlgMisc::DlgMisc(QWidget* parent)
     : QDialog(parent)
 {
-    // Remove the '?' button
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
     QTabWidget* tabWidget = new QTabWidget(this);
     QDialogButtonBox* button = new QDialogButtonBox(QDialogButtonBox::Ok, this);
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
@@ -27,11 +24,9 @@ DlgMisc::DlgMisc(QWidget* parent)
 
     connect(button, &QDialogButtonBox::accepted, this, &QDialog::accept);
 
+    // Dialog setup
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setMinimumSize(480, 600);
-}
-
-DlgMisc::~DlgMisc()
-{
 }
 
 // static method which showes up the dialog
@@ -48,16 +43,18 @@ void DlgMisc::createPageWithText(QTabWidget* tabWidget, QString filename)
     QFile file(filename);
     file.open(QIODevice::ReadOnly);
 
-    // Create a buffer to read the file
+    // Create a buffer to read the file, ensure that is has a terminal 0
+    // Debug: add one byte, to ensure that the allocation is really performed (used when the files were still empty)
     qint64 length = file.size();
-    char* buffer = new char[length];
+    char* buffer = new char[length + 1];
+    buffer[length] = 0;
 
     // Create a stream to read the file
     QDataStream stream(&file);
     stream.readRawData(buffer, length);
 
     // Create the edit widget which contains the text
-    QPlainTextEdit* textEdit = new QPlainTextEdit(buffer);
+    QPlainTextEdit* textEdit = new QPlainTextEdit(buffer, tabWidget);
     textEdit->setReadOnly(true);
 
     //Create the title based on the file name

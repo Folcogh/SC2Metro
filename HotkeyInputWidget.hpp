@@ -33,8 +33,7 @@ class HotkeyInputWidget : public QKeySequenceEdit
 
   public:
     HotkeyInputWidget();
-    ~HotkeyInputWidget();
-    void setHotkey(QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers);
+    void setHotkey(QKeySequence keySequence, UINT nativeModifiers, UINT nativeVirtualKey);
 
     // Getters
     QKeySequence getKeySequence() const { return keySequence(); }

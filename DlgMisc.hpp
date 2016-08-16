@@ -11,7 +11,6 @@ class DlgMisc : public QDialog
 
     private:
         explicit DlgMisc(QWidget* parent);
-        ~DlgMisc();
         void createPageWithText(QTabWidget* tabWidget, QString filename);
 };
 

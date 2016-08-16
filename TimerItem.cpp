@@ -18,8 +18,8 @@ TimerItem::TimerItem()
     : filename(QString())
     , period(0)
     , keySequence(QKeySequence())
-    , nativeVirtualKey(0)
     , nativeModifiers(0)
+    , nativeVirtualKey(0)
     , promptForFile(true)
 {
     this->displayedName = QObject::tr("<Custom...>");
@@ -32,12 +32,12 @@ TimerItem::TimerItem(QString filename)
 }
 
 // Create an item with all values defined. Used for builtin items
-TimerItem::TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers)
+TimerItem::TimerItem(QString filename, int period, QKeySequence keySequence, UINT nativeModifiers, UINT nativeVirtualKey)
     : filename(filename)
     , period(period)
     , keySequence(keySequence)
-    , nativeVirtualKey(nativeVirtualKey)
     , nativeModifiers(nativeModifiers)
+    , nativeVirtualKey(nativeVirtualKey)
     , promptForFile(false)
 {
     QFileInfo info(filename);

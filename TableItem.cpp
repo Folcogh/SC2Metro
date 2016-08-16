@@ -19,7 +19,3 @@ TableItem::TableItem(QString text)
     // Center the items in the cell
     setTextAlignment(Qt::AlignCenter);
 }
-
-TableItem::~TableItem()
-{
-}

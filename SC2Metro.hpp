@@ -23,6 +23,7 @@
 #define BUILTIN_TAG " (builtin)"
 
 #define VERSION 2
+#define SHORT_NAME "SC2Metro"
 #define MAINWINDOW_TITLE "SC2 Metronome"
 
 #endif // SC2METRO_HPP

@@ -1,5 +1,4 @@
 #include "NativeEventFilter.hpp"
-#include "MainWindow.hpp"
 #include "windows.h"
 #include <QCoreApplication>
 

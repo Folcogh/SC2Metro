@@ -16,8 +16,8 @@
 #include <QTimer>
 #include <QObject>
 #include <QString>
-#include <windows.h>
 #include <QMetaType>
+#include <windows.h>
 #include <QKeySequence>
 #include <QMediaPlayer>
 #include <QMediaContent>
@@ -40,15 +40,15 @@ class Timer : public QObject
     Q_OBJECT
 
   public:
-    Timer(QString filename, int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, unsigned int hotkeyId);
+    Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId);
     ~Timer();
-    void setNewData(int period, QKeySequence keySequence, UINT virtualKey, UINT modifiers, int hotkeyId);
+    void setNewData(int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, int hotkeyId);
 
     QString getFilename() const { return filename; }
     int getPeriod() const { return period; }
     QKeySequence getKeySequence() const { return keySequence; }
-    UINT getVirtualKey() const { return virtualKey; }
     UINT getModifiers() const { return modifiers; }
+    UINT getVirtualKey() const { return virtualKey; }
     unsigned int getHotkeyId() const { return hotkeyId; }
     bool isBroken() const { return broken; }
 
@@ -58,8 +58,8 @@ class Timer : public QObject
     QString filename;
     int period;
     QKeySequence keySequence;
-    UINT virtualKey;
     UINT modifiers;
+    UINT virtualKey;
     int hotkeyId;
 
     QTimer* timer;

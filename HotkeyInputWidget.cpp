@@ -21,14 +21,10 @@ HotkeyInputWidget::HotkeyInputWidget()
     this->installEventFilter(this);
 }
 
-HotkeyInputWidget::~HotkeyInputWidget()
+void HotkeyInputWidget::setHotkey(QKeySequence keySequence, UINT nativeModifiers, UINT nativeVirtualKey)
 {
-}
-
-void HotkeyInputWidget::setHotkey(QKeySequence keySequence, UINT nativeVirtualKey, UINT nativeModifiers)
-{
-    this->nativeVirtualKey = nativeVirtualKey;
     this->nativeModifiers  = nativeModifiers;
+    this->nativeVirtualKey = nativeVirtualKey;
 
     // Set the key sequence after the native keys, to ensure consistent data
     // when the QKeySequence::keySequenceChanged event is emitted

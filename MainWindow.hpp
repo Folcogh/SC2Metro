@@ -14,6 +14,7 @@
 #define MAINWINDOW_HPP
 
 #include "NativeEventFilter.hpp"
+#include "Modified.hpp"
 #include "Timer.hpp"
 #include <QMenu>
 #include <QAction>
@@ -43,8 +44,6 @@ class MainWindow : public QMainWindow
   public:
     ~MainWindow();
     static MainWindow* instance();
-
-    // Hotkey handling
     void setTimerStatus(Timer* timer, int status);
     NativeEventFilter* getNativeEventFilter() const { return nativeEventFilter; }
 
@@ -55,6 +54,28 @@ class MainWindow : public QMainWindow
     MainWindow();
     static MainWindow* mainWindow;
 
+    // Convenient methods
+    Timer* getCurrentTimer() const { return timerTable->selectedItems().at(DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
+    Timer* getTimer(int row) const { return timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
+    int getCurrentRow() const { return timerTable->selectedItems().at(0)->row(); }
+    void deleteAllTimers();
+    bool promptForSaving();
+    bool promptForFilename();
+    void addTimerToTable(Timer* timer);
+
+    // Prevent the toolbar to be hidden with a context menu
+    QMenu* createPopupMenu() override { return nullptr; }
+
+    // Methods triggered by the table signals
+    void timerSelectionChanged();
+
+    // Methods called when the actions in the toolbar are triggerred
+    void newListTriggerred();
+    void openListTriggerred();
+    void newTimerTriggerred();
+    void editTimerTriggerred();
+    void removeTimerTriggerred();
+
     // These actions are icons in the main toolbar
     QAction* actionNewList;
     QAction* actionOpenList;
@@ -64,28 +85,18 @@ class MainWindow : public QMainWindow
     QAction* actionRemoveTimer;
     QAction* actionMisc;
 
-    // Prevent the toolbar to be hidden with a context menu
-    QMenu* createPopupMenu() override { return nullptr; }
-
     // Main widget, displaying the timers
     QTableWidget* timerTable;
-
-    // Methods called when the actions in the toolbar are triggerred*
-    void newTimerTriggerred();
-    void editTimerTriggerred();
-    void removeTimerTriggerred();
-
-    // Methods triggered by the table signals
-    void timerSelectionChanged();
-
-    // Convenient methods
-    Timer* getCurrentTimer() const { return timerTable->selectedItems().at(DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
-    Timer* getTimer(int row) const { return timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
-    int getCurrentRow() const { return timerTable->selectedItems().at(0)->row(); }
 
     // Hotkey handling
     NativeEventFilter* nativeEventFilter;
     int hotkeyID;
+
+    // File handling
+    Modified modified;
+    QString currentFilename;
+    QString previousPath;
+    bool save();
 };
 
 #endif // MAINWINDOW_HPP
