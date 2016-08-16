@@ -12,17 +12,15 @@
 
 #include "DlgEditTimer.hpp"
 #include "Timer.hpp"
+#include <QFileInfo>
 #include <QFormLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QKeySequenceEdit>
 
 DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, QWidget* parent)
-    : QDialog(parent)
+    : SMDialog(parent)
 {
-    // Remove the '?' button
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
     // Build the form layout which contains input widgets
     this->editPeriod = new QSpinBox;
     this->editHotkey = new HotkeyInputWidget;
@@ -32,6 +30,9 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     formLayout->addRow(tr("Hotkey"), this->editHotkey);
 
     // Label containing the filename of the timer to edit
+    if (filename.left(5) == QString("qrc:/")) {
+        filename = QFileInfo(filename).completeBaseName();
+    }
     QLabel* labelFilename = new QLabel(filename, this);
 
     // The label displayed if an hotkey is invalid. It's red, an invisible by default
@@ -56,8 +57,10 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     mainLayout->addWidget(this->labelInvalidHotkey);
     mainLayout->addSpacing(20);
     mainLayout->addWidget(this->buttons);
+    mainLayout->setAlignment(labelFilename, Qt::AlignCenter);
     setLayout(mainLayout);
     adjustSize();
+    setWindowTitle(tr("Edit timer"));
 
     // Connections.
     connect(this->buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);

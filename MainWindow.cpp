@@ -111,7 +111,7 @@ MainWindow::MainWindow()
     this->timerTable->setColumnWidth(COLUMN_STATUS, 60);
     this->timerTable->setColumnWidth(COLUMN_NAME, 200);
     this->timerTable->setColumnWidth(COLUMN_PERIOD, 100);
-    this->timerTable->setColumnWidth(COLUMN_HOTKEY, 200);
+    this->timerTable->setColumnWidth(COLUMN_HOTKEY, 150);
 
     // Finally, install the table in the main window
     setCentralWidget(this->timerTable);
@@ -135,6 +135,7 @@ MainWindow::MainWindow()
     // Trigger some slots to have a consistent interface
     timerSelectionChanged();
     updateWindowTitle();
+    adjustSize();
 }
 
 MainWindow::~MainWindow()
@@ -194,49 +195,8 @@ void MainWindow::openListTriggerred()
     }
     this->previousPath = QFileInfo(filename).absolutePath();
 
-    // Clear the editor
     clearList();
-
-    // Open the file
-    QFile file(filename);
-    if (!file.open(QIODevice::ReadOnly)) {
-        QString message = tr("Couldn't open the file %1.").arg(filename);
-        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
-        return;
-    }
-
-    QDataStream stream(&file);
-    while (!stream.atEnd()) {
-        // Read the stream
-        QString fname;
-        int period;
-        QKeySequence keySequence;
-        UINT modifiers;
-        UINT virtualKey;
-        stream >> fname >> period >> keySequence >> modifiers >> virtualKey;
-
-        // Try to create the timer
-        Timer* timer;
-        try {
-            timer = new Timer(fname, period, keySequence, modifiers, virtualKey, this->hotkeyID);
-            this->hotkeyID++;
-        }
-        catch (const SMException& exception) {
-            QString message = tr("Couldn't create the timer: %1").arg(exception.getMessage());
-            QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
-            continue;
-        }
-        addTimerToTable(timer);
-    }
-
-    if (stream.status() != QDataStream::Ok) {
-        QString message = tr("An error occured while reading the file %1.").arg(this->currentFilename);
-        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
-    }
-
-    // Update manually the window title, because if the file is empty, the Modified signal won't be triggerred
-    this->currentFilename = filename;
-    updateWindowTitle();
+    openFile(filename);
 }
 
 // Add a timer to the list
@@ -370,8 +330,7 @@ void MainWindow::deleteAllTimers()
 // Return true if the user wants to save the current file and defines a valid one
 bool MainWindow::promptForSaving()
 {
-    // Ask the user if he wants to save the current list
-    int answer = QMessageBox::question(this, tr("File saving"), tr("Do you want to save the current timer list?"), QMessageBox::Yes | QMessageBox::No);
+    int answer = QMessageBox::question(this, tr("File saving"), tr("Do you want to save the current timer list?"), QMessageBox::Yes, QMessageBox::No);
     return answer == QMessageBox::Yes;
 }
 
@@ -451,4 +410,57 @@ void MainWindow::clearList()
     this->timerTable->setRowCount(0);
     this->currentFilename.clear();
     this->modified.setModified(false);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if (this->modified.isModified() && promptForSaving() && promptForFilename() && !save()) {
+        event->ignore();
+        return;
+    }
+    event->accept();
+}
+
+void MainWindow::openFile(QString filename)
+{
+    // Open the file
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QString message = tr("Couldn't open the file %1.").arg(filename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+        return;
+    }
+
+    QDataStream stream(&file);
+    while (!stream.atEnd()) {
+        // Read the stream
+        QString fname;
+        int period;
+        QKeySequence keySequence;
+        UINT modifiers;
+        UINT virtualKey;
+        stream >> fname >> period >> keySequence >> modifiers >> virtualKey;
+
+        // Try to create the timer
+        Timer* timer;
+        try {
+            timer = new Timer(fname, period, keySequence, modifiers, virtualKey, this->hotkeyID);
+            this->hotkeyID++;
+        }
+        catch (const SMException& exception) {
+            QString message = tr("Couldn't create the timer: %1").arg(exception.getMessage());
+            QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+            continue;
+        }
+        addTimerToTable(timer);
+    }
+
+    if (stream.status() != QDataStream::Ok) {
+        QString message = tr("An error occured while reading the file %1.").arg(this->currentFilename);
+        QMessageBox::critical(this, tr("Error"), message, QMessageBox::Ok);
+    }
+
+    // Update manually the window title, because if the file is empty, the Modified signal won't be triggerred
+    this->currentFilename = filename;
+    updateWindowTitle();
 }

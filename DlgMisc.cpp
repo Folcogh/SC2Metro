@@ -8,7 +8,7 @@
 #include <QDialogButtonBox>
 
 DlgMisc::DlgMisc(QWidget* parent)
-    : QDialog(parent)
+    : SMDialog(parent)
 {
     QTabWidget* tabWidget = new QTabWidget(this);
     QDialogButtonBox* button = new QDialogButtonBox(QDialogButtonBox::Ok, this);
@@ -25,8 +25,8 @@ DlgMisc::DlgMisc(QWidget* parent)
     connect(button, &QDialogButtonBox::accepted, this, &QDialog::accept);
 
     // Dialog setup
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setMinimumSize(480, 600);
+    setWindowTitle(tr("Miscellaneous"));
 }
 
 // static method which showes up the dialog

@@ -15,6 +15,7 @@
 
 #include "HotkeyInputWidget.hpp"
 #include "TimerItem.hpp"
+#include "SMDialog.hpp"
 #include <QLabel>
 #include <QDialog>
 #include <QObject>
@@ -32,9 +33,10 @@
  *  without updating the TimerItem ones
  */
 
-class DlgNewTimer : public QDialog
+class DlgNewTimer : public SMDialog
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DlgNewTimer)
 
   public:
     explicit DlgNewTimer(QWidget* parent = nullptr);
@@ -45,17 +47,13 @@ class DlgNewTimer : public QDialog
     QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
     UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
     UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
-
   private:
-    Q_DISABLE_COPY(DlgNewTimer)
-
     // Method used by the constructor to fill the sound combo box
     void addTimerItem();
     void addTimerItem(QString file, int period, int keys, UINT nativeModifiers, UINT nativeVirtualKey);
 
     // General purpose method
     TimerItem* getCurrentTimerItem() const { return timerList->currentData().value<TimerItem*>(); }
-
     // Widget containing user data
     QComboBox* timerList;
     QSpinBox* editPeriod;

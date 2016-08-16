@@ -1,0 +1,24 @@
+SC2 Metronome
+
+
+This program has been written by Martial Demolins AKA Folco.
+
+Sources are available here: https://github.com/Folcogh/SC2Metro.
+
+You can rebuild the program straight forward using Qt Creator.
+
+For bug report or suggestion, please mail me at <mdemolins at gmail dot com>.
+
+
+
+*************************************************************
+
+
+Greetings
+
+
+Thanks to Kevin Kofler and Zerosquare for their help about Qt.
+
+Thanks to Jany Belluz for its splendid font, Fantasque Sans Mono. Visit https://github.com/belluzj/fantasque-sans. For information, this is a perfect font for coding =)
+
+Thanks to the author of http://soundoftext.com/, the builtin sounds have been produced with its site.

@@ -30,6 +30,7 @@
 class HotkeyInputWidget : public QKeySequenceEdit
 {
     Q_OBJECT
+    Q_DISABLE_COPY(HotkeyInputWidget)
 
   public:
     HotkeyInputWidget();
@@ -39,7 +40,6 @@ class HotkeyInputWidget : public QKeySequenceEdit
     QKeySequence getKeySequence() const { return keySequence(); }
     UINT getNativeModifiers() const { return nativeModifiers; }
     UINT getNativeVirtualKey() const { return nativeVirtualKey; }
-
   private:
     bool eventFilter(QObject* object, QEvent* event) override;
     UINT nativeVirtualKey;

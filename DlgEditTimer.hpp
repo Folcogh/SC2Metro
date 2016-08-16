@@ -14,15 +14,17 @@
 #define DLGEDITTIMER_HPP
 
 #include "HotkeyInputWidget.hpp"
+#include "SMDialog.hpp"
 #include <QLabel>
-#include <QDialog>
 #include <QString>
 #include <QSpinBox>
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
-class DlgEditTimer : public QDialog
+class DlgEditTimer : public SMDialog
 {
+    Q_DISABLE_COPY(DlgEditTimer)
+
   public:
     DlgEditTimer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, QWidget* parent = nullptr);
 
@@ -31,10 +33,7 @@ class DlgEditTimer : public QDialog
     QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
     UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
     UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
-
   private:
-    Q_DISABLE_COPY(DlgEditTimer)
-
     // Elements of the ui which are used by some slots
     QSpinBox* editPeriod;
     HotkeyInputWidget* editHotkey;

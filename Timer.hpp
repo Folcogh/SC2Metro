@@ -38,6 +38,7 @@
 class Timer : public QObject
 {
     Q_OBJECT
+    Q_DISABLE_COPY(Timer)
 
   public:
     Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId);
@@ -51,10 +52,7 @@ class Timer : public QObject
     UINT getVirtualKey() const { return virtualKey; }
     unsigned int getHotkeyId() const { return hotkeyId; }
     bool isBroken() const { return broken; }
-
   private:
-    Q_DISABLE_COPY(Timer)
-
     QString filename;
     int period;
     QKeySequence keySequence;

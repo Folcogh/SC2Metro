@@ -23,6 +23,8 @@
 
 class TableItem : public QTableWidgetItem
 {
+    Q_DISABLE_COPY(TableItem)
+
   public:
     explicit TableItem(QString text);
 };

@@ -18,6 +18,7 @@
 #include "Timer.hpp"
 #include <QMenu>
 #include <QAction>
+#include <QCloseEvent>
 #include <QMainWindow>
 #include <QKeySequence>
 #include <QTableWidget>
@@ -40,16 +41,16 @@
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    Q_DISABLE_COPY(MainWindow)
 
   public:
     ~MainWindow();
     static MainWindow* instance();
     void setTimerStatus(Timer* timer, int status);
     NativeEventFilter* getNativeEventFilter() const { return nativeEventFilter; }
+    void openFile(QString filename);
 
   private:
-    Q_DISABLE_COPY(MainWindow)
-
     // MainWindow is a singleton
     MainWindow();
     static MainWindow* mainWindow;
@@ -65,10 +66,10 @@ class MainWindow : public QMainWindow
 
     // Prevent the toolbar to be hidden with a context menu
     QMenu* createPopupMenu() override { return nullptr; }
-
     // Slot triggered to update the main window title
     void updateWindowTitle();
     void clearList();
+    void closeEvent(QCloseEvent* event) override;
 
     // Methods triggered by the table signals
     void timerSelectionChanged();

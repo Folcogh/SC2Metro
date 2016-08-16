@@ -1,17 +1,8 @@
-- open file on icon doucle click
-- QApplication settings
-- MainWindow settings. See SC2Metro.hpp
-- mainwindow title update
-- edit timer icon looks wrong (?)
-- for HotkeyInputWidget, use a stacked widget {QKeySequence/QPushButton} to display the modifiers when no virtual key is typed yet ?
-- GPLize the sources
-- check: constness, q_disable_copy
-- better adjustement of the columns size
 - create a widget for the key tooltip/invalid hotkey message
-- remove "qrc:/" prefix in DlgEditTimer
-- derive QDialog to remove systematically the '?' button
-- intercept QCloseEvent of MainWindow
 
 
 - Credits :
-Zerosquare, KK, Fantasque (icon font)
+Zerosquare, KK, Fantasque (icon font), the web service producing mp3
+
+Long time TODO
+- app icon (update qguiapplication)

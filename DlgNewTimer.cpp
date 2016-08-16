@@ -24,11 +24,8 @@
 QString DlgNewTimer::previousPath = QDir::homePath();
 
 DlgNewTimer::DlgNewTimer(QWidget* parent)
-    : QDialog(parent)
+    : SMDialog(parent)
 {
-    // Remove the '?' button
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
     // Build the form layout which contains input widgets
     this->timerList  = new QComboBox;
     this->editPeriod = new QSpinBox;
@@ -69,6 +66,7 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     mainLayout->addWidget(this->buttons);
     setLayout(mainLayout);
     adjustSize();
+    setWindowTitle(tr("New timer"));
 
     // Set the previous index of the combo at the current one
     // It's used if the user cancels the choice of a custom sound

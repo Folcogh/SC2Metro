@@ -11,6 +11,7 @@
 //  If not, see <http://www.gnu.org/licenses/>.
 
 #include "MainWindow.hpp"
+#include "SC2Metro.hpp"
 #include <QObject>
 #include <QMessageBox>
 #include <QApplication>
@@ -21,6 +22,7 @@ int main(int argc, char* argv[])
 
     // Initialize the application
     QApplication application(argc, argv);
+    application.setApplicationVersion(QString(VERSION));
 
     // Check that we have no more than one argumen in the command line
     if (argc > 2) {
@@ -32,7 +34,9 @@ int main(int argc, char* argv[])
     // Create and show the ui
     MainWindow::instance()->show();
 
-    // TODO: if argc == 2 => open file
+    if (argc == 2) {
+        MainWindow::instance()->openFile(argv[1]);
+    }
     retval = application.exec();
 
     delete MainWindow::instance();

@@ -25,5 +25,6 @@
 #define VERSION 2
 #define SHORT_NAME "SC2Metro"
 #define MAINWINDOW_TITLE "SC2 Metronome"
+#define APPLICATION_NAME MAINWINDOW_TITLE
 
 #endif // SC2METRO_HPP

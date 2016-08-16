@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     TimerItem.cpp \
     NativeEventFilter.cpp \
     DlgEditTimer.cpp \
-    DlgMisc.cpp
+    DlgMisc.cpp \
+    SMDialog.cpp
 
 HEADERS  += MainWindow.hpp \
     Timer.hpp \
@@ -35,7 +36,8 @@ HEADERS  += MainWindow.hpp \
     SMException.hpp \
     NativeEventFilter.hpp \
     DlgEditTimer.hpp \
-    DlgMisc.hpp
+    DlgMisc.hpp \
+    SMDialog.hpp
 
 RESOURCES += \
     icon64.qrc \

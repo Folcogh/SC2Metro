@@ -28,6 +28,8 @@
 
 class TimerItem
 {
+    Q_DISABLE_COPY(TimerItem)
+
   public:
     TimerItem();
     explicit TimerItem(QString filename);
@@ -41,10 +43,7 @@ class TimerItem
     UINT getNativeVirtualKey() const { return nativeVirtualKey; }
     bool mustPromptForFile() const { return promptForFile; }
     QString getDisplayedName() const { return displayedName; }
-
   private:
-    Q_DISABLE_COPY(TimerItem)
-
     QString filename;
     int period;
     QKeySequence keySequence;
