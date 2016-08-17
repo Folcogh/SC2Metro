@@ -1,8 +1,2 @@
-- create a widget for the key tooltip/invalid hotkey message
-
-
-- Credits :
-Zerosquare, KK, Fantasque (icon font), the web service producing mp3
-
 Long time TODO
 - app icon (update qguiapplication)

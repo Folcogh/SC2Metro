@@ -16,13 +16,13 @@
 #include "HotkeyInputWidget.hpp"
 #include "TimerItem.hpp"
 #include "SMDialog.hpp"
-#include <QLabel>
 #include <QDialog>
 #include <QObject>
 #include <QString>
 #include <QSpinBox>
 #include <QComboBox>
 #include <windows.h>
+#include <QFormLayout>
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
@@ -59,7 +59,7 @@ class DlgNewTimer : public SMDialog
     QSpinBox* editPeriod;
     HotkeyInputWidget* editHotkey;
     QDialogButtonBox* buttons;
-    QLabel* labelInvalidHotkey;
+    QFormLayout* formLayout;
 
     // Convenient storages
     int previousIndex;

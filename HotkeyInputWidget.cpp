@@ -70,6 +70,7 @@ bool HotkeyInputWidget::eventFilter(QObject* object, QEvent* event)
         // - events with no modifiers
         // - events with no key
         if ((modifiers & Qt::META) || (modifiers == 0) || (key == 0)) {
+            this->nativeVirtualKey = 0;
             return true;
         }
 

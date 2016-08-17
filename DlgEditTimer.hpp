@@ -15,9 +15,9 @@
 
 #include "HotkeyInputWidget.hpp"
 #include "SMDialog.hpp"
-#include <QLabel>
 #include <QString>
 #include <QSpinBox>
+#include <QFormLayout>
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
@@ -38,7 +38,7 @@ class DlgEditTimer : public SMDialog
     QSpinBox* editPeriod;
     HotkeyInputWidget* editHotkey;
     QDialogButtonBox* buttons;
-    QLabel* labelInvalidHotkey;
+    QFormLayout* formLayout;
 
     // Slots
     void periodModified(int period);

@@ -31,14 +31,10 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     this->editPeriod = new QSpinBox;
     this->editHotkey = new HotkeyInputWidget;
 
-    QFormLayout* formLayout = new QFormLayout;
-    formLayout->addRow(tr("Sound file:"), this->timerList);
-    formLayout->addRow(tr("Period:"), this->editPeriod);
-    formLayout->addRow(tr("Hotkey"), this->editHotkey);
-
-    // The label displayed if an hotkey is invalid. It's red, an invisible by default
-    this->labelInvalidHotkey = new QLabel(tr("Invalid hotkey"));
-    this->labelInvalidHotkey->setStyleSheet("QLabel { color : red; }");
+    this->formLayout = new QFormLayout;
+    this->formLayout->addRow(tr("Sound file:"), this->timerList);
+    this->formLayout->addRow(tr("Period:"), this->editPeriod);
+    this->formLayout->addRow(tr("Hotkey:"), this->editHotkey);
 
     // OK/Cancel buttons
     this->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -60,8 +56,7 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
 
     // Finalize the ui setup by placing the elements and adjusting their size
     QVBoxLayout* mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(formLayout);
-    mainLayout->addWidget(this->labelInvalidHotkey);
+    mainLayout->addLayout(this->formLayout);
     mainLayout->addSpacing(20);
     mainLayout->addWidget(this->buttons);
     setLayout(mainLayout);
@@ -160,12 +155,13 @@ void DlgNewTimer::soundModified()
 void DlgNewTimer::hotkeyModified()
 {
     QPushButton* buttonOk = this->buttons->button(QDialogButtonBox::Ok);
-    if (this->editHotkey->getNativeVirtualKey() != 0) {
+    QWidget* label = this->formLayout->labelForField(this->editHotkey);
+    if (this->editHotkey->isValid()) {
         buttonOk->setEnabled(true);
-        this->labelInvalidHotkey->setVisible(false);
+        label->setStyleSheet("");
     }
     else {
         buttonOk->setDisabled(true);
-        this->labelInvalidHotkey->setVisible(true);
+        label->setStyleSheet("QLabel { color : red; }");
     }
 }

@@ -12,8 +12,8 @@
 
 #include "DlgEditTimer.hpp"
 #include "Timer.hpp"
+#include <QLabel>
 #include <QFileInfo>
-#include <QFormLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QKeySequenceEdit>
@@ -25,19 +25,15 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     this->editPeriod = new QSpinBox;
     this->editHotkey = new HotkeyInputWidget;
 
-    QFormLayout* formLayout = new QFormLayout;
-    formLayout->addRow(tr("Period:"), this->editPeriod);
-    formLayout->addRow(tr("Hotkey"), this->editHotkey);
+    this->formLayout = new QFormLayout;
+    this->formLayout->addRow(tr("Period:"), this->editPeriod);
+    this->formLayout->addRow(tr("Hotkey:"), this->editHotkey);
 
     // Label containing the filename of the timer to edit
     if (filename.left(5) == QString("qrc:/")) {
         filename = QFileInfo(filename).completeBaseName();
     }
     QLabel* labelFilename = new QLabel(filename, this);
-
-    // The label displayed if an hotkey is invalid. It's red, an invisible by default
-    this->labelInvalidHotkey = new QLabel(tr("Invalid hotkey"));
-    this->labelInvalidHotkey->setStyleSheet("QLabel { color : red; }");
 
     // OK/Cancel buttons
     this->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -53,8 +49,7 @@ DlgEditTimer::DlgEditTimer(QString filename, int period, QKeySequence keySequenc
     // Finalize the ui setup by placing the elements and adjusting their size
     QVBoxLayout* mainLayout = new QVBoxLayout;
     mainLayout->addWidget(labelFilename);
-    mainLayout->addLayout(formLayout);
-    mainLayout->addWidget(this->labelInvalidHotkey);
+    mainLayout->addLayout(this->formLayout);
     mainLayout->addSpacing(20);
     mainLayout->addWidget(this->buttons);
     mainLayout->setAlignment(labelFilename, Qt::AlignCenter);
@@ -88,12 +83,13 @@ void DlgEditTimer::periodModified(int period)
 void DlgEditTimer::hotkeyModified()
 {
     QPushButton* buttonOk = this->buttons->button(QDialogButtonBox::Ok);
-    if (this->editHotkey->getNativeVirtualKey() != 0) {
+    QWidget* label = this->formLayout->labelForField(this->editHotkey);
+    if (this->editHotkey->isValid()) {
         buttonOk->setEnabled(true);
-        this->labelInvalidHotkey->setVisible(false);
+        label->setStyleSheet("");
     }
     else {
         buttonOk->setDisabled(true);
-        this->labelInvalidHotkey->setVisible(true);
+        label->setStyleSheet("QLabel { color : red; }");
     }
 }
