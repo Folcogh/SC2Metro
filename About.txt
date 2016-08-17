@@ -3,11 +3,15 @@ SC2 Metronome
 
 This program has been written by Martial Demolins AKA Folco.
 
+Copyrighted (C) 2016 Martial Demolins, see the License text for more informations.
+
 Sources are available here: https://github.com/Folcogh/SC2Metro.
 
 You can rebuild the program straight forward using Qt Creator.
 
 For bug report or suggestion, please mail me at <mdemolins at gmail dot com>.
+
+SC2 Metronome doesn't hack the StarCraft(R) II binaries or memory data in any way, so it fully respects the Blizzard Entertainement(R) licenses and copyrights.
 
 
 
@@ -17,8 +21,10 @@ For bug report or suggestion, please mail me at <mdemolins at gmail dot com>.
 Greetings
 
 
+Thanks to the Qt guys for their wonderfull framework, see https://www.qt.io/
+
 Thanks to Kevin Kofler and Zerosquare for their help about Qt.
 
 Thanks to Jany Belluz for its splendid font, Fantasque Sans Mono. Visit https://github.com/belluzj/fantasque-sans. For information, this is a perfect font for coding =)
 
-Thanks to the author of http://soundoftext.com/, the builtin sounds have been produced with its site.
+Thanks to the author of http://soundoftext.com/, the builtin sounds have been produced using its website.
