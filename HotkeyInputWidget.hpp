@@ -21,12 +21,9 @@
 
 #define QtKeysMask 0x01FFFFFF // All Qt keys without modifiers. See Qt::Key enum
 
-/*
- *  This class modifies the keyboard handler of QKeySequenceEdit
- *  It intercepts the event to get the native modifiers and virtual key, needed for windows to register a hotkey
- *  It also allows to forbid some hotkeys, and limits the key sequence to one entry
- */
-
+// This class modifies the keyboard handler of QKeySequenceEdit
+// It intercepts the event to get the native modifiers and virtual key, needed for windows to register a hotkey
+// It also allows to forbid some hotkeys, and limits the key sequence to one entry
 class HotkeyInputWidget : public QKeySequenceEdit
 {
     Q_OBJECT
@@ -36,6 +33,7 @@ class HotkeyInputWidget : public QKeySequenceEdit
     HotkeyInputWidget();
     void setHotkey(QKeySequence keySequence, UINT nativeModifiers, UINT nativeVirtualKey);
     bool isValid() const { return !keySequence().isEmpty(); }
+    //
     // Getters
     QKeySequence getKeySequence() const { return keySequence(); }
     UINT getNativeModifiers() const { return nativeModifiers; }

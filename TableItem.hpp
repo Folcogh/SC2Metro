@@ -16,11 +16,7 @@
 #include <QString>
 #include <QTableWidgetItem>
 
-/*
- *  This class initializes some vars of QTableWidgetItem
- *
- */
-
+// This class center an item in the cell of a QTableWidget
 class TableItem : public QTableWidgetItem
 {
     Q_DISABLE_COPY(TableItem)

@@ -16,6 +16,7 @@
 
 NativeEventFilter::NativeEventFilter()
 {
+    //
     QCoreApplication::instance()->installNativeEventFilter(this);
 }
 

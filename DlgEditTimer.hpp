@@ -21,6 +21,7 @@
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
+// This class is a dialog which allow the user to modify the period and the hotkey of a timer
 class DlgEditTimer : public SMDialog
 {
     Q_DISABLE_COPY(DlgEditTimer)
@@ -33,6 +34,7 @@ class DlgEditTimer : public SMDialog
     QKeySequence getKeySquence() const { return editHotkey->getKeySequence(); }
     UINT getNativeVirtualKey() const { return editHotkey->getNativeVirtualKey(); }
     UINT getNativeModifiers() const { return editHotkey->getNativeModifiers(); }
+    //
   private:
     // Elements of the ui which are used by some slots
     QSpinBox* editPeriod;

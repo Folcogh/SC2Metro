@@ -1,17 +1,13 @@
 SC2 Metronome
 
 
-This program has been written by Martial Demolins AKA Folco.
+SC2 Metronome is a tool for improving your mechanics in StarCraft(R) II, by playing the sound you choose at a constant period. Thus it can help you to get constant worker production, optimal creep expansion, perfect injections, or remind you about minimap, scouting or supply blocks.
 
-Copyrighted (C) 2016 Martial Demolins, see the License text for more informations.
-
-Sources are available here: https://github.com/Folcogh/SC2Metro.
-
-You can rebuild the program straight forward using Qt Creator.
+This program has been written by Martial Demolins AKA Folco. See the License text for full licenses informations.
 
 For bug report or suggestion, please mail me at <mdemolins at gmail dot com>.
 
-SC2 Metronome doesn't hack the StarCraft(R) II binaries or memory data in any way, so it fully respects the Blizzard Entertainement(R) licenses and copyrights.
+SC2 Metronome doesn't hack the StarCraft(R) II binaries or memory data in any way, so it fully respects the Blizzard Entertainment(R) licenses and copyrights.
 
 
 
@@ -21,10 +17,26 @@ SC2 Metronome doesn't hack the StarCraft(R) II binaries or memory data in any wa
 Greetings
 
 
-Thanks to the Qt guys for their wonderfull framework, see https://www.qt.io/
+Thanks to the Qt guys for their wonderfull framework, see https://www.qt.io/ .
 
 Thanks to Kevin Kofler and Zerosquare for their help about Qt.
 
-Thanks to Jany Belluz for its splendid font, Fantasque Sans Mono. Visit https://github.com/belluzj/fantasque-sans. For information, this is a perfect font for coding =)
+Thanks to Jany Belluz for its splendid font, Fantasque Sans Mono. Visit https://github.com/belluzj/fantasque-sans . For information, this is a perfect font for coding =)
 
-Thanks to the author of http://soundoftext.com/, the builtin sounds have been produced using its website.
+Thanks to the author of http://soundoftext.com/ , the builtin sounds have been produced using its website.
+
+
+
+*************************************************************
+
+
+Under the hood
+
+
+The program is written in C++, using the Qt framework.
+
+Sources are available here: https://github.com/Folcogh/SC2Metro .
+
+You can rebuild the program straight forward using Qt Creator.
+
+You can modify and distribute the program under the terms of the GPL v3 license.

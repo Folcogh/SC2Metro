@@ -44,14 +44,14 @@ DlgNewTimer::DlgNewTimer(QWidget* parent)
     this->editPeriod->setAlignment(Qt::AlignHCenter);
 
     // Create and add the items in the sound list
-    addTimerItem("qrc:/sounds/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, MOD_ALT + MOD_SHIFT, 0x4D);
-    addTimerItem("qrc:/sounds/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, MOD_ALT + MOD_SHIFT, 0x53);
-    addTimerItem("qrc:/sounds/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, MOD_ALT + MOD_SHIFT, 0x52);
-    addTimerItem("qrc:/sounds/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, MOD_ALT + MOD_SHIFT, 0x50);
-    addTimerItem("qrc:/sounds/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, MOD_ALT + MOD_SHIFT, 0x43);
-    addTimerItem("qrc:/sounds/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, MOD_ALT + MOD_SHIFT, 0x49);
-    addTimerItem("qrc:/sounds/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, MOD_ALT + MOD_SHIFT, 0x57);
-    addTimerItem("qrc:/sounds/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, MOD_ALT + MOD_SHIFT, 0x4C);
+    addTimerItem("qrc:/sound/minimap.mp3", 10, Qt::ALT + Qt::SHIFT + Qt::Key_M, MOD_ALT + MOD_SHIFT, 0x4D);
+    addTimerItem("qrc:/sound/scout.mp3", 60 * 3, Qt::ALT + Qt::SHIFT + Qt::Key_S, MOD_ALT + MOD_SHIFT, 0x53);
+    addTimerItem("qrc:/sound/resource.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_R, MOD_ALT + MOD_SHIFT, 0x52);
+    addTimerItem("qrc:/sound/supply.mp3", 30, Qt::ALT + Qt::SHIFT + Qt::Key_P, MOD_ALT + MOD_SHIFT, 0x50);
+    addTimerItem("qrc:/sound/creep.mp3", 24, Qt::ALT + Qt::SHIFT + Qt::Key_C, MOD_ALT + MOD_SHIFT, 0x43);
+    addTimerItem("qrc:/sound/inject.mp3", 33, Qt::ALT + Qt::SHIFT + Qt::Key_I, MOD_ALT + MOD_SHIFT, 0x49);
+    addTimerItem("qrc:/sound/worker.mp3", 12, Qt::ALT + Qt::SHIFT + Qt::Key_W, MOD_ALT + MOD_SHIFT, 0x57);
+    addTimerItem("qrc:/sound/mule.mp3", 64, Qt::ALT + Qt::SHIFT + Qt::Key_L, MOD_ALT + MOD_SHIFT, 0x4C);
     addTimerItem();
 
     // Finalize the ui setup by placing the elements and adjusting their size
@@ -155,7 +155,7 @@ void DlgNewTimer::soundModified()
 void DlgNewTimer::hotkeyModified()
 {
     QPushButton* buttonOk = this->buttons->button(QDialogButtonBox::Ok);
-    QWidget* label = this->formLayout->labelForField(this->editHotkey);
+    QWidget* label        = this->formLayout->labelForField(this->editHotkey);
     if (this->editHotkey->isValid()) {
         buttonOk->setEnabled(true);
         label->setStyleSheet("");

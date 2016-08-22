@@ -129,12 +129,12 @@ MainWindow::MainWindow()
     connect(this->timerTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::timerSelectionChanged);
     connect(this->timerTable, &QTableWidget::itemDoubleClicked, this, &MainWindow::editTimerTriggerred);
 
-    // Window title update
-    connect(&this->modified, &Modified::changed, this, &MainWindow::updateWindowTitle);
+    // Interface update
+    connect(&this->modified, &Modified::changed, this, &MainWindow::updateUI);
 
     // Trigger some slots to have a consistent interface
     timerSelectionChanged();
-    updateWindowTitle();
+    updateUI();
     adjustSize();
 }
 
@@ -155,8 +155,9 @@ MainWindow* MainWindow::instance()
     return mainWindow;
 }
 
-void MainWindow::updateWindowTitle()
+void MainWindow::updateUI()
 {
+    // Window title
     QString title(MAINWINDOW_TITLE " - ");
     if (this->currentFilename.isEmpty()) {
         title.append(tr("<Unsaved list>"));
@@ -168,6 +169,22 @@ void MainWindow::updateWindowTitle()
         title.append(QChar('*'));
     }
     setWindowTitle(title);
+
+    // "New list" action
+    if (this->currentFilename.isEmpty() && !this->modified.isModified()) {
+        this->actionNewList->setDisabled(true);
+    }
+    else {
+        this->actionNewList->setEnabled(true);
+    }
+
+    // "Save list" action
+    if (this->modified.isModified()) {
+        this->actionSaveList->setEnabled(true);
+    }
+    else {
+        this->actionSaveList->setDisabled(true);
+    }
 }
 
 //
@@ -342,7 +359,7 @@ bool MainWindow::promptForFilename()
             return false;
         }
         this->currentFilename = filename;
-        this->previousPath = QFileInfo(filename).absolutePath();
+        this->previousPath    = QFileInfo(filename).absolutePath();
     }
     return true;
 }
@@ -462,5 +479,5 @@ void MainWindow::openFile(QString filename)
 
     // Update manually the window title, because if the file is empty, the Modified signal won't be triggerred
     this->currentFilename = filename;
-    updateWindowTitle();
+    updateUI();
 }

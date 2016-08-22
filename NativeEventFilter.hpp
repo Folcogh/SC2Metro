@@ -17,6 +17,7 @@
 #include <QByteArray>
 #include <QAbstractNativeEventFilter>
 
+// This class receive the native Windows events, and emit a message when a hotkey is received
 class NativeEventFilter : public QObject, QAbstractNativeEventFilter
 {
     Q_OBJECT

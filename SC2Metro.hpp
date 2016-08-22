@@ -10,21 +10,18 @@
 //  You should have received a copy of the GNU General Public License along with this program.
 //  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- *  This file contains application-wide constants
- *
- */
+// This file contains application-wide constants
 
 #ifndef SC2METRO_HPP
 #define SC2METRO_HPP
 
-#define LIST_FILTER "*.sml"
-#define SOUND_FILTER "*.mp3 *.wav"
-#define BUILTIN_TAG " (builtin)"
+#define LIST_FILTER "*.sml"        // Filter to open/save a timer list
+#define SOUND_FILTER "*.mp3 *.wav" // Supported sound format
+#define BUILTIN_TAG " (builtin)"   // Added in the DlgEditTimer dialog to the builtin sound names
 
-#define VERSION 2
-#define SHORT_NAME "SC2Metro"
-#define MAINWINDOW_TITLE "SC2 Metronome"
-#define APPLICATION_NAME MAINWINDOW_TITLE
+#define VERSION 2                         // Version of the program
+#define SHORT_NAME "SC2Metro"             //
+#define MAINWINDOW_TITLE "SC2 Metronome"  // The name displayed in the menu bar
+#define APPLICATION_NAME MAINWINDOW_TITLE // Used for QApplication
 
 #endif // SC2METRO_HPP

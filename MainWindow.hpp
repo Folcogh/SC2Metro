@@ -34,8 +34,10 @@
 #define COLUMN_HOTKEY 3
 #define COLUMN_COUNT 4
 
+// This column is used as the metadata storage because its content is never deleted (neither modified)
 #define DATA_COLUMN COLUMN_NAME
 
+// Requested by QTableWidget to store metadata in a QTableWidgetItem
 #define TIMER_PTR Qt::UserRole
 
 class MainWindow : public QMainWindow
@@ -45,43 +47,27 @@ class MainWindow : public QMainWindow
 
   public:
     ~MainWindow();
-    static MainWindow* instance();
-    void setTimerStatus(Timer* timer, int status);
-    NativeEventFilter* getNativeEventFilter() const { return nativeEventFilter; }
-    void openFile(QString filename);
+    static MainWindow* instance();                                                // MainWindow is a singleton
+    void setTimerStatus(Timer* timer, int status);                                // Called by the timer to update their status in the list
+    NativeEventFilter* getNativeEventFilter() const { return nativeEventFilter; } // Allow the timers to connect the NativeEventFilter signal
+    void openFile(QString filename);                                              // Used when a file is opened in the CLI (eg. double-clicking an icon)
 
   private:
     // MainWindow is a singleton
     MainWindow();
     static MainWindow* mainWindow;
 
-    // Convenient methods
+    // System related methods
+    QMenu* createPopupMenu() override { return nullptr; } // Prevent to close the toolbar by right-clicking it
+    void closeEvent(QCloseEvent* event) override;         // Intercept the QCloseEvent to prevent the program to prompt the user for saving if needed
+    void updateUI();                                      // Update the main window title and the status of some actions
+
+    // Convenient methods to access a timer
     Timer* getCurrentTimer() const { return timerTable->selectedItems().at(DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
     Timer* getTimer(int row) const { return timerTable->item(row, DATA_COLUMN)->data(TIMER_PTR).value<Timer*>(); }
     int getCurrentRow() const { return timerTable->selectedItems().at(0)->row(); }
-    void deleteAllTimers();
-    bool promptForSaving();
-    bool promptForFilename();
-    void addTimerToTable(Timer* timer);
-
-    // Prevent the toolbar to be hidden with a context menu
-    QMenu* createPopupMenu() override { return nullptr; }
-    // Slot triggered to update the main window title
-    void updateWindowTitle();
-    void clearList();
-    void closeEvent(QCloseEvent* event) override;
-
-    // Methods triggered by the table signals
-    void timerSelectionChanged();
-
-    // Methods called when the actions in the toolbar are triggerred
-    void newListTriggerred();
-    void openListTriggerred();
-    void newTimerTriggerred();
-    void editTimerTriggerred();
-    void removeTimerTriggerred();
-
-    // These actions are icons in the main toolbar
+    //
+    // Actions triggerred by the icons of the main toolbar
     QAction* actionNewList;
     QAction* actionOpenList;
     QAction* actionSaveList;
@@ -90,18 +76,31 @@ class MainWindow : public QMainWindow
     QAction* actionRemoveTimer;
     QAction* actionMisc;
 
-    // Main widget, displaying the timers
+    // Methods triggered by the actions
+    void newListTriggerred();
+    void openListTriggerred();
+    void newTimerTriggerred();
+    void editTimerTriggerred();
+    void removeTimerTriggerred();
+
+    // Timers
     QTableWidget* timerTable;
+    void addTimerToTable(Timer* timer); // Used when the user create a timer or when a file is opened
+    void deleteAllTimers();             // Delete the Timer associated with each row of the table. Used by the dtor, or when the list is cleared
+    void clearList();                   // Delete the Timers, then remove the entries of the list
+    void timerSelectionChanged();       // used to unable/disable actionEditTimer/actionRemoveTimer
 
     // Hotkey handling
-    NativeEventFilter* nativeEventFilter;
-    int hotkeyID;
+    NativeEventFilter* nativeEventFilter; // Handler receiving the Windows events
+    int hotkeyID;                         // Counter making each hotkey unique for the System
 
     // File handling
-    Modified modified;
-    QString currentFilename;
-    QString previousPath;
-    bool save();
+    Modified modified;        // Emit a signal on change
+    QString currentFilename;  // Name of the file currently opened. Empty if the list doesn't belong to a file
+    QString previousPath;     // Last valid path used by the Open/Save dialogs
+    bool promptForSaving();   // If the current list is modified, ask the user if he wants to save it
+    bool promptForFilename(); // If the current filename is empty, ask the user where he wants to save the current list
+    bool save();              // Save the current list in the current filename
 };
 
 #endif // MAINWINDOW_HPP

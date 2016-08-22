@@ -83,7 +83,7 @@ void DlgEditTimer::periodModified(int period)
 void DlgEditTimer::hotkeyModified()
 {
     QPushButton* buttonOk = this->buttons->button(QDialogButtonBox::Ok);
-    QWidget* label = this->formLayout->labelForField(this->editHotkey);
+    QWidget* label        = this->formLayout->labelForField(this->editHotkey);
     if (this->editHotkey->isValid()) {
         buttonOk->setEnabled(true);
         label->setStyleSheet("");

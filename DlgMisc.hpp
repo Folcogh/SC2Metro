@@ -16,6 +16,7 @@
 #include "SMDialog.hpp"
 #include <QTabWidget>
 
+// This class is a dialog which shows some documents to the user. It's displayed with the static method showDlgMisc()
 class DlgMisc : public SMDialog
 {
     Q_DISABLE_COPY(DlgMisc)

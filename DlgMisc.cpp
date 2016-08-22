@@ -1,3 +1,15 @@
+//  SC2 Metronome, a tool for improving mechanics in StarCraft(R) II
+//  Copyright (C) 2016 Martial Demolins AKA Folco
+
+//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+//  as published by the Free Software foundation, either version 3 of the License, or (at your option) any later version.
+
+//  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+//  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+//  You should have received a copy of the GNU General Public License along with this program.
+//  If not, see <http://www.gnu.org/licenses/>.
+
 #include "DlgMisc.hpp"
 #include <QFile>
 #include <QPointer>
@@ -10,9 +22,9 @@
 DlgMisc::DlgMisc(QWidget* parent)
     : SMDialog(parent)
 {
-    QTabWidget* tabWidget = new QTabWidget(this);
+    QTabWidget* tabWidget    = new QTabWidget(this);
     QDialogButtonBox* button = new QDialogButtonBox(QDialogButtonBox::Ok, this);
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    QVBoxLayout* mainLayout  = new QVBoxLayout(this);
 
     mainLayout->addWidget(tabWidget);
     mainLayout->addWidget(button);
@@ -44,9 +56,9 @@ void DlgMisc::createPageWithText(QTabWidget* tabWidget, QString filename)
     file.open(QIODevice::ReadOnly);
 
     // Create a buffer to read the file, ensure that is has a terminal 0
-    // Debug: add one byte, to ensure that the allocation is really performed (used when the files were still empty)
-    qint64 length = file.size();
-    char* buffer = new char[length + 1];
+    // Debug: add one byte, to ensure that the allocation is really performed (usefull when the files were still empty)
+    qint64 length  = file.size();
+    char* buffer   = new char[length + 1];
     buffer[length] = 0;
 
     // Create a stream to read the file
@@ -57,7 +69,7 @@ void DlgMisc::createPageWithText(QTabWidget* tabWidget, QString filename)
     QPlainTextEdit* textEdit = new QPlainTextEdit(buffer, tabWidget);
     textEdit->setReadOnly(true);
 
-    //Create the title based on the file name
+    // Create the title based on the file name
     QFileInfo info(filename);
     QString title = info.completeBaseName();
 

@@ -20,12 +20,9 @@
 
 #define CUSTOM_TIMER_PERIOD 30
 
-/*
- *  This class contains a predefined timer used to be proposed in the list when the user creates a new timer
- *  The data of the objects are used only to initialize the interface when their are displayed
- *
- */
 
+// This class contains a predefined timer used to be proposed in the list when the user creates a new timer
+// The data of the objects are used only to initialize the interface when their are displayed
 class TimerItem
 {
     Q_DISABLE_COPY(TimerItem)
@@ -43,6 +40,7 @@ class TimerItem
     UINT getNativeVirtualKey() const { return nativeVirtualKey; }
     bool mustPromptForFile() const { return promptForFile; }
     QString getDisplayedName() const { return displayedName; }
+    //
   private:
     QString filename;
     int period;

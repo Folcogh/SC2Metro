@@ -26,13 +26,9 @@
 #include <QKeySequence>
 #include <QDialogButtonBox>
 
-/*
- *  This class provides a dialog which requests for a new Timer.
- *  It uses the data of TimerItem instances to fill the ui.
- *  Then the interface is handled with its own data,
- *  without updating the TimerItem ones
- */
 
+// This class provides a dialog which requests for a new Timer. It uses the data of TimerItem instances to fill the ui.
+// Then the interface is handled with its own data, without updating the TimerItem ones
 class DlgNewTimer : public SMDialog
 {
     Q_OBJECT
@@ -52,8 +48,9 @@ class DlgNewTimer : public SMDialog
     void addTimerItem();
     void addTimerItem(QString file, int period, int keys, UINT nativeModifiers, UINT nativeVirtualKey);
 
-    // General purpose method
+    // Return the current TimerItem selected in the combo box
     TimerItem* getCurrentTimerItem() const { return timerList->currentData().value<TimerItem*>(); }
+    //
     // Widget containing user data
     QComboBox* timerList;
     QSpinBox* editPeriod;

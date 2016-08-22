@@ -15,11 +15,7 @@
 
 #include <QObject>
 
-/*
- * This class is a boolean which emit a message when it is affected
- *
- */
-
+// This class is a boolean which emit a message when it is affected
 class Modified : public QObject
 {
     Q_OBJECT

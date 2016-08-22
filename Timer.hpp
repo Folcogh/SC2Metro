@@ -30,11 +30,7 @@
 #define STATUS_PLAYING 2
 #define STATUS_BROKEN 3
 
-/*
- *  This class contains a timer, which can be started and stopped with a hotkey
- *
- */
-
+// This class contains a timer, which can be started and stopped with a hotkey
 class Timer : public QObject
 {
     Q_OBJECT
@@ -43,8 +39,9 @@ class Timer : public QObject
   public:
     Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId);
     ~Timer();
-    void setNewData(int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, int hotkeyId);
-
+    void setNewData(int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, int hotkeyId); // Used when editing a timer
+                                                                                                          //
+    // Getters
     QString getFilename() const { return filename; }
     int getPeriod() const { return period; }
     QKeySequence getKeySequence() const { return keySequence; }
@@ -52,6 +49,7 @@ class Timer : public QObject
     UINT getVirtualKey() const { return virtualKey; }
     unsigned int getHotkeyId() const { return hotkeyId; }
     bool isBroken() const { return broken; }
+    //
   private:
     QString filename;
     int period;

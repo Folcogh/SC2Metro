@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>screen/MainWindow.png</file>
+        <file>screen/DlgNewTimer.png</file>
+    </qresource>
+</RCC>

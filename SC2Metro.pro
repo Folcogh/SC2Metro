@@ -42,7 +42,8 @@ HEADERS  += MainWindow.hpp \
 RESOURCES += \
     icon64.qrc \
     builtinsound.qrc \
-    texts.qrc
+    text.qrc \
+    screens.qrc
 
 DISTFILES += \
     Todo.txt \

@@ -1,2 +1,2 @@
 Long time TODO
-- app icon (update qguiapplication)
+- app icon (remember to update qguiapplication)
