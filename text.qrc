@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>License.txt</file>
-        <file>About.txt</file>
-        <file>Howto.txt</file>
-    </qresource>
-</RCC>
