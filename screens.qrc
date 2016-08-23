@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>screen/MainWindow.png</file>
         <file>screen/DlgNewTimer.png</file>
+        <file>screen/DlgEditTimer.png</file>
+        <file>screen/MainWindowList.png</file>
+        <file>screen/SelectTimer.png</file>
     </qresource>
 </RCC>
