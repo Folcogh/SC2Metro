@@ -13,6 +13,7 @@
 #include "SMException.hpp"
 #include "MainWindow.hpp"
 #include "Timer.hpp"
+#include "Log.hpp"
 #include <QMediaPlaylist>
 
 Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId)
@@ -24,6 +25,12 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT modifi
     , hotkeyId(hotkeyId)
     , broken(false)
 {
+    Log::instance()->write(tr("Trying to register hotkey:"));
+    Log::instance()->write(tr("Hotkey ID: %1").arg(hotkeyId));
+    Log::instance()->write(tr("Native Modifiers: %1").arg(modifiers));
+    Log::instance()->write(tr("Virtual Key: %1").arg(virtualKey));
+    Log::instance()->newLine();
+
     // Register the hotkey (add the MOD_NOREPEAT flag)
     if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
         throw SMException(tr("failed to register the hotkey."));
@@ -61,6 +68,12 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT modifiers, UIN
 {
     // First, try to register the new hotkey if needed
     if ((this->virtualKey != virtualKey) || (this->modifiers != modifiers)) {
+        Log::instance()->write(tr("Trying to modify a hotkey:"));
+        Log::instance()->write(tr("Previous Hokey ID: %1. New Hotkey ID: %2").arg(this->hotkeyId).arg(hotkeyId));
+        Log::instance()->write(tr("Previous Native Modifiers: %1. New Native Modifiers: %2").arg(this->modifiers).arg(modifiers));
+        Log::instance()->write(tr("Previous Virtual Key: %1. New Virtual Key: %2").arg(this->virtualKey).arg(virtualKey));
+        Log::instance()->newLine();
+
         if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
             throw SMException(tr("failed to register the hotkey. No modification done."));
         }

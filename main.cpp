@@ -12,6 +12,7 @@
 
 #include "MainWindow.hpp"
 #include "SC2Metro.hpp"
+#include "Log.hpp"
 #include <QObject>
 #include <QMessageBox>
 #include <QApplication>
@@ -31,6 +32,9 @@ int main(int argc, char* argv[])
         return retval;
     }
 
+    // Create a log file
+    Log::instance();
+
     // Create and show the ui
     MainWindow::instance()->show();
 
@@ -39,7 +43,8 @@ int main(int argc, char* argv[])
     }
     retval = application.exec();
 
+    // Cleanup
     delete MainWindow::instance();
-
+    delete Log::instance();
     return retval;
 }
