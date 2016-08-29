@@ -15,6 +15,7 @@
 #include "Timer.hpp"
 #include "Log.hpp"
 #include <QMediaPlaylist>
+#include <versionhelpers.h>
 
 Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT modifiers, UINT virtualKey, unsigned int hotkeyId)
     : filename(filename)
@@ -32,7 +33,7 @@ Timer::Timer(QString filename, int period, QKeySequence keySequence, UINT modifi
     Log::instance()->newLine();
 
     // Register the hotkey (add the MOD_NOREPEAT flag)
-    if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
+    if (!RegisterHotKey(nullptr, hotkeyId, modifiers | getNoRepeatFlag(), virtualKey)) {
         throw SMException(tr("failed to register the hotkey."));
     }
 
@@ -74,7 +75,7 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT modifiers, UIN
         Log::instance()->write(tr("Previous Virtual Key: %1. New Virtual Key: %2").arg(this->virtualKey).arg(virtualKey));
         Log::instance()->newLine();
 
-        if (!RegisterHotKey(nullptr, hotkeyId, modifiers | 0x4000, virtualKey)) {
+        if (!RegisterHotKey(nullptr, hotkeyId, modifiers | getNoRepeatFlag(), virtualKey)) {
             throw SMException(tr("failed to register the hotkey. No modification done."));
         }
         UnregisterHotKey(nullptr, this->hotkeyId);
@@ -96,6 +97,16 @@ void Timer::setNewData(int period, QKeySequence keySequence, UINT modifiers, UIN
     if (active) {
         play();
     }
+}
+
+// Windows Vista doesn't support the NO_REPEAT_FLAG
+UINT Timer::getNoRepeatFlag()
+{
+    UINT flag = 0x0000;
+    if (IsWindows7OrGreater()) {
+        flag = 0x4000;
+    }
+    return flag;
 }
 
 
