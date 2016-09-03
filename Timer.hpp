@@ -63,7 +63,7 @@ class Timer : public QObject
     QMediaContent* mediaContent;
     bool broken;
 
-    UINT getNoRepeatFlag();
+    UINT getNoRepeatFlag() const;
 
     void play();
     void stop();

@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     }
 
     // Create a log file
-    Log::instance();
+//    Log::instance();
 
     // Create and show the ui
     MainWindow::instance()->show();
@@ -45,6 +45,6 @@ int main(int argc, char* argv[])
 
     // Cleanup
     delete MainWindow::instance();
-    delete Log::instance();
+//    delete Log::instance();
     return retval;
 }

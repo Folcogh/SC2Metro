@@ -23,9 +23,11 @@ Log::Log()
 Log::~Log()
 {
     if (this->log != nullptr) {
-        stream << QObject::tr("================== End of log ==================");
+        this->stream << QObject::tr("================== End of log ==================");
         endl(this->stream);
         endl(this->stream);
+
+        this->alive = true;
         this->log = nullptr;
     }
 }
@@ -49,5 +51,8 @@ void Log::write(QString message)
 
 void Log::newLine()
 {
+    if (this->log == nullptr) {
+        return;
+    }
     endl(this->stream);
 }
