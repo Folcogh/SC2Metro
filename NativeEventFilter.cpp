@@ -32,3 +32,5 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray& eventType, void* mes
     }
     return false;
 }
+
+//CAN SOMEONE TELL ME HOW IT WORKS? WHAT HOTKEYS IT LOOKING FOR?
